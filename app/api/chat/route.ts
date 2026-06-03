@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { createClient } from "@/lib/server";
 
 export async function POST(req: NextRequest) {
@@ -53,7 +53,7 @@ ${JSON.stringify(customers, null, 2)}
       return new Response(stream, { headers: { 'Content-Type': 'text/plain' } });
     }
 
-    const { GoogleGenerativeAI } = require("@google/generative-ai");
+
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
