@@ -38,7 +38,7 @@ export default function LandingPage() {
           <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
             <div className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-sm font-semibold text-indigo-700 mb-8 shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-indigo-600 mr-2 animate-pulse"></span>
-              India's First AI Business Brain 🇮🇳
+              India&apos;s First AI Business Brain 🇮🇳
             </div>
             
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 max-w-4xl mx-auto leading-tight">
