@@ -51,7 +51,7 @@ export default function AuthLayout({
         <div className="relative z-10">
           <div className="bg-white/10 backdrop-blur-md border border-white/10 p-6 rounded-2xl max-w-md">
             <p className="text-slate-200 italic">
-              "VyaparAI has completely transformed how we handle our daily billing and inventory. It feels like having a dedicated accountant who never sleeps."
+              &quot;VyaparAI has completely transformed how we handle our daily billing and inventory. It feels like having a dedicated accountant who never sleeps.&quot;
             </p>
             <div className="mt-4 flex items-center gap-3">
               <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
