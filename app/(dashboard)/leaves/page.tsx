@@ -5,7 +5,9 @@ import { createClient } from "@/lib/client";
 import { LeaveRequest } from "@/lib/types";
 import { LeaveRequestCard } from "@/components/hrms/LeaveRequestCard";
 import { LeaveApprovalModal } from "@/components/hrms/LeaveApprovalModal";
-import { Clock, CheckCircle2, XCircle, List } from "lucide-react";
+import { NewLeaveRequestModal } from "@/components/hrms/NewLeaveRequestModal";
+import { Clock, CheckCircle2, XCircle, List, Plus } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function LeavesPage() {
   const supabase = createClient();
@@ -16,6 +18,7 @@ export default function LeavesPage() {
   // UI State
   const [activeFilter, setActiveFilter] = useState<'pending' | 'approved' | 'rejected' | 'all'>('pending');
   const [modalOpen, setModalOpen] = useState(false);
+  const [newLeaveModalOpen, setNewLeaveModalOpen] = useState(false);
   const [selectedRequest, setSelectedRequest] = useState<LeaveRequest | null>(null);
   const [modalMode, setModalMode] = useState<'approve' | 'reject' | null>(null);
 
@@ -62,9 +65,14 @@ export default function LeavesPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header */}
-      <div>
-        <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Leave Approvals</h1>
-        <p className="text-slate-500 mt-1">Manage employee time off requests.</p>
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Leave Approvals</h1>
+          <p className="text-slate-500 mt-1">Manage employee time off requests.</p>
+        </div>
+        <Button onClick={() => setNewLeaveModalOpen(true)} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 gap-2 font-semibold">
+          <Plus className="w-4 h-4" /> Add Manual Leave
+        </Button>
       </div>
 
       {/* Filters */}
@@ -139,6 +147,13 @@ export default function LeavesPage() {
         mode={modalMode} 
         onSuccess={loadRequests} 
         businessId={businessId} 
+      />
+
+      <NewLeaveRequestModal
+        open={newLeaveModalOpen}
+        onOpenChange={setNewLeaveModalOpen}
+        businessId={businessId}
+        onSuccess={loadRequests}
       />
     </div>
   );
