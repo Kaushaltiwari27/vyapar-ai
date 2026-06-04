@@ -255,7 +255,7 @@ export default function NewInvoicePage() {
               {items.map((item, index) => (
                 <div key={index} className="grid grid-cols-12 gap-3 items-start">
                   <div className="col-span-4 space-y-2">
-                    <Select value={item.product_id} onValueChange={(val) => handleItemChange(index, 'product_id', val)}>
+                    <Select value={item.product_id || ""} onValueChange={(val) => handleItemChange(index, 'product_id', val as string)}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Select Product (Optional)" />
                       </SelectTrigger>

@@ -202,7 +202,7 @@ export default function NewPurchaseOrderPage() {
               {items.map((item, index) => (
                 <div key={index} className="grid grid-cols-12 gap-3 items-start">
                   <div className="col-span-4">
-                    <Select value={item.product_id} onValueChange={(val) => handleItemChange(index, 'product_id', val)}>
+                    <Select value={item.product_id || ""} onValueChange={(val) => handleItemChange(index, 'product_id', val as string)}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select product" />
                       </SelectTrigger>

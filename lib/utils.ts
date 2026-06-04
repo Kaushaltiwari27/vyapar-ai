@@ -74,3 +74,44 @@ export function getStockBadgeStyle(status: 'ok' | 'low' | 'out') {
   }
   return styles[status]
 }
+
+
+// --- HRMS Helper Functions ---
+
+export async function generateEmployeeCode(supabase: any, businessId: string): Promise<string> {
+  const { count } = await supabase
+    .from('employees')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', businessId)
+  return `EMP-${String((count || 0) + 1).padStart(3, '0')}`
+}
+
+export function calculateSalaryComponents(basic: number, hra: number, allowances: number, pfApplicable: boolean, esicApplicable: boolean) {
+  const gross = basic + hra + allowances
+  const pfEmployee = pfApplicable ? Math.round(basic * 0.12) : 0
+  const pfEmployer = pfApplicable ? Math.round(basic * 0.12) : 0
+  const esicEmployee = esicApplicable && gross <= 21000 ? Math.round(gross * 0.0075) : 0
+  const esicEmployer = esicApplicable && gross <= 21000 ? Math.round(gross * 0.0325) : 0
+  const netTakeHome = gross - pfEmployee - esicEmployee
+  return { gross, pfEmployee, pfEmployer, esicEmployee, esicEmployer, netTakeHome }
+}
+
+export function getDepartmentColor(dept: string): string {
+  const colors: Record<string, string> = {
+    Sales: '#4F46E5', HR: '#7C3AED', Engineering: '#0891B2',
+    Operations: '#059669', Finance: '#D97706', Marketing: '#DC2626'
+  }
+  return colors[dept] || '#6B7280'
+}
+
+export function calculateLeaveDays(from: string, to: string): number {
+  let count = 0
+  const start = new Date(from)
+  const end = new Date(to)
+  while (start <= end) {
+    const day = start.getDay()
+    if (day !== 0 && day !== 6) count++
+    start.setDate(start.getDate() + 1)
+  }
+  return count
+}

@@ -149,3 +149,97 @@ export interface PurchaseOrder {
   received_at: string | null;
   created_at: string;
 }
+
+export interface Employee {
+  id: string;
+  business_id: string;
+  employee_code: string | null;
+  full_name: string;
+  email: string | null;
+  phone: string;
+  department: string | null;
+  designation: string | null;
+  date_of_joining: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  address: string | null;
+  city: string | null;
+  emergency_contact: string | null;
+  emergency_phone: string | null;
+  bank_account: string | null;
+  bank_ifsc: string | null;
+  pan_number: string | null;
+  aadhar_number: string | null;
+  basic_salary: number;
+  hra: number;
+  other_allowances: number;
+  pf_applicable: boolean;
+  esic_applicable: boolean;
+  employment_type: string;
+  status: string;
+  profile_photo_url: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Attendance {
+  id: string;
+  business_id: string;
+  employee_id: string;
+  date: string;
+  status: string;
+  check_in: string | null;
+  check_out: string | null;
+  working_hours: number | null;
+  overtime_hours: number;
+  notes: string | null;
+  marked_by: string | null;
+  created_at: string;
+  employees?: {
+    full_name: string;
+    department: string | null;
+  };
+}
+
+export interface LeaveType {
+  id: string;
+  business_id: string;
+  name: string;
+  days_allowed: number;
+  is_paid: boolean;
+  carry_forward: boolean;
+  created_at: string;
+}
+
+export interface LeaveRequest {
+  id: string;
+  business_id: string;
+  employee_id: string;
+  leave_type_id: string | null;
+  leave_type_name: string | null;
+  from_date: string;
+  to_date: string;
+  days: number;
+  reason: string | null;
+  status: string;
+  approved_by: string | null;
+  approved_at: string | null;
+  rejection_reason: string | null;
+  created_at: string;
+  employees?: {
+    full_name: string;
+    department: string | null;
+  };
+}
+
+export interface LeaveBalance {
+  id: string;
+  business_id: string;
+  employee_id: string;
+  leave_type_id: string;
+  year: number;
+  allocated: number;
+  used: number;
+  balance: number;
+}

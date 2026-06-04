@@ -20,6 +20,11 @@ export default function DashboardPage() {
   const [pendingInvoices, setPendingInvoices] = useState(0);
   const [wonThisMonth, setWonThisMonth] = useState(0);
   
+  // HRMS Metrics
+  const [presentToday, setPresentToday] = useState(0);
+  const [totalEmployees, setTotalEmployees] = useState(0);
+  const [pendingLeaves, setPendingLeaves] = useState(0);
+  
   // Activity
   const [recentDeals, setRecentDeals] = useState<Deal[]>([]);
   const [overdueInvoices, setOverdueInvoices] = useState<Invoice[]>([]);
@@ -102,6 +107,17 @@ export default function DashboardPage() {
         const filteredLowStock = (lowStock as Product[]).filter(p => p.current_stock <= p.reorder_level);
         setLowStockProducts(filteredLowStock);
       }
+
+      // 8. HRMS Metrics
+      const today = new Date().toISOString().split('T')[0];
+      const [present, emps, pending] = await Promise.all([
+        supabase.from('attendance').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('date', today).eq('status', 'present'),
+        supabase.from('employees').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('status', 'active'),
+        supabase.from('leave_requests').select('id', { count: 'exact', head: true }).eq('business_id', businessId).eq('status', 'pending')
+      ]);
+      setPresentToday(present.count || 0);
+      setTotalEmployees(emps.count || 0);
+      setPendingLeaves(pending.count || 0);
 
       setLoading(false);
     }
@@ -203,6 +219,48 @@ export default function DashboardPage() {
               </div>
             </div>
             <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(wonThisMonth)}</div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* HRMS Metrics Row */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[500ms] fill-mode-both">
+          <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
+          <CardContent className="p-6 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-500 pb-1">Total Employees</p>
+              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{totalEmployees}</div>
+            </div>
+            <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
+              <Users className="h-6 w-6 text-indigo-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[600ms] fill-mode-both">
+          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
+          <CardContent className="p-6 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-500 pb-1">Present Today</p>
+              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{presentToday}</div>
+            </div>
+            <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
+              <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[700ms] fill-mode-both">
+          <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
+          <CardContent className="p-6 flex items-center justify-between">
+            <div>
+              <p className="text-sm font-semibold text-slate-500 pb-1">Pending Leaves</p>
+              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{pendingLeaves}</div>
+            </div>
+            <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
+              <Clock className="h-6 w-6 text-rose-600" />
+            </div>
           </CardContent>
         </Card>
       </div>

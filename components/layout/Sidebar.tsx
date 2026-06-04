@@ -49,6 +49,9 @@ export function Sidebar() {
     { name: "Inventory", href: "/inventory", icon: Package },
     { name: "Vendors", href: "/vendors", icon: Truck },
     { name: "Purchase Orders", href: "/purchase-orders", icon: ClipboardList },
+    { name: "Employees", href: "/employees", icon: Users },
+    { name: "Attendance", href: "/attendance", icon: ClipboardList },
+    { name: "Leaves", href: "/leaves", icon: FileText },
     { name: "AI Chat", href: "/chat", icon: MessageCircle, badge: "NEW" },
   ];
 

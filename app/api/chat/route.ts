@@ -33,6 +33,21 @@ export async function POST(req: NextRequest) {
           .order('current_stock', { ascending: true })
           .limit(20);
 
+        // Fetch HRMS Data
+        const today = new Date().toISOString().split('T')[0];
+        const [
+          { data: employees },
+          { data: attendance },
+          { data: pendingLeaves }
+        ] = await Promise.all([
+          supabase.from('employees').select('full_name, department, designation, status').eq('business_id', profile.business_id).eq('status', 'active'),
+          supabase.from('attendance').select('status').eq('business_id', profile.business_id).eq('date', today),
+          supabase.from('leave_requests').select('days, employees(full_name)').eq('business_id', profile.business_id).eq('status', 'pending')
+        ]);
+
+        const presentCount = attendance?.filter(a => a.status === 'present').length || 0;
+        const leaveCount = attendance?.filter(a => ['on_leave', 'absent', 'half_day'].includes(a.status)).length || 0;
+
         contextData = `
 User Context:
 Business Owner: ${profile.full_name}
@@ -54,6 +69,12 @@ ${JSON.stringify(inventory?.map(p => ({
   status: p.current_stock === 0 ? 'OUT OF STOCK' : p.current_stock <= p.reorder_level ? 'LOW STOCK' : 'OK',
   value: p.current_stock * p.selling_price
 })), null, 2)}
+
+HRMS SUMMARY:
+Total Active Employees: ${employees?.length || 0}
+Present Today: ${presentCount}
+On Leave/Absent Today: ${leaveCount}
+Pending Leave Approvals: ${pendingLeaves?.length || 0}
         `;
       }
     }

@@ -62,8 +62,8 @@ export function StockAdjustForm({ productId, currentStock, onSave, onCancel }: S
         <div className="space-y-2">
           <Label>Adjustment Type</Label>
           <Select 
-            value={formData.movement_type} 
-            onValueChange={(val) => setFormData({ ...formData, movement_type: val })}
+            value={formData.movement_type || ""} 
+            onValueChange={(val) => setFormData({ ...formData, movement_type: val as string })}
           >
             <SelectTrigger>
               <SelectValue />
