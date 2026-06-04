@@ -6,54 +6,61 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900">
       {/* Navigation */}
-      <nav className="w-full flex justify-between items-center px-6 py-5 max-w-7xl mx-auto">
-        <div className="flex items-center gap-2">
-          <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-200">
-            <ShieldCheck className="text-white w-6 h-6" />
+      <nav className="fixed w-full z-50 top-0 bg-white/70 backdrop-blur-lg border-b border-slate-200/50 transition-all duration-300">
+        <div className="w-full flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+              <ShieldCheck className="text-white w-6 h-6" />
+            </div>
+            <span className="text-2xl font-extrabold text-slate-900 tracking-tight">VyaparAI</span>
           </div>
-          <span className="text-2xl font-extrabold text-slate-900 tracking-tight">VyaparAI</span>
-        </div>
-        <div className="space-x-4 flex items-center">
-          <Link href="/login" className="text-slate-600 hover:text-indigo-600 font-medium px-4 py-2 transition-colors">
-            Login karo
-          </Link>
-          <Link href="/signup">
-            <Button className="bg-indigo-600 text-white hover:bg-indigo-700 shadow-md">
-              Free mein shuru karo
-            </Button>
-          </Link>
+          <div className="space-x-4 flex items-center">
+            <Link href="/login" className="text-slate-600 hover:text-indigo-600 font-medium px-4 py-2 transition-colors">
+              Log In
+            </Link>
+            <Link href="/signup">
+              <Button className="bg-slate-900 text-white hover:bg-slate-800 rounded-full px-6 shadow-md transition-transform hover:scale-105">
+                Start for Free
+              </Button>
+            </Link>
+          </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1">
-        <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50/50 to-white pt-24 pb-32">
-          <div className="max-w-7xl mx-auto px-6 text-center">
+      <main className="flex-1 pt-20">
+        <section className="relative overflow-hidden pt-24 pb-32">
+          {/* Background mesh and glow */}
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+          <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-indigo-500 opacity-20 blur-[100px]"></div>
+          <div className="absolute right-0 bottom-0 -z-10 m-auto h-[250px] w-[250px] rounded-full bg-purple-500 opacity-20 blur-[100px]"></div>
+          
+          <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
             <div className="inline-flex items-center rounded-full border border-indigo-200 bg-indigo-50 px-4 py-1.5 text-sm font-semibold text-indigo-700 mb-8 shadow-sm">
               <span className="flex h-2 w-2 rounded-full bg-indigo-600 mr-2 animate-pulse"></span>
-              India ka pehla AI Business Brain 🇮🇳
+              India's First AI Business Brain 🇮🇳
             </div>
             
             <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-8 max-w-4xl mx-auto leading-tight">
               CRM + Invoice + AI Assistant <br className="hidden md:block"/>
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">
-                ek hi jagah
+                in one place
               </span>
             </h1>
             
             <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto leading-relaxed">
-              VyaparAI helps Indian SMBs manage customers, track deals, generate GST invoices, and get AI insights in Hinglish. Growth ab aapki mutthi mein.
+              VyaparAI helps Indian SMBs manage customers, track deals, generate GST invoices, and get AI insights. Growth is now in your hands.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <Link href="/signup">
-                <Button size="lg" className="h-14 px-8 bg-indigo-600 hover:bg-indigo-700 text-lg font-semibold shadow-xl shadow-indigo-200/50 rounded-xl transition-all hover:scale-105">
-                  Free mein shuru karo &rarr;
+                <Button size="lg" className="h-14 px-8 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white text-lg font-semibold shadow-xl shadow-indigo-500/30 rounded-full transition-all hover:scale-105 border-0">
+                  Start for Free &rarr;
                 </Button>
               </Link>
               <Link href="/login">
-                <Button size="lg" variant="outline" className="h-14 px-8 border-2 text-lg font-semibold rounded-xl hover:bg-slate-50 transition-all">
-                  Login karo
+                <Button size="lg" variant="outline" className="h-14 px-8 border-2 border-slate-200 text-slate-700 hover:text-slate-900 text-lg font-semibold rounded-full hover:bg-slate-50 transition-all">
+                  Log In
                 </Button>
               </Link>
             </div>
@@ -66,14 +73,14 @@ export default function LandingPage() {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">Sab kuch ek jagah par</h2>
-              <p className="text-slate-600 max-w-2xl mx-auto">Different apps use karna band karein. VyaparAI has everything you need to run your business smoothly.</p>
+              <h2 className="text-3xl font-bold text-slate-900 mb-4">Everything in one place</h2>
+              <p className="text-slate-600 max-w-2xl mx-auto">Stop using different apps. VyaparAI has everything you need to run your business smoothly.</p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {/* Feature 1 */}
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:shadow-lg transition-all group">
-                <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
                   <TrendingUp className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-slate-900">Sales Pipeline</h3>
@@ -81,8 +88,8 @@ export default function LandingPage() {
               </div>
               
               {/* Feature 2 */}
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:shadow-lg transition-all group">
-                <div className="w-14 h-14 bg-green-100 text-green-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-14 h-14 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
                   <IndianRupee className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-slate-900">GST Invoice</h3>
@@ -90,17 +97,17 @@ export default function LandingPage() {
               </div>
 
               {/* Feature 3 */}
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:shadow-lg transition-all group">
-                <div className="w-14 h-14 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-14 h-14 bg-purple-50 text-purple-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
                   <MessageSquare className="w-7 h-7" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-slate-900">Hindi AI Chat</h3>
-                <p className="text-slate-600">Chat with your business data in Hinglish. Ask &quot;Mera total revenue kya hai?&quot; and get instant answers.</p>
+                <h3 className="text-xl font-bold mb-3 text-slate-900">AI Chat Assistant</h3>
+                <p className="text-slate-600">Chat with your business data. Ask &quot;What is my total revenue?&quot; and get instant answers.</p>
               </div>
 
               {/* Feature 4 */}
-              <div className="bg-slate-50 p-8 rounded-2xl border border-slate-100 hover:border-indigo-100 hover:shadow-lg transition-all group">
-                <div className="w-14 h-14 bg-amber-100 text-amber-600 rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+              <div className="bg-white p-8 rounded-3xl border border-slate-200/60 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+                <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
                   <BarChart3 className="w-7 h-7" />
                 </div>
                 <h3 className="text-xl font-bold mb-3 text-slate-900">Smart Dashboard</h3>
@@ -115,27 +122,27 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-3xl font-bold text-slate-900 mb-12">Simple Pricing, No Hidden Fees</h2>
             
-            <div className="bg-white p-10 rounded-3xl border-2 border-indigo-100 shadow-xl relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-indigo-600 text-white text-xs font-bold px-4 py-1 rounded-bl-lg">
+            <div className="bg-white p-10 rounded-3xl border border-slate-200/60 shadow-2xl shadow-indigo-100/50 relative overflow-hidden transform hover:-translate-y-1 transition-all duration-300">
+              <div className="absolute top-0 right-0 bg-gradient-to-r from-indigo-500 to-purple-500 text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl shadow-sm">
                 MOST POPULAR
               </div>
               <h3 className="text-2xl font-bold text-slate-900 mb-2">Vyapar Pro</h3>
-              <div className="text-5xl font-extrabold text-slate-900 mb-6 mt-4">
+              <div className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600 mb-6 mt-4">
                 ₹2,499<span className="text-lg text-slate-500 font-medium">/month</span>
               </div>
-              <p className="text-slate-600 mb-8 pb-8 border-b border-slate-100">Sab kuch included. Koi extra charges nahi.</p>
+              <p className="text-slate-600 mb-8 pb-8 border-b border-slate-100">Everything included. No extra charges.</p>
               
               <ul className="space-y-4 text-left max-w-sm mx-auto mb-10">
-                {['Unlimited Invoices & Customers', 'Advanced CRM & Kanban Board', 'AI Assistant (Vyapaar Mitra)', 'Priority Support'].map((feature, i) => (
+                {['Unlimited Invoices & Customers', 'Advanced CRM & Kanban Board', 'AI Chat Assistant', 'Priority Support'].map((feature, i) => (
                   <li key={i} className="flex items-center gap-3">
-                    <CheckCircle2 className="w-5 h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-indigo-500 flex-shrink-0" />
                     <span className="text-slate-700 font-medium">{feature}</span>
                   </li>
                 ))}
               </ul>
               
               <Link href="/signup">
-                <Button size="lg" className="w-full h-14 bg-indigo-600 hover:bg-indigo-700 text-lg font-semibold rounded-xl">
+                <Button size="lg" className="w-full h-14 bg-slate-900 hover:bg-slate-800 text-white text-lg font-semibold rounded-full shadow-lg transition-transform hover:scale-105">
                   Start Your Free Trial
                 </Button>
               </Link>

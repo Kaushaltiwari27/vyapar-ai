@@ -12,16 +12,16 @@ interface Message {
 }
 
 const SUGGESTED_QUESTIONS = [
-  "Is mahine ka total revenue kya hai?",
-  "Kaun se deals close hone wale hain?",
-  "Kaunse invoices overdue hain?",
-  "Mera best customer kaun hai?",
-  "Pipeline mein kitni value hai?"
+  "What is the total revenue for this month?",
+  "Which deals are about to close?",
+  "Which invoices are overdue?",
+  "Who is my best customer?",
+  "What is the total value in the pipeline?"
 ];
 
 export default function ChatPage() {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Namaste! Main Vyapaar Mitra hoon. Aap apne business data (customers, deals, invoices) ke baare mein kuch bhi pooch sakte hain." }
+    { role: 'assistant', content: "Hello! I am your AI Business Assistant. You can ask me anything about your business data (customers, deals, invoices)." }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -78,7 +78,7 @@ export default function ChatPage() {
       }
     } catch (error: unknown) {
       toast.error((error as Error).message);
-      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, kuch error aaya server connect karne mein." }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: "Sorry, an error occurred while connecting to the server." }]);
     } finally {
       setIsLoading(false);
     }
@@ -162,7 +162,7 @@ export default function ChatPage() {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Sawaal puchiye... (eg. Mera total revenue kya hai?)"
+              placeholder="Ask a question... (e.g., What is my total revenue?)"
               className="flex-1 h-12 bg-slate-50"
               disabled={isLoading}
             />

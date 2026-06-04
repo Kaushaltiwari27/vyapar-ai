@@ -39,9 +39,9 @@ export default function LoginPage() {
   return (
     <Card className="w-full shadow-lg border-slate-200/60">
       <CardHeader className="space-y-1 pb-6">
-        <CardTitle className="text-2xl font-bold text-center">Login karo</CardTitle>
+        <CardTitle className="text-2xl font-bold text-center">Log In</CardTitle>
         <CardDescription className="text-center">
-          Apne account mein login karne ke liye details daalein
+          Enter your details to log in to your account
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleLogin}>
@@ -77,7 +77,7 @@ export default function LoginPage() {
             {loading ? "Logging in..." : "Login"}
           </Button>
           <div className="text-sm text-center text-slate-500">
-            Naya account banana hai?{" "}
+            Don't have an account?{" "}
             <Link href="/signup" className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline">
               Sign up
             </Link>

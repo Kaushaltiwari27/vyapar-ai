@@ -89,13 +89,13 @@ export default function SignupPage() {
     <Card className="w-full shadow-lg border-slate-200/60">
       <CardHeader className="space-y-1 pb-6">
         <div className="flex justify-between items-center mb-2">
-          <CardTitle className="text-2xl font-bold">Free mein shuru karo</CardTitle>
+          <CardTitle className="text-2xl font-bold">Start for Free</CardTitle>
           <span className="text-xs font-semibold bg-indigo-100 text-indigo-700 px-2 py-1 rounded-full">
             Step {step} of 2
           </span>
         </div>
         <CardDescription>
-          {step === 1 ? "Apni basic details dalein account banane ke liye" : "Apne business ki details dalein"}
+          {step === 1 ? "Enter your basic details to create an account" : "Enter your business details"}
         </CardDescription>
         
         {/* Progress bar */}
@@ -160,9 +160,9 @@ export default function SignupPage() {
               Next Step &rarr;
             </Button>
             <div className="text-sm text-center text-slate-500">
-              Pehle se account hai?{" "}
+              Already have an account?{" "}
               <Link href="/login" className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline">
-                Login karo
+                Log In
               </Link>
             </div>
           </CardFooter>
