@@ -154,12 +154,12 @@ export default function DashboardPage() {
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[100ms] fill-mode-both">
           <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
               <p className="text-sm font-semibold text-slate-500">Total Customers</p>
-              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
                 <Users className="h-4 w-4 text-blue-600" />
               </div>
             </div>
@@ -167,12 +167,12 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
         
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[200ms] fill-mode-both">
           <div className="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
               <p className="text-sm font-semibold text-slate-500">Pipeline Value</p>
-              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
                 <TrendingUp className="h-4 w-4 text-purple-600" />
               </div>
             </div>
@@ -180,12 +180,12 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[300ms] fill-mode-both">
           <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
               <p className="text-sm font-semibold text-slate-500">Pending Invoices</p>
-              <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
                 <FileText className="h-4 w-4 text-amber-600" />
               </div>
             </div>
@@ -193,12 +193,12 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[400ms] fill-mode-both">
           <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
               <p className="text-sm font-semibold text-slate-500">Won This Month</p>
-              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
+              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
                 <CheckCircle2 className="h-4 w-4 text-emerald-600" />
               </div>
             </div>
