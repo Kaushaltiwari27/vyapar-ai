@@ -339,10 +339,10 @@ export default function NewInvoicePage() {
 
             <div className="mt-8 space-y-3">
               <Button className="w-full bg-indigo-600 hover:bg-indigo-700 h-11" onClick={() => handleSave('sent')} disabled={loading}>
-                <Send className="w-4 h-4 mr-2" /> Invoice Bhejo (Sent)
+                <Send className="w-4 h-4 mr-2" /> Send Invoice
               </Button>
               <Button variant="outline" className="w-full h-11 border-slate-200" onClick={() => handleSave('draft')} disabled={loading}>
-                <Save className="w-4 h-4 mr-2" /> Draft Bachao
+                <Save className="w-4 h-4 mr-2" /> Save as Draft
               </Button>
             </div>
           </div>

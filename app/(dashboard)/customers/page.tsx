@@ -121,7 +121,7 @@ export default function CustomersPage() {
           className="bg-indigo-600 hover:bg-indigo-700 h-11"
           onClick={() => { setSelectedCustomer(null); setIsFormOpen(true); }}
         >
-          <Plus className="w-4 h-4 mr-2" /> Naya Customer
+          <Plus className="w-4 h-4 mr-2" /> New Customer
         </Button>
       </div>
 

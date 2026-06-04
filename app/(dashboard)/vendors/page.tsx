@@ -74,7 +74,7 @@ export default function VendorsPage() {
           <p className="text-slate-500 mt-1">Manage your suppliers and vendors</p>
         </div>
         <Button onClick={() => setIsSheetOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
-          <Plus className="w-4 h-4 mr-2" /> Naya Vendor
+          <Plus className="w-4 h-4 mr-2" /> New Vendor
         </Button>
       </div>
 

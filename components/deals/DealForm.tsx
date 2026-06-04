@@ -111,7 +111,7 @@ export function DealForm({ deal, onSuccess, onCancel }: DealFormProps) {
   return (
     <div className="flex flex-col h-full">
       <SheetHeader className="mb-6">
-        <SheetTitle>{deal ? "Edit Deal" : "Naya Deal"}</SheetTitle>
+        <SheetTitle>{deal ? "Edit Deal" : "New Deal"}</SheetTitle>
         <SheetDescription>
           {deal ? "Deal details update karein." : "Naye deal ki details enter karein."}
         </SheetDescription>

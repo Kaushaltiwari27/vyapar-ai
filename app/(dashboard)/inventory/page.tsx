@@ -154,7 +154,7 @@ export default function InventoryPage() {
           <p className="text-slate-500 mt-1">Manage products, stock levels, and pricing</p>
         </div>
         <Button onClick={() => setIsProductSheetOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
-          <Plus className="w-4 h-4 mr-2" /> Naya Product
+          <Plus className="w-4 h-4 mr-2" /> New Product
         </Button>
       </div>
 

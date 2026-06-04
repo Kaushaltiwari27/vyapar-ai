@@ -75,7 +75,7 @@ export default function DealsPage() {
           className="bg-indigo-600 hover:bg-indigo-700"
           onClick={() => { setSelectedDeal(null); setIsFormOpen(true); }}
         >
-          <Plus className="w-4 h-4 mr-2" /> Naya Deal
+          <Plus className="w-4 h-4 mr-2" /> New Deal
         </Button>
       </div>
 

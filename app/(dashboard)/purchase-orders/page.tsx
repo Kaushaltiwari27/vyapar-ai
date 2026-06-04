@@ -125,7 +125,7 @@ export default function PurchaseOrdersPage() {
         </div>
         <Link href="/purchase-orders/new">
           <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-sm">
-            <Plus className="w-4 h-4 mr-2" /> Naya PO
+            <Plus className="w-4 h-4 mr-2" /> New PO
           </Button>
         </Link>
       </div>

@@ -90,7 +90,7 @@ export default function InvoicesPage() {
         <h2 className="text-2xl font-bold text-slate-900">Invoices</h2>
         <Link href="/invoices/new">
           <Button className="bg-indigo-600 hover:bg-indigo-700">
-            <Plus className="w-4 h-4 mr-2" /> Naya Invoice
+            <Plus className="w-4 h-4 mr-2" /> New Invoice
           </Button>
         </Link>
       </div>

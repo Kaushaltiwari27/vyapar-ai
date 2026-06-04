@@ -126,65 +126,83 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-8">
-      {/* Quick Actions */}
-      <div className="flex flex-wrap gap-3">
-        <Link href="/customers">
-          <Button className="bg-indigo-600 hover:bg-indigo-700 shadow-sm gap-2">
-            <Plus className="w-4 h-4" /> Naya Customer
-          </Button>
-        </Link>
-        <Link href="/deals">
-          <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2" variant="outline">
-            <Plus className="w-4 h-4" /> Naya Deal
-          </Button>
-        </Link>
-        <Link href="/invoices/new">
-          <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2" variant="outline">
-            <Plus className="w-4 h-4" /> Naya Invoice
-          </Button>
-        </Link>
+    <div className="p-8 max-w-7xl mx-auto space-y-10">
+      {/* Header & Quick Actions */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Overview</h1>
+          <p className="text-slate-500 mt-1">Here's what's happening with your business today.</p>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/customers">
+            <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2 font-semibold" variant="outline">
+              <Plus className="w-4 h-4 text-slate-400" /> New Customer
+            </Button>
+          </Link>
+          <Link href="/deals">
+            <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2 font-semibold" variant="outline">
+              <Plus className="w-4 h-4 text-slate-400" /> New Deal
+            </Button>
+          </Link>
+          <Link href="/invoices/new">
+            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 gap-2 font-semibold">
+              <Plus className="w-4 h-4" /> New Invoice
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Metrics Row */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-l-4 border-l-blue-500 shadow-sm">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium text-slate-500">Total Customers</p>
-              <Users className="h-4 w-4 text-blue-500" />
+              <p className="text-sm font-semibold text-slate-500">Total Customers</p>
+              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center">
+                <Users className="h-4 w-4 text-blue-600" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900">{totalCustomers}</div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{totalCustomers}</div>
           </CardContent>
         </Card>
         
-        <Card className="border-l-4 border-l-purple-500 shadow-sm">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium text-slate-500">Pipeline Value</p>
-              <TrendingUp className="h-4 w-4 text-purple-500" />
+              <p className="text-sm font-semibold text-slate-500">Pipeline Value</p>
+              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center">
+                <TrendingUp className="h-4 w-4 text-purple-600" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900">{formatCurrency(pipelineValue)}</div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(pipelineValue)}</div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-amber-500 shadow-sm">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium text-slate-500">Pending Invoices</p>
-              <FileText className="h-4 w-4 text-amber-500" />
+              <p className="text-sm font-semibold text-slate-500">Pending Invoices</p>
+              <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center">
+                <FileText className="h-4 w-4 text-amber-600" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900">{formatCurrency(pendingInvoices)}</div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(pendingInvoices)}</div>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-green-500 shadow-sm">
+        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group">
+          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
           <CardContent className="p-6">
             <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-medium text-slate-500">Won This Month</p>
-              <CheckCircle2 className="h-4 w-4 text-green-500" />
+              <p className="text-sm font-semibold text-slate-500">Won This Month</p>
+              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              </div>
             </div>
-            <div className="text-3xl font-bold text-slate-900">{formatCurrency(wonThisMonth)}</div>
+            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(wonThisMonth)}</div>
           </CardContent>
         </Card>
       </div>
@@ -192,27 +210,27 @@ export default function DashboardPage() {
       {/* Activity Row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {/* Recent Deals */}
-        <Card className="shadow-sm border-slate-200">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold">Recent Deals</CardTitle>
-            <Link href="/deals" className="text-sm text-indigo-600 hover:underline flex items-center gap-1">
-              View all <ArrowRight className="w-3 h-3" />
+        <Card className="shadow-sm border-0 ring-1 ring-slate-200">
+          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-100">
+            <CardTitle className="text-lg font-bold text-slate-900">Recent Deals</CardTitle>
+            <Link href="/deals" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
+              View all <ArrowRight className="w-4 h-4" />
             </Link>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4 px-0">
             {recentDeals.length === 0 ? (
-              <p className="text-sm text-slate-500 py-4">No recent deals found.</p>
+              <p className="text-sm text-slate-500 px-6 pb-2">No recent deals found.</p>
             ) : (
-              <div className="space-y-4 pt-4">
+              <div className="divide-y divide-slate-100">
                 {recentDeals.map(deal => (
-                  <div key={deal.id} className="flex items-center justify-between border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                  <div key={deal.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
                     <div className="space-y-1">
-                      <p className="text-sm font-medium leading-none text-slate-900">{deal.title}</p>
-                      <p className="text-sm text-slate-500">{deal.customer_name || 'Unknown Customer'}</p>
+                      <p className="text-sm font-bold text-slate-900">{deal.title}</p>
+                      <p className="text-sm font-medium text-slate-500">{deal.customer_name || 'Unknown Customer'}</p>
                     </div>
-                    <div className="flex flex-col items-end gap-1">
-                      <div className="text-sm font-bold text-slate-900">{formatCurrency(deal.value)}</div>
-                      <Badge variant="secondary" className={`${getStageColor(deal.stage)} border-0 text-[10px]`}>
+                    <div className="flex flex-col items-end gap-1.5">
+                      <div className="text-sm font-extrabold text-slate-900">{formatCurrency(deal.value)}</div>
+                      <Badge variant="secondary" className={`${getStageColor(deal.stage)} border-0 text-[10px] uppercase font-bold tracking-wider px-2`}>
                         {deal.stage}
                       </Badge>
                     </div>
@@ -224,34 +242,34 @@ export default function DashboardPage() {
         </Card>
 
         {/* Overdue Invoices */}
-        <Card className="shadow-sm border-slate-200">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold text-red-600 flex items-center gap-2">
-              <Clock className="w-5 h-5" /> Overdue Invoices
+        <Card className="shadow-sm border-0 ring-1 ring-slate-200">
+          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-100">
+            <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-rose-500" /> Overdue Invoices
             </CardTitle>
-            <Link href="/invoices" className="text-sm text-indigo-600 hover:underline flex items-center gap-1">
-              View all <ArrowRight className="w-3 h-3" />
+            <Link href="/invoices" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
+              View all <ArrowRight className="w-4 h-4" />
             </Link>
           </CardHeader>
-          <CardContent>
+          <CardContent className="pt-4 px-0">
             {overdueInvoices.length === 0 ? (
-              <p className="text-sm text-slate-500 py-4">Great job! No overdue invoices.</p>
+              <p className="text-sm text-slate-500 px-6 pb-2">Great job! No overdue invoices.</p>
             ) : (
-              <div className="space-y-4 pt-4">
+              <div className="divide-y divide-slate-100">
                 {overdueInvoices.map(invoice => {
                   const daysOverdue = Math.floor((new Date().getTime() - new Date(invoice.due_date || new Date().toISOString()).getTime()) / (1000 * 3600 * 24));
                   return (
-                    <div key={invoice.id} className="flex items-center justify-between border-b border-slate-100 pb-4 last:border-0 last:pb-0">
+                    <div key={invoice.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
                       <div className="space-y-1">
-                        <Link href={`/invoices/${invoice.id}`} className="text-sm font-medium leading-none text-indigo-600 hover:underline">
+                        <Link href={`/invoices/${invoice.id}`} className="text-sm font-bold text-indigo-600 hover:text-indigo-700 hover:underline">
                           {invoice.invoice_number}
                         </Link>
-                        <p className="text-sm text-slate-500">{invoice.customer_name || 'Unknown Customer'}</p>
+                        <p className="text-sm font-medium text-slate-500">{invoice.customer_name || 'Unknown Customer'}</p>
                       </div>
-                      <div className="flex flex-col items-end gap-1">
-                        <div className="text-sm font-bold text-slate-900">{formatCurrency(invoice.total_amount)}</div>
-                        <span className="text-[11px] font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded">
-                          {daysOverdue} din overdue
+                      <div className="flex flex-col items-end gap-1.5">
+                        <div className="text-sm font-extrabold text-slate-900">{formatCurrency(invoice.total_amount)}</div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
+                          {daysOverdue} days overdue
                         </span>
                       </div>
                     </div>
@@ -265,29 +283,29 @@ export default function DashboardPage() {
 
       {/* Low Stock Alerts */}
       {lowStockProducts.length > 0 && (
-        <Card className="shadow-sm border-amber-200 bg-amber-50/30">
+        <Card className="shadow-sm border-0 ring-1 ring-amber-200 bg-gradient-to-r from-amber-50 to-orange-50/50">
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold text-amber-700 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5" /> Low Stock Alerts
+            <CardTitle className="text-lg font-bold text-amber-900 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5 text-amber-600" /> Inventory Alerts
             </CardTitle>
-            <Link href="/inventory" className="text-sm text-indigo-600 hover:underline flex items-center gap-1">
-              Manage Inventory <ArrowRight className="w-3 h-3" />
+            <Link href="/inventory" className="text-sm font-semibold text-amber-700 hover:text-amber-800 flex items-center gap-1 transition-colors">
+              Manage Inventory <ArrowRight className="w-4 h-4" />
             </Link>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-amber-800 mb-4 font-medium">
-              {lowStockProducts.length} product(s) are low on stock. Please review and reorder.
+            <p className="text-sm text-amber-800/80 mb-5 font-semibold">
+              {lowStockProducts.length} product(s) are running low. Consider reordering soon.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {lowStockProducts.slice(0, 6).map(product => (
-                <div key={product.id} className="bg-white p-4 rounded-lg border border-amber-100 shadow-sm flex justify-between items-center">
+                <div key={product.id} className="bg-white p-4 rounded-xl border border-amber-100 shadow-sm flex justify-between items-center hover:shadow-md transition-shadow">
                   <div>
                     <p className="text-sm font-bold text-slate-900 truncate max-w-[150px]" title={product.name}>
                       {product.name}
                     </p>
-                    <p className="text-xs text-slate-500">Reorder at {product.reorder_level}</p>
+                    <p className="text-xs font-semibold text-slate-400 mt-0.5">Reorder at {product.reorder_level}</p>
                   </div>
-                  <div className={`px-2.5 py-1 rounded-full text-xs font-bold ${product.current_stock === 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                  <div className={`px-2.5 py-1 rounded-md text-xs font-bold border ${product.current_stock === 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
                     {product.current_stock} {product.unit} left
                   </div>
                 </div>

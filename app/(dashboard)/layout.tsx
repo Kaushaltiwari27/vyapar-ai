@@ -11,7 +11,7 @@ export default function DashboardLayout({
       <div className="print:hidden">
         <Sidebar />
       </div>
-      <div className="pl-60 print:pl-0 flex flex-col min-h-screen">
+      <div className="pl-64 print:pl-0 flex flex-col min-h-screen">
         <div className="print:hidden">
           <Topbar />
         </div>

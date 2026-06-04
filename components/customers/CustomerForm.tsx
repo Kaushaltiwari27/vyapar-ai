@@ -81,7 +81,7 @@ export function CustomerForm({ customer, onSuccess, onCancel }: CustomerFormProp
   return (
     <div className="flex flex-col h-full">
       <SheetHeader className="mb-6">
-        <SheetTitle>{customer ? "Edit Customer" : "Naya Customer"}</SheetTitle>
+        <SheetTitle>{customer ? "Edit Customer" : "New Customer"}</SheetTitle>
         <SheetDescription>
           {customer ? "Customer details update karein." : "Naye customer ki details save karein."}
         </SheetDescription>
