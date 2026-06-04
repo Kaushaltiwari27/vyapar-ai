@@ -55,7 +55,7 @@ export async function generatePONumber(supabase: any, businessId: string): Promi
     .from('purchase_orders')
     .select('*', { count: 'exact', head: true })
     .eq('business_id', businessId)
-  return "PO-\"
+  return `PO-${String((count || 0) + 1).padStart(4, '0')}`;
 }
 
 // Stock status helper
