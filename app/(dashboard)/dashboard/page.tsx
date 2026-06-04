@@ -5,8 +5,8 @@ import { createClient } from "@/lib/client";
 import { formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Deal, Invoice } from "@/lib/types";
-import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight } from "lucide-react";
+import { Deal, Invoice, Product } from "@/lib/types";
+import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight, AlertTriangle } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
@@ -23,6 +23,7 @@ export default function DashboardPage() {
   // Activity
   const [recentDeals, setRecentDeals] = useState<Deal[]>([]);
   const [overdueInvoices, setOverdueInvoices] = useState<Invoice[]>([]);
+  const [lowStockProducts, setLowStockProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     async function loadDashboardData() {
@@ -89,6 +90,18 @@ export default function DashboardPage() {
         .order('due_date', { ascending: true })
         .limit(5);
       setOverdueInvoices(oInvoices || []);
+
+      // 7. Low Stock Products
+      const { data: lowStock } = await supabase
+        .from('products')
+        .select('*')
+        .eq('business_id', businessId)
+        .eq('is_active', true);
+      
+      if (lowStock) {
+        const filteredLowStock = (lowStock as Product[]).filter(p => p.current_stock <= p.reorder_level);
+        setLowStockProducts(filteredLowStock);
+      }
 
       setLoading(false);
     }
@@ -249,6 +262,40 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Low Stock Alerts */}
+      {lowStockProducts.length > 0 && (
+        <Card className="shadow-sm border-amber-200 bg-amber-50/30">
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-lg font-bold text-amber-700 flex items-center gap-2">
+              <AlertTriangle className="w-5 h-5" /> Low Stock Alerts
+            </CardTitle>
+            <Link href="/inventory" className="text-sm text-indigo-600 hover:underline flex items-center gap-1">
+              Manage Inventory <ArrowRight className="w-3 h-3" />
+            </Link>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-amber-800 mb-4 font-medium">
+              {lowStockProducts.length} product(s) are low on stock. Please review and reorder.
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {lowStockProducts.slice(0, 6).map(product => (
+                <div key={product.id} className="bg-white p-4 rounded-lg border border-amber-100 shadow-sm flex justify-between items-center">
+                  <div>
+                    <p className="text-sm font-bold text-slate-900 truncate max-w-[150px]" title={product.name}>
+                      {product.name}
+                    </p>
+                    <p className="text-xs text-slate-500">Reorder at {product.reorder_level}</p>
+                  </div>
+                  <div className={`px-2.5 py-1 rounded-full text-xs font-bold ${product.current_stock === 0 ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                    {product.current_stock} {product.unit} left
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

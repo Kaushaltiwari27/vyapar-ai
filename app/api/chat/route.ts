@@ -24,6 +24,15 @@ export async function POST(req: NextRequest) {
         // Fetch Top Customers
         const { data: customers } = await supabase.from('customers').select('name, company, total_revenue').eq('business_id', profile.business_id).order('total_revenue', { ascending: false }).limit(10);
 
+        // Fetch Inventory
+        const { data: inventory } = await supabase
+          .from('products')
+          .select('name, current_stock, reorder_level, selling_price, unit')
+          .eq('business_id', profile.business_id)
+          .eq('is_active', true)
+          .order('current_stock', { ascending: true })
+          .limit(20);
+
         contextData = `
 User Context:
 Business Owner: ${profile.full_name}
@@ -37,6 +46,14 @@ ${JSON.stringify(invoices, null, 2)}
 
 Top Customers:
 ${JSON.stringify(customers, null, 2)}
+
+INVENTORY (low stock first):
+${JSON.stringify(inventory?.map(p => ({
+  name: p.name,
+  stock: `${p.current_stock} ${p.unit}`,
+  status: p.current_stock === 0 ? 'OUT OF STOCK' : p.current_stock <= p.reorder_level ? 'LOW STOCK' : 'OK',
+  value: p.current_stock * p.selling_price
+})), null, 2)}
         `;
       }
     }

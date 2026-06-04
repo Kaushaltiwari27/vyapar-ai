@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/client";
-import { Customer, InvoiceItem } from "@/lib/types";
+import { Customer, InvoiceItem, Product } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,7 @@ export default function NewInvoicePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
   // Form State
   const [customerId, setCustomerId] = useState("");
@@ -48,6 +49,15 @@ export default function NewInvoicePage() {
         .order('name');
       if (custData) setCustomers(custData as Customer[]);
 
+      // Fetch products
+      const { data: pData } = await supabase
+        .from('products')
+        .select('*')
+        .eq('business_id', profile.business_id)
+        .eq('is_active', true)
+        .order('name');
+      if (pData) setProducts(pData as Product[]);
+
       // Generate next invoice number
       const { data: invData } = await supabase
         .from('invoices')
@@ -75,8 +85,17 @@ export default function NewInvoicePage() {
     const newItems = [...items];
     const item = { ...newItems[index], [field]: value };
     
+    if (field === 'product_id' && typeof value === 'string') {
+      const product = products.find(p => p.id === value);
+      if (product) {
+        item.description = product.name;
+        item.hsn = product.hsn_code || "";
+        item.rate = product.selling_price;
+      }
+    }
+
     // Auto calculate amount
-    if (field === 'quantity' || field === 'rate') {
+    if (field === 'quantity' || field === 'rate' || field === 'product_id') {
       const qty = field === 'quantity' ? Number(value) : item.quantity;
       const rate = field === 'rate' ? Number(value) : item.rate;
       item.amount = qty * rate;
@@ -142,6 +161,32 @@ export default function NewInvoicePage() {
       toast.error(error.message);
       setLoading(false);
     } else {
+      // If status is 'sent', update stock
+      if (status === 'sent') {
+        for (const item of items) {
+          if (!item.product_id) continue;
+          
+          const { data: pData } = await supabase.from('products').select('current_stock').eq('id', item.product_id).single();
+          const currentStock = pData?.current_stock || 0;
+
+          await supabase.from('stock_movements').insert([{
+            business_id: profile.business_id,
+            product_id: item.product_id,
+            movement_type: 'out',
+            quantity: item.quantity,
+            reference_type: 'invoice',
+            reference_id: data.id,
+            reference_number: invoiceNumber,
+            notes: `Sold via Invoice: ${invoiceNumber}`
+          }]);
+
+          await supabase.from('products').update({ 
+            current_stock: currentStock - item.quantity, 
+            updated_at: new Date().toISOString() 
+          }).eq('id', item.product_id);
+        }
+      }
+
       toast.success(`Invoice ${status === 'draft' ? 'saved as draft' : 'sent'} successfully`);
       router.push(`/invoices/${data.id}`);
     }
@@ -209,7 +254,19 @@ export default function NewInvoicePage() {
 
               {items.map((item, index) => (
                 <div key={index} className="grid grid-cols-12 gap-3 items-start">
-                  <div className="col-span-4">
+                  <div className="col-span-4 space-y-2">
+                    <Select value={item.product_id} onValueChange={(val) => handleItemChange(index, 'product_id', val)}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select Product (Optional)" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {products.map(p => (
+                          <SelectItem key={p.id} value={p.id}>
+                            {p.name} <span className="text-slate-400 text-xs ml-1">({p.current_stock} {p.unit} avail)</span>
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <Input placeholder="Item description" value={item.description} onChange={e => handleItemChange(index, 'description', e.target.value)} />
                   </div>
                   <div className="col-span-2">

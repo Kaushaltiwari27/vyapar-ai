@@ -48,3 +48,29 @@ export function numberToWords(amount: number): string {
   
   return str.replace(/\s+/g, ' ').trim() + ' Only';
 }
+
+// Auto-generate PO number
+export async function generatePONumber(supabase: any, businessId: string): Promise<string> {
+  const { count } = await supabase
+    .from('purchase_orders')
+    .select('*', { count: 'exact', head: true })
+    .eq('business_id', businessId)
+  return "PO-\"
+}
+
+// Stock status helper
+export function getStockStatus(current: number, reorder: number): 'ok' | 'low' | 'out' {
+  if (current === 0) return 'out'
+  if (current <= reorder) return 'low'
+  return 'ok'
+}
+
+// Stock badge color
+export function getStockBadgeStyle(status: 'ok' | 'low' | 'out') {
+  const styles = {
+    ok: 'bg-green-50 text-green-700 border-green-200',
+    low: 'bg-amber-50 text-amber-700 border-amber-200',
+    out: 'bg-red-50 text-red-700 border-red-200'
+  }
+  return styles[status]
+}

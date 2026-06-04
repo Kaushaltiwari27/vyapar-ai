@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ShieldCheck, Home, Users, TrendingUp, FileText, MessageCircle, LogOut } from "lucide-react";
+import { ShieldCheck, Home, Users, TrendingUp, FileText, MessageCircle, LogOut, Package, Truck, ClipboardList } from "lucide-react";
 import { createClient } from "@/lib/client";
 import { useEffect, useState } from "react";
 import { toast } from "react-hot-toast";
@@ -46,6 +46,9 @@ export function Sidebar() {
     { name: "Customers", href: "/customers", icon: Users },
     { name: "Deals", href: "/deals", icon: TrendingUp },
     { name: "Invoices", href: "/invoices", icon: FileText },
+    { name: "Inventory", href: "/inventory", icon: Package },
+    { name: "Vendors", href: "/vendors", icon: Truck },
+    { name: "Purchase Orders", href: "/purchase-orders", icon: ClipboardList },
     { name: "AI Chat", href: "/chat", icon: MessageCircle, badge: "NEW" },
   ];
 
