@@ -38,11 +38,15 @@ export async function POST(req: NextRequest) {
         const [
           { data: employees },
           { data: attendance },
-          { data: pendingLeaves }
+          { data: pendingLeaves },
+          { data: payrollRun },
+          { data: complianceDue }
         ] = await Promise.all([
           supabase.from('employees').select('full_name, department, designation, status').eq('business_id', profile.business_id).eq('status', 'active'),
           supabase.from('attendance').select('status').eq('business_id', profile.business_id).eq('date', today),
-          supabase.from('leave_requests').select('days, employees(full_name)').eq('business_id', profile.business_id).eq('status', 'pending')
+          supabase.from('leave_requests').select('days, employees(full_name)').eq('business_id', profile.business_id).eq('status', 'pending'),
+          supabase.from('payroll_runs').select('month, year, status, total_gross, total_net_pay, employee_count, total_pf_employee, total_tds').eq('business_id', profile.business_id).order('created_at', { ascending: false }).limit(3),
+          supabase.from('compliance_calendar').select('compliance_type, title, due_date, amount, status').eq('business_id', profile.business_id).eq('status', 'pending').order('due_date', { ascending: true }).limit(5)
         ]);
 
         const presentCount = attendance?.filter(a => a.status === 'present').length || 0;
@@ -75,7 +79,27 @@ Total Active Employees: ${employees?.length || 0}
 Present Today: ${presentCount}
 On Leave/Absent Today: ${leaveCount}
 Pending Leave Approvals: ${pendingLeaves?.length || 0}
-        `;
+
+PAYROLL (last 3 months):
+${JSON.stringify(payrollRun?.map(p => ({
+  period: \`\${p.month}/\${p.year}\`,
+  status: p.status,
+  employees: p.employee_count,
+  gross: p.total_gross,
+  netPay: p.total_net_pay,
+  pf: p.total_pf_employee,
+  tds: p.total_tds
+})), null, 2)}
+
+COMPLIANCE DEADLINES (upcoming):
+${JSON.stringify(complianceDue?.map(c => ({
+  type: c.compliance_type,
+  title: c.title,
+  dueDate: c.due_date,
+  amount: c.amount,
+  daysLeft: Math.ceil((new Date(c.due_date).getTime() - Date.now()) / 86400000)
+})), null, 2)}
+        \`;
       }
     }
 

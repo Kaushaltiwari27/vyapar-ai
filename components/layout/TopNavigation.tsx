@@ -88,6 +88,9 @@ export function TopNavigation() {
     { name: "Employees", href: "/employees" },
     { name: "Attendance", href: "/attendance" },
     { name: "Leaves", href: "/leaves" },
+    { name: "Payroll", href: "/payroll" },
+    { name: "Compliance", href: "/compliance" },
+    { name: "AI Chat", href: "/chat" },
   ];
 
   const currentTabs = activeApp === 'hrms' ? hrmsTabs : crmTabs;

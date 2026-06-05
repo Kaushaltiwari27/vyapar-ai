@@ -170,17 +170,18 @@ export interface Employee {
   bank_ifsc: string | null;
   pan_number: string | null;
   aadhar_number: string | null;
-  basic_salary: number;
-  hra: number;
-  other_allowances: number;
-  pf_applicable: boolean;
-  esic_applicable: boolean;
-  employment_type: string;
-  status: string;
   profile_photo_url: string | null;
   notes: string | null;
-  created_at: string;
   updated_at: string;
+  employment_type?: string; // full_time, part_time, contract
+  status: string; // active, inactive
+  created_at?: string;
+  // Payroll fields
+  basic_salary?: number;
+  hra?: number;
+  other_allowances?: number;
+  pf_applicable?: boolean;
+  esic_applicable?: boolean;
 }
 
 export interface Attendance {
@@ -242,4 +243,75 @@ export interface LeaveBalance {
   allocated: number;
   used: number;
   balance: number;
+}
+
+export interface PayrollRun {
+  id: string;
+  business_id: string;
+  month: number;
+  year: number;
+  status: 'draft' | 'processed';
+  total_gross: number;
+  total_pf_employee: number;
+  total_pf_employer: number;
+  total_esic_employee: number;
+  total_esic_employer: number;
+  total_tds: number;
+  total_deductions: number;
+  total_net_pay: number;
+  employee_count: number;
+  processed_at?: string;
+  processed_by?: string;
+  created_at?: string;
+}
+
+export interface PayrollDetail {
+  id: string;
+  business_id: string;
+  payroll_run_id: string;
+  employee_id: string;
+  employee_name: string;
+  employee_code?: string;
+  department?: string;
+  designation?: string;
+  month: number;
+  year: number;
+  working_days: number;
+  present_days: number;
+  leave_days: number;
+  lop_days: number;
+  basic_salary: number;
+  hra: number;
+  other_allowances: number;
+  gross_salary: number;
+  lop_deduction: number;
+  pf_employee: number;
+  pf_employer: number;
+  esic_employee: number;
+  esic_employer: number;
+  tds: number;
+  other_deductions: number;
+  total_deductions: number;
+  net_pay: number;
+  bank_account?: string;
+  bank_ifsc?: string;
+  pan_number?: string;
+  payslip_sent: boolean;
+  created_at?: string;
+  payroll_runs?: { status: string }; // joined data
+}
+
+export interface ComplianceCalendar {
+  id: string;
+  business_id: string;
+  compliance_type: 'PF' | 'ESIC' | 'TDS' | 'GST' | 'Other';
+  title: string;
+  description?: string;
+  due_date: string;
+  month?: number;
+  year?: number;
+  status: 'pending' | 'done';
+  amount?: number;
+  notes?: string;
+  created_at?: string;
 }

@@ -9,6 +9,7 @@ import { Deal, Invoice, Product } from "@/lib/types";
 import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight, AlertTriangle, Building2, Calendar, ClipboardCheck } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { getMonthName } from "@/lib/payroll";
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -31,6 +32,10 @@ export default function DashboardPage() {
   const [recentDeals, setRecentDeals] = useState<Deal[]>([]);
   const [overdueInvoices, setOverdueInvoices] = useState<Invoice[]>([]);
   const [lowStockProducts, setLowStockProducts] = useState<Product[]>([]);
+  
+  // Payroll & Compliance Alerts
+  const [payrollStatus, setPayrollStatus] = useState<any>(null);
+  const [upcomingDeadlines, setUpcomingDeadlines] = useState<any[]>([]);
 
   useEffect(() => {
     // Determine active app
@@ -140,6 +145,29 @@ export default function DashboardPage() {
       setPresentToday(present.count || 0);
       setTotalEmployees(emps.count || 0);
       setPendingLeaves(pending.count || 0);
+      
+      // 9. Payroll & Compliance Alerts
+      const currentMonth = new Date().getMonth() + 1;
+      const currentYear = new Date().getFullYear();
+
+      const { data: currentPayroll } = await supabase
+        .from('payroll_runs')
+        .select('status, total_net_pay, employee_count')
+        .eq('business_id', businessId)
+        .eq('month', currentMonth)
+        .eq('year', currentYear)
+        .single();
+      setPayrollStatus(currentPayroll);
+
+      const in7Days = new Date(Date.now() + 7 * 86400000).toISOString().split('T')[0];
+      const { data: deadlines } = await supabase
+        .from('compliance_calendar')
+        .select('*')
+        .eq('business_id', businessId)
+        .eq('status', 'pending')
+        .gte('due_date', today)
+        .lte('due_date', in7Days);
+      setUpcomingDeadlines(deadlines || []);
 
       setLoading(false);
     }
@@ -397,10 +425,58 @@ export default function DashboardPage() {
         </Card>
       </div>
       
-      <div className="mt-8 text-center p-12 border-2 border-dashed border-slate-200 rounded-sm bg-slate-50">
-        <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-        <h3 className="text-lg font-bold text-slate-700">HRMS Workspace</h3>
-        <p className="text-sm text-slate-500 max-w-sm mx-auto mt-2">Use the navigation tabs above to manage employee profiles, track daily attendance, and approve leave requests.</p>
+      {/* Alerts Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+        {/* Payroll Alert */}
+        <Card className={`border shadow-sm rounded-sm ${payrollStatus?.status === 'processed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/50'}`}>
+          <CardContent className="p-6 flex items-center justify-between">
+            <div>
+              <h3 className={`font-bold text-lg mb-1 flex items-center gap-2 ${payrollStatus?.status === 'processed' ? 'text-emerald-800' : 'text-amber-800'}`}>
+                {payrollStatus?.status === 'processed' ? <CheckCircle2 className="w-5 h-5"/> : <AlertTriangle className="w-5 h-5"/>} 
+                {getMonthName(new Date().getMonth() + 1)} Payroll
+              </h3>
+              <p className={`text-sm font-medium ${payrollStatus?.status === 'processed' ? 'text-emerald-700' : 'text-amber-700'}`}>
+                {payrollStatus?.status === 'processed' 
+                  ? `Processed for ${payrollStatus.employee_count} employees. Net Pay: ${formatCurrency(payrollStatus.total_net_pay)}` 
+                  : 'Payroll for this month is pending calculation.'}
+              </p>
+            </div>
+            {!payrollStatus || payrollStatus.status !== 'processed' ? (
+              <Link href="/payroll/run">
+                <Button className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm font-bold">Run Now</Button>
+              </Link>
+            ) : (
+              <Link href="/payroll">
+                <Button variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100 font-bold">View</Button>
+              </Link>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Compliance Alert */}
+        {upcomingDeadlines.length > 0 ? (
+          <Card className="border border-rose-200 bg-rose-50/50 shadow-sm rounded-sm">
+            <CardContent className="p-6 flex items-center justify-between">
+              <div>
+                <h3 className="font-bold text-lg text-rose-800 mb-1 flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5"/> {upcomingDeadlines.length} Compliance Deadlines
+                </h3>
+                <p className="text-sm font-medium text-rose-700">
+                  {upcomingDeadlines[0].title} is due in {Math.ceil((new Date(upcomingDeadlines[0].due_date).getTime() - Date.now()) / 86400000)} days.
+                </p>
+              </div>
+              <Link href="/compliance">
+                <Button className="bg-rose-600 hover:bg-rose-700 text-white shadow-sm font-bold">Review</Button>
+              </Link>
+            </CardContent>
+          </Card>
+        ) : (
+          <Card className="border border-slate-200 bg-slate-50/50 shadow-sm rounded-sm flex items-center justify-center p-6">
+            <p className="text-slate-500 font-medium flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-500"/> No urgent compliance deadlines this week.
+            </p>
+          </Card>
+        )}
       </div>
     </div>
   );

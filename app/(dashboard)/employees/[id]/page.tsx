@@ -20,9 +20,10 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
   const [leaveHistory, setLeaveHistory] = useState<LeaveRequest[]>([]);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
   const [deals, setDeals] = useState<Deal[]>([]);
+  const [payslips, setPayslips] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   
-  const [activeTab, setActiveTab] = useState<'overview' | 'attendance' | 'leaves' | 'performance'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'attendance' | 'leaves' | 'performance' | 'payslips'>('overview');
   const [formOpen, setFormOpen] = useState(false);
   const [businessId, setBusinessId] = useState("");
 
@@ -88,6 +89,17 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
       .limit(20);
     
     setDeals(empDeals || []);
+
+    // 6. Payslips
+    const { data: empPayslips } = await supabase
+      .from('payroll_details')
+      .select('*, payroll_runs(status)')
+      .eq('employee_id', emp.id)
+      .order('year', { ascending: false })
+      .order('month', { ascending: false })
+      .limit(12);
+
+    setPayslips(empPayslips || []);
     
     setLoading(false);
   };
@@ -173,7 +185,7 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
 
       {/* Tabs */}
       <div className="flex gap-2 border-b border-slate-200 overflow-x-auto no-scrollbar">
-        {['overview', 'attendance', 'leaves', 'performance'].map((tab) => (
+        {['overview', 'attendance', 'leaves', 'performance', 'payslips'].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab as any)}
@@ -431,6 +443,54 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                   ))}
                   {deals.length === 0 && (
                     <tr><td colSpan={4} className="px-6 py-8 text-center text-slate-500">No deals associated with this employee.</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'payslips' && (
+          <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+            <h3 className="text-lg font-bold text-slate-900">Payslip History</h3>
+            <div className="bg-white rounded-xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
+              <table className="w-full text-left text-sm whitespace-nowrap">
+                <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 font-semibold uppercase tracking-wider text-xs">
+                  <tr>
+                    <th className="px-6 py-4">Period</th>
+                    <th className="px-6 py-4">Gross Salary</th>
+                    <th className="px-6 py-4">Net Pay</th>
+                    <th className="px-6 py-4">Status</th>
+                    <th className="px-6 py-4 text-right">Action</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {payslips.map(ps => {
+                    const monthName = require('@/lib/payroll').getMonthName(ps.month);
+                    return (
+                      <tr key={ps.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-6 py-4 font-bold text-slate-900">{monthName} {ps.year}</td>
+                        <td className="px-6 py-4 text-slate-600">{formatCurrency(ps.gross_salary)}</td>
+                        <td className="px-6 py-4 font-extrabold text-[#0176D3]">{formatCurrency(ps.net_pay)}</td>
+                        <td className="px-6 py-4">
+                          <Badge variant="secondary" className={`text-[10px] uppercase font-bold tracking-wider px-2 border-0 ${
+                            ps.payroll_runs?.status === 'processed' ? 'bg-green-50 text-green-700' : 'bg-amber-50 text-amber-700'
+                          }`}>
+                            {ps.payroll_runs?.status || 'Draft'}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <Link href={`/payroll/${ps.payroll_run_id}`}>
+                            <Button variant="outline" size="sm" className="h-8 text-xs font-semibold">
+                              <FileText className="w-3 h-3 mr-1" /> View Run
+                            </Button>
+                          </Link>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                  {payslips.length === 0 && (
+                    <tr><td colSpan={5} className="px-6 py-8 text-center text-slate-500">No payslips generated for this employee yet.</td></tr>
                   )}
                 </tbody>
               </table>
