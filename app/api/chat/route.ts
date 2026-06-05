@@ -82,7 +82,7 @@ Pending Leave Approvals: ${pendingLeaves?.length || 0}
 
 PAYROLL (last 3 months):
 ${JSON.stringify(payrollRun?.map(p => ({
-  period: \`\${p.month}/\${p.year}\`,
+  period: p.month + "/" + p.year,
   status: p.status,
   employees: p.employee_count,
   gross: p.total_gross,
@@ -99,7 +99,7 @@ ${JSON.stringify(complianceDue?.map(c => ({
   amount: c.amount,
   daysLeft: Math.ceil((new Date(c.due_date).getTime() - Date.now()) / 86400000)
 })), null, 2)}
-        \`;
+        `;
       }
     }
 
