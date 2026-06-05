@@ -9,6 +9,7 @@ import { Users, UserCheck, Palmtree, Clock, Search, List, Grid, Plus } from "luc
 import { EmployeeTable } from "@/components/hrms/EmployeeTable";
 import { DepartmentOrgView } from "@/components/hrms/DepartmentOrgView";
 import { EmployeeForm } from "@/components/hrms/EmployeeForm";
+import { toast } from "react-hot-toast";
 
 export default function EmployeesPage() {
   const supabase = createClient();
@@ -79,7 +80,24 @@ export default function EmployeesPage() {
     setFormOpen(true);
   };
 
+  const handleDeactivate = async (emp: Employee) => {
+    if (!confirm(`Are you sure you want to deactivate ${emp.full_name}? They will be hidden from the active employees list.`)) return;
+    
+    const { error } = await supabase
+      .from('employees')
+      .update({ status: 'inactive' })
+      .eq('id', emp.id);
+
+    if (error) {
+      toast.error("Failed to deactivate employee: " + error.message);
+    } else {
+      toast.success("Employee deactivated successfully");
+      loadData();
+    }
+  };
+
   const filteredEmployees = employees.filter(emp => {
+    if (emp.status === 'inactive') return false;
     const matchesSearch = emp.full_name.toLowerCase().includes(searchQuery.toLowerCase()) || 
                           emp.phone?.includes(searchQuery) ||
                           emp.employee_code?.toLowerCase().includes(searchQuery.toLowerCase());
@@ -199,7 +217,7 @@ export default function EmployeesPage() {
       {/* Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         {viewMode === 'table' ? (
-          <EmployeeTable employees={filteredEmployees} onEdit={handleEdit} />
+          <EmployeeTable employees={filteredEmployees} onEdit={handleEdit} onDeactivate={handleDeactivate} />
         ) : (
           <DepartmentOrgView employees={filteredEmployees} />
         )}
