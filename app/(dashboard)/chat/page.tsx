@@ -11,7 +11,7 @@ interface Message {
   content: string;
 }
 
-const SUGGESTED_QUESTIONS = [
+const CRM_QUESTIONS = [
   "What is the total revenue for this month?",
   "Which deals are about to close?",
   "Which invoices are overdue?",
@@ -19,9 +19,18 @@ const SUGGESTED_QUESTIONS = [
   "What is the total value in the pipeline?"
 ];
 
+const HRMS_QUESTIONS = [
+  "How many employees are present today?",
+  "What was the total payroll for last month?",
+  "Are there any upcoming compliance deadlines?",
+  "How many leave requests are pending?",
+  "What is my total PF contribution?"
+];
+
 export default function ChatPage() {
+  const [activeApp, setActiveApp] = useState<'crm' | 'hrms'>('crm');
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: "Hello! I am your AI Business Assistant. You can ask me anything about your business data (customers, deals, invoices)." }
+    { role: 'assistant', content: "Hello! I am your AI Business Assistant. How can I help you today?" }
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +39,14 @@ export default function ChatPage() {
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
+
+  useEffect(() => {
+    const savedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+    if (savedApp) {
+      setActiveApp(savedApp);
+      setMessages([{ role: 'assistant', content: `Hello! I am your AI Business Assistant for Vyapar ${savedApp.toUpperCase()}. How can I help you today?` }]);
+    }
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -48,7 +65,7 @@ export default function ChatPage() {
       const res = await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: query })
+        body: JSON.stringify({ message: query, activeApp })
       });
 
       if (!res.ok) {
@@ -96,7 +113,7 @@ export default function ChatPage() {
           </h3>
         </div>
         <div className="flex-1 overflow-y-auto px-4 space-y-2">
-          {SUGGESTED_QUESTIONS.map((q, i) => (
+          {(activeApp === 'hrms' ? HRMS_QUESTIONS : CRM_QUESTIONS).map((q, i) => (
             <button
               key={i}
               onClick={() => {
