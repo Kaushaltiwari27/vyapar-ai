@@ -29,8 +29,14 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1 pt-14">
-        <section className="bg-white border-b border-[#dddbda] pt-24 pb-20">
-          <div className="max-w-5xl mx-auto px-6 text-center">
+        <section className="relative bg-white border-b border-[#dddbda] pt-24 pb-20 overflow-hidden">
+          {/* Background Image */}
+          <div 
+            className="absolute inset-0 opacity-[0.15] pointer-events-none"
+            style={{ backgroundImage: 'url("/hero_bg.png")', backgroundSize: 'cover', backgroundPosition: 'center' }}
+          />
+          
+          <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6 leading-tight">
               Grow Your Business with the World's #1 <br className="hidden md:block"/>
               AI-Powered CRM for Indian SMBs.
