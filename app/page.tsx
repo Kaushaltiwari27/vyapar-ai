@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ShieldCheck, MessageSquare, IndianRupee, BarChart3, TrendingUp, CheckCircle2, Cloud } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Cloud } from "lucide-react";
+import { APP_FEATURES } from "@/lib/features";
 import { Button } from "@/components/ui/button";
 
 export default function LandingPage() {
@@ -69,42 +70,24 @@ export default function LandingPage() {
               <p className="text-slate-600 max-w-2xl mx-auto text-lg">Connect sales, service, and finance on a single platform.</p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {/* Feature 1 */}
-              <div className="bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">Sales Pipeline</h3>
-                <p className="text-slate-600 text-sm">Track all your leads and deals with a visual drag-and-drop Kanban board.</p>
-              </div>
-              
-              {/* Feature 2 */}
-              <div className="bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
-                  <IndianRupee className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">GST Invoice</h3>
-                <p className="text-slate-600 text-sm">Generate professional GST invoices instantly and track pending payments easily.</p>
-              </div>
-
-              {/* Feature 3 */}
-              <div className="bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
-                  <MessageSquare className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">AI Chat Assistant</h3>
-                <p className="text-slate-600 text-sm">Chat with your business data. Ask &quot;What is my total revenue?&quot; and get instant answers.</p>
-              </div>
-
-              {/* Feature 4 */}
-              <div className="bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
-                <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
-                  <BarChart3 className="w-5 h-5" />
-                </div>
-                <h3 className="text-lg font-bold mb-2 text-slate-900">Smart Dashboard</h3>
-                <p className="text-slate-600 text-sm">Get a bird&apos;s eye view of your entire business performance with real-time metrics.</p>
-              </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {APP_FEATURES.map((feature) => {
+                const Icon = feature.icon;
+                return (
+                  <div key={feature.id} className="relative bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+                    {feature.isNew && (
+                      <div className="absolute top-4 right-4 bg-[#0176D3] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                        New
+                      </div>
+                    )}
+                    <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="text-lg font-bold mb-2 text-slate-900">{feature.title}</h3>
+                    <p className="text-slate-600 text-sm">{feature.description}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
