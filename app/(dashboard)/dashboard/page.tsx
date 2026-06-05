@@ -6,13 +6,15 @@ import { formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Deal, Invoice, Product } from "@/lib/types";
-import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight, AlertTriangle } from "lucide-react";
+import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight, AlertTriangle, Building2, Calendar, ClipboardCheck } from "lucide-react";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 
 export default function DashboardPage() {
   const supabase = createClient();
   const [loading, setLoading] = useState(true);
+  const [activeApp, setActiveApp] = useState<'crm' | 'hrms'>('crm');
+  const [userName, setUserName] = useState("User");
   
   // Metrics
   const [totalCustomers, setTotalCustomers] = useState(0);
@@ -31,13 +33,33 @@ export default function DashboardPage() {
   const [lowStockProducts, setLowStockProducts] = useState<Product[]>([]);
 
   useEffect(() => {
+    // Determine active app
+    const savedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+    if (savedApp) setActiveApp(savedApp);
+
+    // Listen for storage changes if app is switched in another tab/component
+    const handleStorageChange = () => {
+      const updatedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+      if (updatedApp) setActiveApp(updatedApp);
+    };
+    window.addEventListener('storage', handleStorageChange);
+    // Poll localstorage periodically just in case TopNavigation changed it without triggering 'storage' event in same window
+    const interval = setInterval(() => {
+      const currentApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+      if (currentApp && currentApp !== activeApp) setActiveApp(currentApp);
+    }, 1000);
+
     async function loadDashboardData() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const { data: profile } = await supabase.from('profiles').select('business_id').eq('id', user.id).single();
+      const { data: profile } = await supabase.from('profiles').select('full_name, business_id').eq('id', user.id).single();
       if (!profile?.business_id) return;
       const businessId = profile.business_id;
+      
+      if (profile.full_name) {
+        setUserName(profile.full_name.split(' ')[0]); // Get First Name
+      }
 
       // 1. Total Customers
       const { count: customersCount } = await supabase
@@ -64,7 +86,7 @@ export default function DashboardPage() {
       const pInvoices = pendingInvs?.reduce((sum, inv) => sum + (Number(inv.total_amount) || 0), 0) || 0;
       setPendingInvoices(pInvoices);
 
-      // 4. Won This Month (simple check for recent won deals)
+      // 4. Won This Month
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       startOfMonth.setHours(0,0,0,0);
@@ -123,255 +145,263 @@ export default function DashboardPage() {
     }
 
     loadDashboardData();
-  }, [supabase]);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [supabase, activeApp]);
 
   const getStageColor = (stage: string) => {
     switch (stage) {
-      case 'Lead': return 'bg-slate-100 text-slate-700';
-      case 'Contacted': return 'bg-blue-100 text-blue-700';
-      case 'Proposal': return 'bg-yellow-100 text-yellow-700';
-      case 'Negotiation': return 'bg-orange-100 text-orange-700';
-      case 'Won': return 'bg-green-100 text-green-700';
-      case 'Lost': return 'bg-red-100 text-red-700';
-      default: return 'bg-slate-100 text-slate-700';
+      case 'Won': return 'bg-[#e5f6e8] text-[#008a00] border-[#008a00]';
+      case 'Lost': return 'bg-[#fff0f0] text-[#c23934] border-[#c23934]';
+      default: return 'bg-[#f3f2f2] text-slate-700 border-slate-300';
     }
   };
 
   if (loading) {
-    return <div className="p-8 text-slate-500">Loading dashboard data...</div>;
+    return (
+      <div className="p-8 max-w-7xl mx-auto space-y-6">
+        <div className="h-10 w-48 bg-slate-200 animate-pulse rounded"></div>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          {[1,2,3,4].map(i => <div key={i} className="h-28 bg-slate-100 animate-pulse rounded border border-slate-200"></div>)}
+        </div>
+        <div className="h-64 bg-slate-100 animate-pulse rounded border border-slate-200 mt-8"></div>
+      </div>
+    );
   }
 
-  return (
-    <div className="p-8 max-w-7xl mx-auto space-y-10">
-      {/* Header & Quick Actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div>
-          <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">Overview</h1>
-          <p className="text-slate-500 mt-1">Here's what's happening with your business today.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/customers">
-            <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2 font-semibold" variant="outline">
-              <Plus className="w-4 h-4 text-slate-400" /> New Customer
-            </Button>
-          </Link>
-          <Link href="/deals">
-            <Button className="bg-white text-slate-700 border-slate-200 hover:bg-slate-50 shadow-sm gap-2 font-semibold" variant="outline">
-              <Plus className="w-4 h-4 text-slate-400" /> New Deal
-            </Button>
-          </Link>
-          <Link href="/invoices/new">
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-md shadow-indigo-200 gap-2 font-semibold">
-              <Plus className="w-4 h-4" /> New Invoice
-            </Button>
-          </Link>
-        </div>
-      </div>
-
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[100ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-blue-500"></div>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-semibold text-slate-500">Total Customers</p>
-              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
-                <Users className="h-4 w-4 text-blue-600" />
-              </div>
+  // --- CRM VIEW ---
+  if (activeApp === 'crm') {
+    return (
+      <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+        {/* Header & Quick Actions */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 bg-[#0176D3] rounded text-white flex items-center justify-center shadow-inner">
+              <Building2 className="w-6 h-6" />
             </div>
-            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{totalCustomers}</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[200ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-purple-500"></div>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-semibold text-slate-500">Pipeline Value</p>
-              <div className="w-8 h-8 rounded-full bg-purple-50 flex items-center justify-center group-hover:bg-purple-100 transition-colors">
-                <TrendingUp className="h-4 w-4 text-purple-600" />
-              </div>
+            <div>
+              <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Vyapar CRM</p>
+              <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Welcome back, {userName}!</h1>
             </div>
-            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(pipelineValue)}</div>
-          </CardContent>
-        </Card>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Link href="/deals">
+              <Button size="sm" className="bg-white text-slate-700 border-slate-300 hover:bg-slate-50 h-9 font-semibold rounded-sm" variant="outline">
+                New Deal
+              </Button>
+            </Link>
+            <Link href="/invoices/new">
+              <Button size="sm" className="bg-[#0176D3] hover:bg-[#014486] text-white h-9 rounded-sm font-semibold shadow-sm">
+                New Invoice
+              </Button>
+            </Link>
+          </div>
+        </div>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[300ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-amber-500"></div>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-semibold text-slate-500">Pending Invoices</p>
-              <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center group-hover:bg-amber-100 transition-colors">
+        {/* CRM Metrics Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between pb-2">
+                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Pipeline Value</p>
+                <TrendingUp className="h-4 w-4 text-[#0176D3]" />
+              </div>
+              <div className="text-2xl font-bold text-slate-900">{formatCurrency(pipelineValue)}</div>
+            </CardContent>
+          </Card>
+
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between pb-2">
+                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Won This Month</p>
+                <CheckCircle2 className="h-4 w-4 text-[#008a00]" />
+              </div>
+              <div className="text-2xl font-bold text-slate-900">{formatCurrency(wonThisMonth)}</div>
+            </CardContent>
+          </Card>
+          
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between pb-2">
+                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Pending Invoices</p>
                 <FileText className="h-4 w-4 text-amber-600" />
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(pendingInvoices)}</div>
-          </CardContent>
-        </Card>
+              <div className="text-2xl font-bold text-slate-900">{formatCurrency(pendingInvoices)}</div>
+            </CardContent>
+          </Card>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[400ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between space-y-0 pb-2">
-              <p className="text-sm font-semibold text-slate-500">Won This Month</p>
-              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between pb-2">
+                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Total Customers</p>
+                <Users className="h-4 w-4 text-slate-500" />
               </div>
-            </div>
-            <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{formatCurrency(wonThisMonth)}</div>
-          </CardContent>
-        </Card>
+              <div className="text-2xl font-bold text-slate-900">{totalCustomers}</div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Activity Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Recent Deals Table */}
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white">
+            <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
+              <CardTitle className="text-[15px] font-bold text-slate-900">Recent Deals</CardTitle>
+              <Link href="/deals" className="text-[13px] font-bold text-[#0176D3] hover:underline">View All</Link>
+            </CardHeader>
+            <CardContent className="p-0">
+              {recentDeals.length === 0 ? (
+                <div className="p-6 text-center text-sm text-slate-500">No deals found.</div>
+              ) : (
+                <table className="w-full text-left text-[13px]">
+                  <thead className="bg-white border-b border-slate-200 text-slate-500">
+                    <tr>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Deal Name</th>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Value</th>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide text-right">Stage</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {recentDeals.map(deal => (
+                      <tr key={deal.id} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-4 py-3">
+                          <p className="font-bold text-[#0176D3] hover:underline cursor-pointer">{deal.title}</p>
+                          <p className="text-slate-500">{deal.customer_name || 'Unknown'}</p>
+                        </td>
+                        <td className="px-4 py-3 font-medium text-slate-900">{formatCurrency(deal.value)}</td>
+                        <td className="px-4 py-3 text-right">
+                          <span className={`px-2 py-0.5 rounded text-[11px] font-bold uppercase border ${getStageColor(deal.stage)}`}>
+                            {deal.stage}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </CardContent>
+          </Card>
+
+          {/* Overdue Invoices Table */}
+          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white">
+            <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
+              <CardTitle className="text-[15px] font-bold text-slate-900 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4 text-[#c23934]" /> Overdue Invoices
+              </CardTitle>
+              <Link href="/invoices" className="text-[13px] font-bold text-[#0176D3] hover:underline">View All</Link>
+            </CardHeader>
+            <CardContent className="p-0">
+              {overdueInvoices.length === 0 ? (
+                <div className="p-6 text-center text-sm text-slate-500">No overdue invoices. Great job!</div>
+              ) : (
+                <table className="w-full text-left text-[13px]">
+                  <thead className="bg-white border-b border-slate-200 text-slate-500">
+                    <tr>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Invoice</th>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Amount</th>
+                      <th className="px-4 py-2 font-bold uppercase tracking-wide text-right">Status</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {overdueInvoices.map(invoice => {
+                      const daysOverdue = Math.floor((new Date().getTime() - new Date(invoice.due_date || new Date().toISOString()).getTime()) / (1000 * 3600 * 24));
+                      return (
+                        <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
+                          <td className="px-4 py-3">
+                            <Link href={`/invoices/${invoice.id}`} className="font-bold text-[#0176D3] hover:underline">
+                              {invoice.invoice_number}
+                            </Link>
+                            <p className="text-slate-500">{invoice.customer_name || 'Unknown'}</p>
+                          </td>
+                          <td className="px-4 py-3 font-medium text-slate-900">{formatCurrency(invoice.total_amount)}</td>
+                          <td className="px-4 py-3 text-right">
+                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#c23934] bg-[#fff0f0] border border-[#c23934] px-2 py-0.5 rounded">
+                              {daysOverdue} days late
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  // --- HRMS VIEW ---
+  return (
+    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+      {/* Header & Quick Actions */}
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 bg-purple-600 rounded text-white flex items-center justify-center shadow-inner">
+            <Users className="w-6 h-6" />
+          </div>
+          <div>
+            <p className="text-sm font-bold text-slate-500 uppercase tracking-wider">Vyapar HRMS</p>
+            <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Welcome back, {userName}!</h1>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link href="/employees">
+            <Button size="sm" className="bg-[#0176D3] hover:bg-[#014486] text-white h-9 rounded-sm font-semibold shadow-sm">
+              Manage Employees
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* HRMS Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[500ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500"></div>
-          <CardContent className="p-6 flex items-center justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
+          <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-slate-500 pb-1">Total Employees</p>
-              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{totalEmployees}</div>
+              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Total Employees</p>
+              <div className="text-3xl font-bold text-slate-900">{totalEmployees}</div>
             </div>
-            <div className="w-12 h-12 rounded-full bg-indigo-50 flex items-center justify-center group-hover:bg-indigo-100 transition-colors">
-              <Users className="h-6 w-6 text-indigo-600" />
+            <div className="w-10 h-10 rounded bg-[#f3f2f2] flex items-center justify-center">
+              <Users className="h-5 w-5 text-[#0176D3]" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[600ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-emerald-500"></div>
-          <CardContent className="p-6 flex items-center justify-between">
+        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-emerald-500 transition-colors">
+          <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-slate-500 pb-1">Present Today</p>
-              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{presentToday}</div>
+              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Present Today</p>
+              <div className="text-3xl font-bold text-slate-900">{presentToday}</div>
             </div>
-            <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center group-hover:bg-emerald-100 transition-colors">
-              <CheckCircle2 className="h-6 w-6 text-emerald-600" />
+            <div className="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center">
+              <ClipboardCheck className="h-5 w-5 text-emerald-600" />
             </div>
           </CardContent>
         </Card>
 
-        <Card className="border-0 shadow-sm bg-white ring-1 ring-slate-100 overflow-hidden relative group hover:-translate-y-1 hover:shadow-lg transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 delay-[700ms] fill-mode-both">
-          <div className="absolute top-0 left-0 w-1 h-full bg-rose-500"></div>
-          <CardContent className="p-6 flex items-center justify-between">
+        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-amber-500 transition-colors">
+          <CardContent className="p-5 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-slate-500 pb-1">Pending Leaves</p>
-              <div className="text-3xl font-extrabold text-slate-900 tracking-tight">{pendingLeaves}</div>
+              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Pending Leaves</p>
+              <div className="text-3xl font-bold text-slate-900">{pendingLeaves}</div>
             </div>
-            <div className="w-12 h-12 rounded-full bg-rose-50 flex items-center justify-center group-hover:bg-rose-100 transition-colors">
-              <Clock className="h-6 w-6 text-rose-600" />
+            <div className="w-10 h-10 rounded bg-amber-50 flex items-center justify-center">
+              <Calendar className="h-5 w-5 text-amber-600" />
             </div>
           </CardContent>
         </Card>
       </div>
-
-      {/* Activity Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Recent Deals */}
-        <Card className="shadow-sm border-0 ring-1 ring-slate-200">
-          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-100">
-            <CardTitle className="text-lg font-bold text-slate-900">Recent Deals</CardTitle>
-            <Link href="/deals" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
-              View all <ArrowRight className="w-4 h-4" />
-            </Link>
-          </CardHeader>
-          <CardContent className="pt-4 px-0">
-            {recentDeals.length === 0 ? (
-              <p className="text-sm text-slate-500 px-6 pb-2">No recent deals found.</p>
-            ) : (
-              <div className="divide-y divide-slate-100">
-                {recentDeals.map(deal => (
-                  <div key={deal.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
-                    <div className="space-y-1">
-                      <p className="text-sm font-bold text-slate-900">{deal.title}</p>
-                      <p className="text-sm font-medium text-slate-500">{deal.customer_name || 'Unknown Customer'}</p>
-                    </div>
-                    <div className="flex flex-col items-end gap-1.5">
-                      <div className="text-sm font-extrabold text-slate-900">{formatCurrency(deal.value)}</div>
-                      <Badge variant="secondary" className={`${getStageColor(deal.stage)} border-0 text-[10px] uppercase font-bold tracking-wider px-2`}>
-                        {deal.stage}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Overdue Invoices */}
-        <Card className="shadow-sm border-0 ring-1 ring-slate-200">
-          <CardHeader className="flex flex-row items-center justify-between pb-4 border-b border-slate-100">
-            <CardTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
-              <Clock className="w-5 h-5 text-rose-500" /> Overdue Invoices
-            </CardTitle>
-            <Link href="/invoices" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 flex items-center gap-1 transition-colors">
-              View all <ArrowRight className="w-4 h-4" />
-            </Link>
-          </CardHeader>
-          <CardContent className="pt-4 px-0">
-            {overdueInvoices.length === 0 ? (
-              <p className="text-sm text-slate-500 px-6 pb-2">Great job! No overdue invoices.</p>
-            ) : (
-              <div className="divide-y divide-slate-100">
-                {overdueInvoices.map(invoice => {
-                  const daysOverdue = Math.floor((new Date().getTime() - new Date(invoice.due_date || new Date().toISOString()).getTime()) / (1000 * 3600 * 24));
-                  return (
-                    <div key={invoice.id} className="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition-colors">
-                      <div className="space-y-1">
-                        <Link href={`/invoices/${invoice.id}`} className="text-sm font-bold text-indigo-600 hover:text-indigo-700 hover:underline">
-                          {invoice.invoice_number}
-                        </Link>
-                        <p className="text-sm font-medium text-slate-500">{invoice.customer_name || 'Unknown Customer'}</p>
-                      </div>
-                      <div className="flex flex-col items-end gap-1.5">
-                        <div className="text-sm font-extrabold text-slate-900">{formatCurrency(invoice.total_amount)}</div>
-                        <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 bg-rose-50 px-2 py-0.5 rounded-md border border-rose-100">
-                          {daysOverdue} days overdue
-                        </span>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+      
+      <div className="mt-8 text-center p-12 border-2 border-dashed border-slate-200 rounded-sm bg-slate-50">
+        <Users className="w-12 h-12 text-slate-300 mx-auto mb-3" />
+        <h3 className="text-lg font-bold text-slate-700">HRMS Workspace</h3>
+        <p className="text-sm text-slate-500 max-w-sm mx-auto mt-2">Use the navigation tabs above to manage employee profiles, track daily attendance, and approve leave requests.</p>
       </div>
-
-      {/* Low Stock Alerts */}
-      {lowStockProducts.length > 0 && (
-        <Card className="shadow-sm border-0 ring-1 ring-amber-200 bg-gradient-to-r from-amber-50 to-orange-50/50">
-          <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-lg font-bold text-amber-900 flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-amber-600" /> Inventory Alerts
-            </CardTitle>
-            <Link href="/inventory" className="text-sm font-semibold text-amber-700 hover:text-amber-800 flex items-center gap-1 transition-colors">
-              Manage Inventory <ArrowRight className="w-4 h-4" />
-            </Link>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-amber-800/80 mb-5 font-semibold">
-              {lowStockProducts.length} product(s) are running low. Consider reordering soon.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {lowStockProducts.slice(0, 6).map(product => (
-                <div key={product.id} className="bg-white p-4 rounded-xl border border-amber-100 shadow-sm flex justify-between items-center hover:shadow-md transition-shadow">
-                  <div>
-                    <p className="text-sm font-bold text-slate-900 truncate max-w-[150px]" title={product.name}>
-                      {product.name}
-                    </p>
-                    <p className="text-xs font-semibold text-slate-400 mt-0.5">Reorder at {product.reorder_level}</p>
-                  </div>
-                  <div className={`px-2.5 py-1 rounded-md text-xs font-bold border ${product.current_stock === 0 ? 'bg-rose-50 text-rose-600 border-rose-100' : 'bg-amber-50 text-amber-600 border-amber-100'}`}>
-                    {product.current_stock} {product.unit} left
-                  </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }
