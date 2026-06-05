@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 export function NewLeaveRequestModal({ open, onOpenChange, businessId, onSuccess }: any) {
   const supabase = createClient();
   const [loading, setLoading] = useState(false);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [employees, setEmployees] = useState<any[]>([]);
   const [leaveTypes, setLeaveTypes] = useState<any[]>([]);
 
   const [formData, setFormData] = useState({
