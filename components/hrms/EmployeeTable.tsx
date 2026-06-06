@@ -9,10 +9,10 @@ import { Badge } from "@/components/ui/badge";
 interface EmployeeTableProps {
   employees: Employee[];
   onEdit: (employee: Employee) => void;
-  onDeactivate: (employee: Employee) => void;
+  onDelete: (employee: Employee) => void;
 }
 
-export function EmployeeTable({ employees, onEdit, onDeactivate }: EmployeeTableProps) {
+export function EmployeeTable({ employees, onEdit, onDelete }: EmployeeTableProps) {
   if (employees.length === 0) {
     return (
       <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
@@ -76,7 +76,7 @@ export function EmployeeTable({ employees, onEdit, onDeactivate }: EmployeeTable
                     <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-[#0176D3]" onClick={() => onEdit(emp)}>
                       <Edit className="h-4 w-4" />
                     </Button>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50" onClick={() => onDeactivate(emp)}>
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600 hover:bg-red-50" onClick={() => onDelete(emp)}>
                       <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>

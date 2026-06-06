@@ -80,18 +80,20 @@ export default function EmployeesPage() {
     setFormOpen(true);
   };
 
-  const handleDeactivate = async (emp: Employee) => {
-    if (!confirm(`Are you sure you want to deactivate ${emp.full_name}? They will be hidden from the active employees list.`)) return;
+  const handleDelete = async (emp: Employee) => {
+    if (!confirm(`Are you sure you want to PERMANENTLY delete ${emp.full_name} and all their data from the database? This action cannot be undone.`)) return;
     
+    // Deleting the employee will also delete attendance, leaves, etc., if cascading is set.
+    // If cascading is not set, we might need to delete them manually, but Supabase handles relations or fails if restricted.
     const { error } = await supabase
       .from('employees')
-      .update({ status: 'inactive' })
+      .delete()
       .eq('id', emp.id);
 
     if (error) {
-      toast.error("Failed to deactivate employee: " + error.message);
+      toast.error("Failed to delete employee: " + error.message);
     } else {
-      toast.success("Employee deactivated successfully");
+      toast.success("Employee permanently deleted from database");
       loadData();
     }
   };
@@ -217,7 +219,7 @@ export default function EmployeesPage() {
       {/* Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
         {viewMode === 'table' ? (
-          <EmployeeTable employees={filteredEmployees} onEdit={handleEdit} onDeactivate={handleDeactivate} />
+          <EmployeeTable employees={filteredEmployees} onEdit={handleEdit} onDelete={handleDelete} />
         ) : (
           <DepartmentOrgView employees={filteredEmployees} />
         )}
