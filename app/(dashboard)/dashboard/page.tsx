@@ -10,6 +10,8 @@ import { Users, TrendingUp, FileText, CheckCircle2, Clock, Plus, ArrowRight, Ale
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { getMonthName } from "@/lib/payroll";
+import { RevenueChart } from "@/components/dashboard/RevenueChart";
+import { AttendanceChart } from "@/components/dashboard/AttendanceChart";
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -36,6 +38,10 @@ export default function DashboardPage() {
   // Payroll & Compliance Alerts
   const [payrollStatus, setPayrollStatus] = useState<any>(null);
   const [upcomingDeadlines, setUpcomingDeadlines] = useState<any[]>([]);
+
+  // Chart Data
+  const [revenueData, setRevenueData] = useState<any[]>([]);
+  const [attendanceData, setAttendanceData] = useState<any[]>([]);
 
   useEffect(() => {
     // Determine active app
@@ -169,6 +175,68 @@ export default function DashboardPage() {
         .lte('due_date', in7Days);
       setUpcomingDeadlines(deadlines || []);
 
+      // 10. Fetch Revenue Data (last 6 months)
+      const sixMonthsAgo = new Date();
+      sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 5);
+      sixMonthsAgo.setDate(1);
+      const { data: revDeals } = await supabase
+        .from('deals')
+        .select('value, updated_at')
+        .eq('business_id', businessId)
+        .eq('stage', 'Won')
+        .gte('updated_at', sixMonthsAgo.toISOString());
+      
+      if (revDeals) {
+        const groupedRev: Record<string, number> = {};
+        for (let i = 5; i >= 0; i--) {
+          const d = new Date();
+          d.setMonth(d.getMonth() - i);
+          const mName = getMonthName(d.getMonth() + 1);
+          groupedRev[mName] = 0;
+        }
+        revDeals.forEach(deal => {
+          const d = new Date(deal.updated_at);
+          const mName = getMonthName(d.getMonth() + 1);
+          if (groupedRev[mName] !== undefined) {
+            groupedRev[mName] += Number(deal.value) || 0;
+          }
+        });
+        setRevenueData(Object.keys(groupedRev).map(k => ({ month: k, revenue: groupedRev[k] })));
+      }
+
+      // 11. Fetch Attendance Trend (last 7 days)
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 6);
+      const { data: attTrend } = await supabase
+        .from('attendance')
+        .select('status, date')
+        .eq('business_id', businessId)
+        .gte('date', sevenDaysAgo.toISOString().split('T')[0]);
+
+      if (attTrend) {
+        const groupedAtt: Record<string, { display: string, present: number, lop: number }> = {};
+        for (let i = 6; i >= 0; i--) {
+          const d = new Date();
+          d.setDate(d.getDate() - i);
+          const dateStr = d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+          const isoDate = d.toISOString().split('T')[0];
+          groupedAtt[isoDate] = { display: dateStr, present: 0, lop: 0 };
+        }
+        
+        attTrend.forEach(a => {
+          if (groupedAtt[a.date]) {
+            if (['present', 'half_day'].includes(a.status)) groupedAtt[a.date].present++;
+            if (['on_leave', 'absent'].includes(a.status)) groupedAtt[a.date].lop++;
+          }
+        });
+        
+        setAttendanceData(Object.keys(groupedAtt).sort().map(k => ({ 
+          date: groupedAtt[k].display, 
+          present: groupedAtt[k].present, 
+          lop: groupedAtt[k].lop 
+        })));
+      }
+
       setLoading(false);
     }
 
@@ -272,8 +340,56 @@ export default function DashboardPage() {
           </Card>
         </div>
 
+        {/* Charts Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
+            <RevenueChart data={revenueData} />
+          </div>
+          <div className="lg:col-span-1 flex flex-col gap-6">
+            {/* Overdue Invoices Table moved to side of chart */}
+            <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white flex-1 flex flex-col">
+              <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
+                <CardTitle className="text-[15px] font-bold text-slate-900 flex items-center gap-2">
+                  <AlertTriangle className="w-4 h-4 text-[#c23934]" /> Overdue Invoices
+                </CardTitle>
+                <Link href="/invoices" className="text-[13px] font-bold text-[#0176D3] hover:underline">View All</Link>
+              </CardHeader>
+              <CardContent className="p-0 flex-1 overflow-y-auto max-h-[250px]">
+                {overdueInvoices.length === 0 ? (
+                  <div className="p-6 text-center text-sm text-slate-500">No overdue invoices. Great job!</div>
+                ) : (
+                  <table className="w-full text-left text-[13px]">
+                    <thead className="bg-white border-b border-slate-200 text-slate-500">
+                      <tr>
+                        <th className="px-4 py-2 font-bold uppercase tracking-wide">Invoice</th>
+                        <th className="px-4 py-2 font-bold uppercase tracking-wide">Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {overdueInvoices.map(invoice => {
+                        const daysOverdue = Math.floor((new Date().getTime() - new Date(invoice.due_date || new Date().toISOString()).getTime()) / (1000 * 3600 * 24));
+                        return (
+                          <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
+                            <td className="px-4 py-3">
+                              <Link href={`/invoices/${invoice.id}`} className="font-bold text-[#0176D3] hover:underline">
+                                {invoice.invoice_number}
+                              </Link>
+                              <div className="text-[10px] font-bold uppercase text-[#c23934] mt-0.5">{daysOverdue} days late</div>
+                            </td>
+                            <td className="px-4 py-3 font-medium text-slate-900">{formatCurrency(invoice.total_amount)}</td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
         {/* Activity Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 gap-6">
           {/* Recent Deals Table */}
           <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white">
             <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
@@ -307,52 +423,6 @@ export default function DashboardPage() {
                         </td>
                       </tr>
                     ))}
-                  </tbody>
-                </table>
-              )}
-            </CardContent>
-          </Card>
-
-          {/* Overdue Invoices Table */}
-          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white">
-            <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
-              <CardTitle className="text-[15px] font-bold text-slate-900 flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-[#c23934]" /> Overdue Invoices
-              </CardTitle>
-              <Link href="/invoices" className="text-[13px] font-bold text-[#0176D3] hover:underline">View All</Link>
-            </CardHeader>
-            <CardContent className="p-0">
-              {overdueInvoices.length === 0 ? (
-                <div className="p-6 text-center text-sm text-slate-500">No overdue invoices. Great job!</div>
-              ) : (
-                <table className="w-full text-left text-[13px]">
-                  <thead className="bg-white border-b border-slate-200 text-slate-500">
-                    <tr>
-                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Invoice</th>
-                      <th className="px-4 py-2 font-bold uppercase tracking-wide">Amount</th>
-                      <th className="px-4 py-2 font-bold uppercase tracking-wide text-right">Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-100">
-                    {overdueInvoices.map(invoice => {
-                      const daysOverdue = Math.floor((new Date().getTime() - new Date(invoice.due_date || new Date().toISOString()).getTime()) / (1000 * 3600 * 24));
-                      return (
-                        <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
-                          <td className="px-4 py-3">
-                            <Link href={`/invoices/${invoice.id}`} className="font-bold text-[#0176D3] hover:underline">
-                              {invoice.invoice_number}
-                            </Link>
-                            <p className="text-slate-500">{invoice.customer_name || 'Unknown'}</p>
-                          </td>
-                          <td className="px-4 py-3 font-medium text-slate-900">{formatCurrency(invoice.total_amount)}</td>
-                          <td className="px-4 py-3 text-right">
-                            <span className="text-[11px] font-bold uppercase tracking-wider text-[#c23934] bg-[#fff0f0] border border-[#c23934] px-2 py-0.5 rounded">
-                              {daysOverdue} days late
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })}
                   </tbody>
                 </table>
               )}
@@ -424,59 +494,66 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
-      
-      {/* Alerts Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        {/* Payroll Alert */}
-        <Card className={`border shadow-sm rounded-sm ${payrollStatus?.status === 'processed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/50'}`}>
-          <CardContent className="p-6 flex items-center justify-between">
-            <div>
-              <h3 className={`font-bold text-lg mb-1 flex items-center gap-2 ${payrollStatus?.status === 'processed' ? 'text-emerald-800' : 'text-amber-800'}`}>
-                {payrollStatus?.status === 'processed' ? <CheckCircle2 className="w-5 h-5"/> : <AlertTriangle className="w-5 h-5"/>} 
-                {getMonthName(new Date().getMonth() + 1)} Payroll
-              </h3>
-              <p className={`text-sm font-medium ${payrollStatus?.status === 'processed' ? 'text-emerald-700' : 'text-amber-700'}`}>
-                {payrollStatus?.status === 'processed' 
-                  ? `Processed for ${payrollStatus.employee_count} employees. Net Pay: ${formatCurrency(payrollStatus.total_net_pay)}` 
-                  : 'Payroll for this month is pending calculation.'}
-              </p>
-            </div>
-            {!payrollStatus || payrollStatus.status !== 'processed' ? (
-              <Link href="/payroll/run">
-                <Button className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm font-bold">Run Now</Button>
-              </Link>
-            ) : (
-              <Link href="/payroll">
-                <Button variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100 font-bold">View</Button>
-              </Link>
-            )}
-          </CardContent>
-        </Card>
 
-        {/* Compliance Alert */}
-        {upcomingDeadlines.length > 0 ? (
-          <Card className="border border-rose-200 bg-rose-50/50 shadow-sm rounded-sm">
-            <CardContent className="p-6 flex items-center justify-between">
-              <div>
-                <h3 className="font-bold text-lg text-rose-800 mb-1 flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5"/> {upcomingDeadlines.length} Compliance Deadlines
+      {/* HRMS Chart Row */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+        <div className="lg:col-span-2">
+          <AttendanceChart data={attendanceData} />
+        </div>
+        
+        {/* Alerts Section (Moved to side of chart) */}
+        <div className="lg:col-span-1 flex flex-col gap-6">
+          {/* Payroll Alert */}
+          <Card className={`border shadow-sm rounded-sm flex-1 flex flex-col ${payrollStatus?.status === 'processed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/50'}`}>
+            <CardContent className="p-6 flex-1 flex flex-col justify-between items-start">
+              <div className="mb-4">
+                <h3 className={`font-bold text-lg mb-1 flex items-center gap-2 ${payrollStatus?.status === 'processed' ? 'text-emerald-800' : 'text-amber-800'}`}>
+                  {payrollStatus?.status === 'processed' ? <CheckCircle2 className="w-5 h-5"/> : <AlertTriangle className="w-5 h-5"/>} 
+                  {getMonthName(new Date().getMonth() + 1)} Payroll
                 </h3>
-                <p className="text-sm font-medium text-rose-700">
-                  {upcomingDeadlines[0].title} is due in {Math.ceil((new Date(upcomingDeadlines[0].due_date).getTime() - Date.now()) / 86400000)} days.
+                <p className={`text-sm font-medium ${payrollStatus?.status === 'processed' ? 'text-emerald-700' : 'text-amber-700'}`}>
+                  {payrollStatus?.status === 'processed' 
+                    ? `Processed for ${payrollStatus.employee_count} employees. Net Pay: ${formatCurrency(payrollStatus.total_net_pay)}` 
+                    : 'Payroll for this month is pending calculation.'}
                 </p>
               </div>
-              <Link href="/compliance">
-                <Button className="bg-rose-600 hover:bg-rose-700 text-white shadow-sm font-bold">Review</Button>
-              </Link>
+              {!payrollStatus || payrollStatus.status !== 'processed' ? (
+                <Link href="/payroll/run">
+                  <Button className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm font-bold w-full">Run Now</Button>
+                </Link>
+              ) : (
+                <Link href="/payroll">
+                  <Button variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100 font-bold w-full">View Payroll</Button>
+                </Link>
+              )}
             </CardContent>
           </Card>
-        ) : (
-          <Card className="border border-slate-200 bg-slate-50/50 shadow-sm rounded-sm flex items-center justify-center p-6">
-            <p className="text-slate-500 font-medium flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500"/> No urgent compliance deadlines this week.
-            </p>
-          </Card>
-        )}
+
+          {/* Compliance Alert */}
+          {upcomingDeadlines.length > 0 ? (
+            <Card className="border border-rose-200 bg-rose-50/50 shadow-sm rounded-sm flex-1 flex flex-col">
+              <CardContent className="p-6 flex-1 flex flex-col justify-between items-start">
+                <div className="mb-4">
+                  <h3 className="font-bold text-lg text-rose-800 mb-1 flex items-center gap-2">
+                    <AlertTriangle className="w-5 h-5"/> Compliance Deadlines
+                  </h3>
+                  <p className="text-sm font-medium text-rose-700">
+                    {upcomingDeadlines[0].title} is due in {Math.ceil((new Date(upcomingDeadlines[0].due_date).getTime() - Date.now()) / 86400000)} days.
+                  </p>
+                </div>
+                <Link href="/compliance">
+                  <Button className="bg-rose-600 hover:bg-rose-700 text-white shadow-sm font-bold w-full">Review Now</Button>
+                </Link>
+              </CardContent>
+            </Card>
+          ) : (
+            <Card className="border border-slate-200 bg-slate-50/50 shadow-sm rounded-sm flex-1 flex items-center justify-center p-6">
+              <p className="text-slate-500 font-medium flex items-center gap-2 text-sm">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500"/> No urgent compliance deadlines.
+              </p>
+            </Card>
+          )}
+        </div>
       </div>
     </div>
   );
