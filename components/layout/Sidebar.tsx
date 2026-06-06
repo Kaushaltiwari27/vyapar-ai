@@ -1,116 +1,148 @@
-"use client";
+'use client'
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { ShieldCheck, Home, Users, TrendingUp, FileText, MessageCircle, LogOut, Package, Truck, ClipboardList } from "lucide-react";
-import { createClient } from "@/lib/client";
-import { useEffect, useState } from "react";
-import { toast } from "react-hot-toast";
+import { useEffect, useRef, useState } from 'react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { gsap } from 'gsap'
+import { createClient } from "@/lib/client"
+import { toast } from "react-hot-toast"
+import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck } from "lucide-react"
+
+const navItems = [
+  { href: '/dashboard', icon: Home, label: 'Dashboard' },
+  { href: '/customers', icon: Users, label: 'Customers' },
+  { href: '/deals', icon: TrendingUp, label: 'Deals' },
+  { href: '/invoices', icon: FileText, label: 'Invoices' },
+  { href: '/inventory', icon: Package, label: 'Inventory' },
+  { href: '/vendors', icon: Truck, label: 'Vendors' },
+  { href: '/purchase-orders', icon: ClipboardList, label: 'POs' },
+  { href: '/employees', icon: Users, label: 'Employees' },
+  { href: '/attendance', icon: ClipboardList, label: 'Attendance' },
+  { href: '/leaves', icon: FileText, label: 'Leaves' },
+  { href: '/payroll', icon: FileText, label: 'Payroll' },
+  { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
+  { href: '/chat', icon: MessageCircle, label: 'AI Chat', badge: 'AI' },
+]
 
 export function Sidebar() {
-  const pathname = usePathname();
-  const router = useRouter();
-  const supabase = createClient();
-  const [businessName, setBusinessName] = useState("Loading...");
+  const sidebarRef = useRef<HTMLElement>(null)
+  const pathname = usePathname()
+  const router = useRouter()
+  const supabase = createClient()
+  const [businessName, setBusinessName] = useState("Loading...")
 
   useEffect(() => {
+    // GSAP stagger animation on mount
+    gsap.fromTo(
+      '.nav-item',
+      { opacity: 0, x: -20 },
+      { opacity: 1, x: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
+    )
+    gsap.fromTo(
+      '.sidebar-logo',
+      { opacity: 0, scale: 0.8 },
+      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }
+    )
+    
+    // Fetch business name
     async function loadBusiness() {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) return;
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
       const { data } = await supabase
         .from('profiles')
         .select('businesses(name)')
         .eq('id', user.id)
-        .single();
+        .single()
       
-      const bus = data?.businesses as unknown as { name?: string };
+      const bus = data?.businesses as unknown as { name?: string }
       if (bus?.name) {
-        setBusinessName(bus.name);
+        setBusinessName(bus.name)
       }
     }
-    loadBusiness();
-  }, [supabase]);
+    loadBusiness()
+  }, [supabase])
 
   const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut()
     if (error) {
-      toast.error(error.message);
+      toast.error(error.message)
     } else {
-      router.push("/login");
-      router.refresh();
+      router.push("/login")
+      router.refresh()
     }
-  };
-
-  const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: Home },
-    { name: "Customers", href: "/customers", icon: Users },
-    { name: "Deals", href: "/deals", icon: TrendingUp },
-    { name: "Invoices", href: "/invoices", icon: FileText },
-    { name: "Inventory", href: "/inventory", icon: Package },
-    { name: "Vendors", href: "/vendors", icon: Truck },
-    { name: "Purchase Orders", href: "/purchase-orders", icon: ClipboardList },
-    { name: "Employees", href: "/employees", icon: Users },
-    { name: "Attendance", href: "/attendance", icon: ClipboardList },
-    { name: "Leaves", href: "/leaves", icon: FileText },
-    { name: "AI Chat", href: "/chat", icon: MessageCircle, badge: "NEW" },
-  ];
+  }
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-slate-950 border-r border-slate-800 flex flex-col transition-transform shadow-2xl">
+    <aside ref={sidebarRef} className="fixed left-0 top-0 z-40 h-screen w-64 bg-[#0A0A14] border-r border-[rgba(255,255,255,0.06)] flex flex-col transition-transform shadow-2xl">
       {/* Logo */}
-      <div className="h-20 flex items-center px-6 border-b border-slate-800/50">
+      <div className="h-20 flex items-center px-6 border-b border-[rgba(255,255,255,0.06)] sidebar-logo">
         <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20 group-hover:shadow-indigo-500/40 transition-all duration-300">
-            <ShieldCheck className="text-white w-5 h-5" />
+          <div className="w-9 h-9 bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all duration-300">
+            <span className="text-white font-extrabold text-lg">V</span>
           </div>
-          <span className="text-2xl font-extrabold text-white tracking-tight">Vyapar<span className="text-indigo-400">AI</span></span>
+          <div className="flex flex-col">
+            <span className="text-xl font-extrabold text-white tracking-tight leading-none">VyaparAI</span>
+            <span className="text-[10px] text-[#8B5CF6] font-medium tracking-widest uppercase mt-1">Business Brain</span>
+          </div>
         </Link>
       </div>
 
-      {/* Nav Links */}
-      <div className="flex-1 py-6 px-4 space-y-1.5 overflow-y-auto custom-scrollbar">
+      {/* Nav */}
+      <div className="flex-1 py-6 px-3 space-y-1 overflow-y-auto custom-scrollbar">
         {navItems.map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
-          const Icon = item.icon;
-          
+          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+          const Icon = item.icon
           return (
             <Link
-              key={item.name}
+              key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all duration-200 ${
+              className={`nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
                 isActive 
-                  ? "bg-indigo-500/10 text-indigo-400 shadow-sm border border-indigo-500/20" 
-                  : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200 border border-transparent"
+                  ? 'text-[#ffffff] bg-[rgba(79,70,229,0.15)]' 
+                  : 'text-[rgba(255,255,255,0.55)] hover:text-[#ffffff] hover:bg-[rgba(255,255,255,0.05)]'
               }`}
+              onMouseEnter={e => {
+                if (!isActive) {
+                  gsap.to(e.currentTarget, { x: 4, duration: 0.2, ease: 'power2.out' })
+                }
+              }}
+              onMouseLeave={e => {
+                if (!isActive) {
+                  gsap.to(e.currentTarget, { x: 0, duration: 0.2, ease: 'power2.out' })
+                }
+              }}
             >
-              <Icon className={`w-5 h-5 ${isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300"}`} />
-              {item.name}
+              {isActive && (
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-[#4F46E5] rounded-r-full shadow-[0_0_10px_#4F46E5]" />
+              )}
+              <Icon className={`w-4 h-4 ${isActive ? "text-[#8B5CF6]" : "opacity-70"}`} />
+              {item.label}
               {item.badge && (
-                <span className="ml-auto bg-indigo-500/20 text-indigo-300 text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wider border border-indigo-500/30">
+                <span className="ml-auto bg-[rgba(79,70,229,0.2)] text-[#8B5CF6] text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wider border border-[rgba(79,70,229,0.3)]">
                   {item.badge}
                 </span>
               )}
             </Link>
-          );
+          )
         })}
       </div>
 
-      {/* Footer / Business Name */}
-      <div className="p-4 border-t border-slate-800/50 bg-slate-950/50 backdrop-blur-md">
-        <div className="flex items-center justify-between bg-slate-900 rounded-xl p-3 border border-slate-800">
+      {/* Business name at bottom */}
+      <div className="p-4 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(0,0,0,0.2)]">
+        <div className="flex items-center justify-between bg-[rgba(255,255,255,0.03)] rounded-xl p-3 border border-[rgba(255,255,255,0.05)]">
           <div className="truncate pr-2">
-            <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Workspace</p>
-            <p className="text-sm font-bold text-slate-200 truncate">{businessName}</p>
+            <p className="text-[10px] font-bold text-[rgba(255,255,255,0.4)] uppercase tracking-widest mb-0.5">Workspace</p>
+            <p className="text-sm font-bold text-white truncate">{businessName}</p>
           </div>
           <button 
             onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-lg transition-colors flex-shrink-0"
+            className="p-2 text-[rgba(255,255,255,0.5)] hover:text-rose-400 hover:bg-[rgba(244,63,94,0.1)] rounded-lg transition-colors flex-shrink-0"
             title="Logout"
           >
-            <LogOut className="w-5 h-5" />
+            <LogOut className="w-4 h-4" />
           </button>
         </div>
       </div>
     </aside>
-  );
+  )
 }

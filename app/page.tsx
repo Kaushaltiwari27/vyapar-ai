@@ -1,90 +1,101 @@
 import Link from "next/link";
-import { ShieldCheck, CheckCircle2, Cloud } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database } from "lucide-react";
 import { APP_FEATURES } from "@/lib/features";
-import { Button } from "@/components/ui/button";
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-[#F3F2F2] flex flex-col font-sans selection:bg-[#0176D3] selection:text-white">
+    <div className="min-h-screen bg-[#0A0A14] flex flex-col font-sans selection:bg-[#4F46E5]/30 selection:text-white">
       {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 bg-white border-b border-[#dddbda] shadow-sm">
-        <div className="w-full flex justify-between items-center px-6 py-3 max-w-7xl mx-auto">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 bg-[#0176D3] rounded flex items-center justify-center">
-              <Cloud className="text-white w-5 h-5" />
+      <nav className="fixed w-full z-50 top-0 bg-[rgba(10,10,20,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]">
+        <div className="w-full flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
+              <span className="text-white font-extrabold text-xl">V</span>
             </div>
-            <span className="text-xl font-bold text-slate-900 tracking-tight">VyaparAI</span>
+            <div className="flex flex-col">
+              <span className="text-xl font-extrabold text-white tracking-tight leading-none">VyaparAI</span>
+              <span className="text-[10px] text-[#8B5CF6] font-medium tracking-widest uppercase mt-1">Business Brain</span>
+            </div>
           </div>
-          <div className="space-x-4 flex items-center">
-            <Link href="/login" className="text-[#0176D3] hover:underline font-semibold px-4 py-2 text-sm">
+          <div className="space-x-6 flex items-center">
+            <Link href="/login" className="text-[rgba(255,255,255,0.7)] hover:text-white font-medium text-sm transition-colors">
               Log In
             </Link>
-            <Link href="/signup">
-              <Button className="bg-[#0176D3] text-white hover:bg-[#014486] rounded-[4px] px-6 h-9 font-semibold transition-colors shadow-sm">
-                Try for Free
-              </Button>
+            <Link 
+              href="/signup"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]"
+              style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+            >
+              Try for Free <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </nav>
 
       {/* Hero Section */}
-      <main className="flex-1 pt-14">
-        <section className="relative bg-white border-b border-[#dddbda] pt-24 pb-20 overflow-hidden">
-          {/* Background Image */}
-          <div 
-            className="absolute inset-0 opacity-[0.15] pointer-events-none"
-            style={{ backgroundImage: 'url("/hero_bg.png")', backgroundSize: 'cover', backgroundPosition: 'center' }}
-          />
+      <main className="flex-1 pt-20">
+        <section className="relative pt-32 pb-40 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
+          {/* Animated gradient orbs in background */}
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#4F46E5] rounded-full blur-[120px] opacity-20 animate-float" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#7C3AED] rounded-full blur-[100px] opacity-20 animate-float" style={{ animationDelay: '1s' }} />
           
           <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight text-slate-900 mb-6 leading-tight">
-              Grow Your Business with the World's #1 <br className="hidden md:block"/>
-              AI-Powered CRM for Indian SMBs.
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] mb-8 animate-fade-in">
+              <span className="flex h-2 w-2 rounded-full bg-[#38ef7d] animate-pulse"></span>
+              <span className="text-xs font-medium text-[rgba(255,255,255,0.8)]">VyaparAI 2.0 is now live</span>
+            </div>
+
+            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6 animate-slide-up leading-tight">
+              India ka pehla <br className="hidden md:block"/>
+              <span className="gradient-text">AI Business Brain</span>
             </h1>
             
-            <p className="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">
-              VyaparAI brings customer management, invoicing, and intelligent insights together in one integrated platform. Work smarter, not harder.
+            <p className="text-lg md:text-xl text-[rgba(255,255,255,0.6)] mb-10 max-w-2xl mx-auto animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              CRM, HRMS, Payroll, and Invoicing powered by Artificial Intelligence. 
+              Built exclusively for modern Indian SMBs.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <Link href="/signup">
-                <Button size="lg" className="h-12 px-8 bg-[#0176D3] hover:bg-[#014486] text-white text-base font-semibold rounded-[4px] transition-colors shadow-sm">
-                  Start Free Trial
-                </Button>
+            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <Link 
+                href="/signup"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_10px_40px_rgba(79,70,229,0.4)]"
+                style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+              >
+                Start Free Trial <ArrowRight className="w-5 h-5" />
               </Link>
-              <Link href="/login">
-                <Button size="lg" variant="outline" className="h-12 px-8 border-[#0176D3] text-[#0176D3] hover:bg-[#F3F2F2] text-base font-semibold rounded-[4px] transition-colors">
-                  Watch Demo
-                </Button>
+              <Link 
+                href="/login"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-semibold text-white transition-all duration-300 hover:bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] backdrop-blur-sm"
+              >
+                Watch Demo
               </Link>
             </div>
           </div>
         </section>
 
         {/* Features Section */}
-        <section className="py-20 bg-[#F3F2F2]">
+        <section className="py-24 relative z-10 bg-[#0A0A14]">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-slate-900 mb-4">A complete view of your customers.</h2>
-              <p className="text-slate-600 max-w-2xl mx-auto text-lg">Connect sales, service, and finance on a single platform.</p>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">A complete intelligent suite.</h2>
+              <p className="text-[rgba(255,255,255,0.5)] max-w-2xl mx-auto text-lg">Everything you need to run your business, seamlessly connected.</p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {APP_FEATURES.map((feature) => {
+              {APP_FEATURES.map((feature, idx) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.id} className="relative bg-white p-6 rounded-[4px] border border-[#dddbda] shadow-[0_2px_2px_rgba(0,0,0,0.05)] hover:shadow-md transition-shadow">
+                  <div key={feature.id} className="relative group glass-card p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(79,70,229,0.15)] bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.05)]">
                     {feature.isNew && (
-                      <div className="absolute top-4 right-4 bg-[#0176D3] text-white text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">
+                      <div className="absolute top-6 right-6 bg-[rgba(79,70,229,0.2)] text-[#8B5CF6] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-[rgba(79,70,229,0.3)]">
                         New
                       </div>
                     )}
-                    <div className="w-10 h-10 bg-[#0176D3]/10 text-[#0176D3] rounded flex items-center justify-center mb-4">
-                      <Icon className="w-5 h-5" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110" style={{ background: 'linear-gradient(135deg, rgba(79,70,229,0.2), rgba(124,58,237,0.2))' }}>
+                      <Icon className="w-6 h-6 text-[#8B5CF6]" />
                     </div>
-                    <h3 className="text-lg font-bold mb-2 text-slate-900">{feature.title}</h3>
-                    <p className="text-slate-600 text-sm">{feature.description}</p>
+                    <h3 className="text-xl font-bold mb-3 text-white">{feature.title}</h3>
+                    <p className="text-[rgba(255,255,255,0.5)] text-sm leading-relaxed">{feature.description}</p>
                   </div>
                 );
               })}
@@ -93,33 +104,35 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing */}
-        <section className="py-20 bg-white border-t border-b border-[#dddbda]">
+        <section className="py-24 relative z-10 bg-[#05050A] border-t border-[rgba(255,255,255,0.05)]">
           <div className="max-w-3xl mx-auto px-6 text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-10">Transparent pricing for growing businesses</h2>
+            <h2 className="text-3xl md:text-5xl font-bold text-white mb-16">Enterprise power, SMB pricing.</h2>
             
-            <div className="bg-white p-8 rounded-[4px] border-2 border-[#0176D3] shadow-md relative max-w-md mx-auto">
-              <div className="absolute top-0 right-0 bg-[#0176D3] text-white text-xs font-bold px-3 py-1 rounded-bl-[4px]">
-                ENTERPRISE READY
+            <div className="glass-card p-10 relative max-w-md mx-auto bg-[rgba(255,255,255,0.02)] border-[rgba(79,70,229,0.3)] shadow-[0_0_40px_rgba(79,70,229,0.1)]">
+              <div className="absolute top-0 right-0 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-xl">
+                MOST POPULAR
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-2 mt-2">Professional Edition</h3>
-              <div className="text-4xl font-bold text-slate-900 mb-6 mt-4">
-                ₹2,499<span className="text-sm text-slate-500 font-medium ml-1">/ user / month</span>
+              <h3 className="text-2xl font-bold text-white mb-2 mt-2">Premium Edition</h3>
+              <div className="text-5xl font-bold text-white mb-6 mt-4 flex items-baseline justify-center">
+                ₹2,499<span className="text-sm text-[rgba(255,255,255,0.5)] font-medium ml-2">/ user / month</span>
               </div>
-              <p className="text-slate-600 mb-6 pb-6 border-b border-slate-200 text-sm">Billed annually. Complete CRM, Sales, and Service.</p>
+              <p className="text-[rgba(255,255,255,0.6)] mb-8 pb-8 border-b border-[rgba(255,255,255,0.06)] text-sm">Billed annually. Full access to CRM, HRMS, and AI.</p>
               
-              <ul className="space-y-3 text-left mb-8">
-                {['Unlimited Accounts & Contacts', 'Opportunity Tracking (Kanban)', 'AI Analytics & Forecasting', '24/7 Enterprise Support'].map((feature, i) => (
+              <ul className="space-y-4 text-left mb-10">
+                {['Unlimited Customers & Invoices', 'Full HRMS & Payroll Engine', 'Advanced AI Chat Assistant', '24/7 Priority Support'].map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-[#0176D3] flex-shrink-0" />
-                    <span className="text-slate-700">{feature}</span>
+                    <CheckCircle2 className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
+                    <span className="text-[rgba(255,255,255,0.8)]">{feature}</span>
                   </li>
                 ))}
               </ul>
               
-              <Link href="/signup">
-                <Button className="w-full h-10 bg-[#0176D3] hover:bg-[#014486] text-white font-semibold rounded-[4px] transition-colors">
-                  Try for Free
-                </Button>
+              <Link 
+                href="/signup"
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_10px_20px_rgba(79,70,229,0.3)]"
+                style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+              >
+                Start Free Trial
               </Link>
             </div>
           </div>
@@ -127,18 +140,18 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#032D60] text-white py-12">
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2">
-            <Cloud className="text-white w-6 h-6" />
-            <span className="font-bold text-lg">VyaparAI</span>
+      <footer className="bg-[#05050A] border-t border-[rgba(255,255,255,0.05)] py-12">
+        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
+          <div className="flex items-center gap-3">
+            <span className="text-white font-extrabold text-xl">V</span>
+            <span className="font-bold text-lg text-white">VyaparAI</span>
           </div>
-          <div className="flex gap-6 text-sm text-slate-300">
-            <a href="#" className="hover:text-white hover:underline">Privacy</a>
-            <a href="#" className="hover:text-white hover:underline">Terms of Service</a>
-            <a href="#" className="hover:text-white hover:underline">Contact</a>
+          <div className="flex gap-8 text-sm text-[rgba(255,255,255,0.5)]">
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
+            <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
+            <a href="#" className="hover:text-white transition-colors">Contact</a>
           </div>
-          <div className="text-slate-400 text-sm">&copy; {new Date().getFullYear()} VyaparAI, Inc. All rights reserved.</div>
+          <div className="text-[rgba(255,255,255,0.3)] text-sm">&copy; {new Date().getFullYear()} VyaparAI, Inc. All rights reserved.</div>
         </div>
       </footer>
     </div>

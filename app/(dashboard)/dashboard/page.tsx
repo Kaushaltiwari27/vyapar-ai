@@ -12,6 +12,8 @@ import { Badge } from "@/components/ui/badge";
 import { getMonthName } from "@/lib/payroll";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
 import { AttendanceChart } from "@/components/dashboard/AttendanceChart";
+import MetricCard from "@/components/ui/MetricCard";
+import PageWrapper from "@/components/ui/PageWrapper";
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -271,9 +273,9 @@ export default function DashboardPage() {
   // --- CRM VIEW ---
   if (activeApp === 'crm') {
     return (
-      <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+      <PageWrapper>
         {/* Header & Quick Actions */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
+        <div className="animate-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-[rgba(0,0,0,0.06)] shadow-sm mb-6">
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 bg-[#0176D3] rounded text-white flex items-center justify-center shadow-inner">
               <Building2 className="w-6 h-6" />
@@ -283,65 +285,41 @@ export default function DashboardPage() {
               <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Welcome back, {userName}!</h1>
             </div>
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-3">
             <Link href="/deals">
-              <Button size="sm" className="bg-white text-slate-700 border-slate-300 hover:bg-slate-50 h-9 font-semibold rounded-sm" variant="outline">
+              <Button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 hover:bg-slate-50 active:scale-95" style={{ border: '1px solid #E5E7EB', color: '#374151' }} variant="outline">
                 New Deal
               </Button>
             </Link>
             <Link href="/invoices/new">
-              <Button size="sm" className="bg-[#0176D3] hover:bg-[#014486] text-white h-9 rounded-sm font-semibold shadow-sm">
+              <Button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', boxShadow: '0 4px 14px rgba(79,70,229,0.35)' }}>
                 New Invoice
               </Button>
             </Link>
           </div>
         </div>
 
-        {/* CRM Metrics Row */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between pb-2">
-                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Pipeline Value</p>
-                <TrendingUp className="h-4 w-4 text-[#0176D3]" />
+        {/* Pipeline Sparklines (Mini visual trend) */}
+        <div className="animate-card mb-6 p-5 bg-white rounded-2xl border border-[rgba(0,0,0,0.06)] shadow-sm flex items-end gap-2 h-20">
+          <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mr-4 mb-2">Pipeline Trend</div>
+          {[40, 65, 45, 80, 55, 90, 75].map((h, i) => (
+            <div key={i} className="w-8 bg-[#4F46E5]/20 rounded-t-sm hover:bg-[#4F46E5]/40 transition-colors cursor-pointer relative group flex items-end" style={{ height: \`\${h}%\` }}>
+              <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] bg-slate-800 text-white px-1.5 py-0.5 rounded transition-opacity">
+                {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}
               </div>
-              <div className="text-2xl font-bold text-slate-900">{formatCurrency(pipelineValue)}</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between pb-2">
-                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Won This Month</p>
-                <CheckCircle2 className="h-4 w-4 text-[#008a00]" />
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{formatCurrency(wonThisMonth)}</div>
-            </CardContent>
-          </Card>
-          
-          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between pb-2">
-                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Pending Invoices</p>
-                <FileText className="h-4 w-4 text-amber-600" />
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{formatCurrency(pendingInvoices)}</div>
-            </CardContent>
-          </Card>
-
-          <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between pb-2">
-                <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider">Total Customers</p>
-                <Users className="h-4 w-4 text-slate-500" />
-              </div>
-              <div className="text-2xl font-bold text-slate-900">{totalCustomers}</div>
-            </CardContent>
-          </Card>
+            </div>
+          ))}
         </div>
 
+        {/* CRM Metrics Row */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <MetricCard title="Pipeline Value" value={pipelineValue} prefix="₹" icon={<TrendingUp className="w-5 h-5"/>} />
+          <MetricCard title="Won This Month" value={wonThisMonth} prefix="₹" icon={<CheckCircle2 className="w-5 h-5"/>} />
+          <MetricCard title="Pending Invoices" value={pendingInvoices} prefix="₹" icon={<FileText className="w-5 h-5"/>} />
+          <MetricCard title="Total Customers" value={totalCustomers} icon={<Users className="w-5 h-5"/>} />
+        </div>
         {/* Charts Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="animate-card grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
           <div className="lg:col-span-2">
             <RevenueChart data={revenueData} />
           </div>
@@ -389,7 +367,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Activity Row */}
-        <div className="grid grid-cols-1 gap-6">
+        <div className="animate-card grid grid-cols-1 gap-6">
           {/* Recent Deals Table */}
           <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white">
             <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
@@ -429,15 +407,15 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </div>
-      </div>
+      </PageWrapper>
     );
   }
 
   // --- HRMS VIEW ---
   return (
-    <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
+    <PageWrapper>
       {/* Header & Quick Actions */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
+      <div className="animate-card flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl border border-[rgba(0,0,0,0.06)] shadow-sm mb-6">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 bg-purple-600 rounded text-white flex items-center justify-center shadow-inner">
             <Users className="w-6 h-6" />
@@ -449,7 +427,7 @@ export default function DashboardPage() {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href="/employees">
-            <Button size="sm" className="bg-[#0176D3] hover:bg-[#014486] text-white h-9 rounded-sm font-semibold shadow-sm">
+            <Button className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-200 hover:opacity-90 active:scale-95" style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)', boxShadow: '0 4px 14px rgba(79,70,229,0.35)' }}>
               Manage Employees
             </Button>
           </Link>
@@ -457,46 +435,13 @@ export default function DashboardPage() {
       </div>
 
       {/* HRMS Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-[#0176D3] transition-colors">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Total Employees</p>
-              <div className="text-3xl font-bold text-slate-900">{totalEmployees}</div>
-            </div>
-            <div className="w-10 h-10 rounded bg-[#f3f2f2] flex items-center justify-center">
-              <Users className="h-5 w-5 text-[#0176D3]" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-emerald-500 transition-colors">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Present Today</p>
-              <div className="text-3xl font-bold text-slate-900">{presentToday}</div>
-            </div>
-            <div className="w-10 h-10 rounded bg-emerald-50 flex items-center justify-center">
-              <ClipboardCheck className="h-5 w-5 text-emerald-600" />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white hover:border-amber-500 transition-colors">
-          <CardContent className="p-5 flex items-center justify-between">
-            <div>
-              <p className="text-[13px] font-bold text-slate-500 uppercase tracking-wider pb-1">Pending Leaves</p>
-              <div className="text-3xl font-bold text-slate-900">{pendingLeaves}</div>
-            </div>
-            <div className="w-10 h-10 rounded bg-amber-50 flex items-center justify-center">
-              <Calendar className="h-5 w-5 text-amber-600" />
-            </div>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <MetricCard title="Total Employees" value={totalEmployees} icon={<Users className="w-5 h-5"/>} />
+        <MetricCard title="Present Today" value={presentToday} icon={<ClipboardCheck className="w-5 h-5"/>} />
+        <MetricCard title="Pending Leaves" value={pendingLeaves} icon={<Calendar className="w-5 h-5"/>} />
       </div>
-
       {/* HRMS Chart Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-8">
+      <div className="animate-card grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <div className="lg:col-span-2">
           <AttendanceChart data={attendanceData} />
         </div>
@@ -555,6 +500,6 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 }
