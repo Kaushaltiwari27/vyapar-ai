@@ -8,7 +8,7 @@ import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
 import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck } from "lucide-react"
 
-const navItems = [
+const crmItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/customers', icon: Users, label: 'Customers' },
   { href: '/deals', icon: TrendingUp, label: 'Deals' },
@@ -16,11 +16,18 @@ const navItems = [
   { href: '/inventory', icon: Package, label: 'Inventory' },
   { href: '/vendors', icon: Truck, label: 'Vendors' },
   { href: '/purchase-orders', icon: ClipboardList, label: 'POs' },
+]
+
+const hrmsItems = [
+  { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/employees', icon: Users, label: 'Employees' },
   { href: '/attendance', icon: ClipboardList, label: 'Attendance' },
   { href: '/leaves', icon: FileText, label: 'Leaves' },
   { href: '/payroll', icon: FileText, label: 'Payroll' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
+]
+
+const commonItems = [
   { href: '/chat', icon: MessageCircle, label: 'AI Chat', badge: 'AI' },
 ]
 
@@ -30,8 +37,23 @@ export function Sidebar() {
   const router = useRouter()
   const supabase = createClient()
   const [businessName, setBusinessName] = useState("Loading...")
+  const [activeApp, setActiveApp] = useState<'crm' | 'hrms'>('crm')
 
   useEffect(() => {
+    const savedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms'
+    if (savedApp) setActiveApp(savedApp)
+
+    const handleStorageChange = () => {
+      const updatedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms'
+      if (updatedApp && updatedApp !== activeApp) setActiveApp(updatedApp)
+    }
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Poll localstorage periodically just in case TopNavigation changed it
+    const interval = setInterval(() => {
+      const currentApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+      if (currentApp && currentApp !== activeApp) setActiveApp(currentApp);
+    }, 1000);
     // GSAP stagger animation on mount
     gsap.fromTo(
       '.nav-item',
@@ -60,7 +82,21 @@ export function Sidebar() {
       }
     }
     loadBusiness()
-  }, [supabase])
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      clearInterval(interval)
+    }
+  }, [supabase, activeApp])
+
+  const toggleApp = (app: 'crm' | 'hrms') => {
+    setActiveApp(app)
+    localStorage.setItem('vyapar_active_app', app)
+    window.dispatchEvent(new Event('storage'))
+    if (pathname !== '/dashboard') {
+      router.push('/dashboard')
+    }
+  }
 
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut()
@@ -87,9 +123,35 @@ export function Sidebar() {
         </Link>
       </div>
 
+      {/* App Switcher */}
+      <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
+        <div className="flex p-1 bg-[rgba(255,255,255,0.05)] rounded-lg">
+          <button
+            onClick={() => toggleApp('crm')}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+              activeApp === 'crm' 
+                ? 'bg-[rgba(79,70,229,0.8)] text-white shadow-sm' 
+                : 'text-[rgba(255,255,255,0.5)] hover:text-white'
+            }`}
+          >
+            CRM & ERP
+          </button>
+          <button
+            onClick={() => toggleApp('hrms')}
+            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
+              activeApp === 'hrms' 
+                ? 'bg-[rgba(124,58,237,0.8)] text-white shadow-sm' 
+                : 'text-[rgba(255,255,255,0.5)] hover:text-white'
+            }`}
+          >
+            HRMS
+          </button>
+        </div>
+      </div>
+
       {/* Nav */}
       <div className="flex-1 py-6 px-3 space-y-1 overflow-y-auto custom-scrollbar">
-        {navItems.map((item) => {
+        {[...(activeApp === 'crm' ? crmItems : hrmsItems), ...commonItems].map((item) => {
           const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
           const Icon = item.icon
           return (
