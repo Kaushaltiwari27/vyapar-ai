@@ -303,7 +303,7 @@ export default function DashboardPage() {
         <div className="animate-card mb-6 p-5 bg-white rounded-2xl border border-[rgba(0,0,0,0.06)] shadow-sm flex items-end gap-2 h-20">
           <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mr-4 mb-2">Pipeline Trend</div>
           {[40, 65, 45, 80, 55, 90, 75].map((h, i) => (
-            <div key={i} className="w-8 bg-[#4F46E5]/20 rounded-t-sm hover:bg-[#4F46E5]/40 transition-colors cursor-pointer relative group flex items-end" style={{ height: \`\${h}%\` }}>
+            <div key={i} className="w-8 bg-[#4F46E5]/20 rounded-t-sm hover:bg-[#4F46E5]/40 transition-colors cursor-pointer relative group flex items-end" style={{ height: `${h}%` }}>
               <div className="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 text-[10px] bg-slate-800 text-white px-1.5 py-0.5 rounded transition-opacity">
                 {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'][i]}
               </div>
