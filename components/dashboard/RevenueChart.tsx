@@ -58,7 +58,7 @@ export function RevenueChart({ data }: { data: RevenueData[] }) {
                 axisLine={false}
                 tickLine={false}
                 tick={{ fill: '#64748b', fontSize: 12 }}
-                tickFormatter={(value) => \`₹\${value >= 1000 ? (value / 1000).toFixed(0) + 'k' : value}\`}
+                tickFormatter={(value) => `₹${value >= 1000 ? (value / 1000).toFixed(0) + 'k' : value}`}
               />
               <Tooltip content={<CustomTooltip />} cursor={{ fill: '#f8fafc' }} />
               <Bar 
