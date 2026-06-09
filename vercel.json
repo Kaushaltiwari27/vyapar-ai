@@ -1,0 +1,8 @@
+{
+  "crons": [
+    { "path": "/api/cron/morning-briefing", "schedule": "30 2 * * *" },
+    { "path": "/api/cron/invoice-alerts", "schedule": "30 4 * * *" },
+    { "path": "/api/cron/stock-alerts", "schedule": "0 */4 * * *" },
+    { "path": "/api/cron/compliance-alerts", "schedule": "0 3 * * *" }
+  ]
+}

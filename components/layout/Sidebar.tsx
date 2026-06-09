@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { gsap } from 'gsap'
 import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
-import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck } from "lucide-react"
+import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone } from "lucide-react"
 
 const crmItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
@@ -28,6 +28,7 @@ const hrmsItems = [
 ]
 
 const commonItems = [
+  { href: '/whatsapp', icon: Smartphone, label: 'WhatsApp OS', badge: 'NEW' },
   { href: '/chat', icon: MessageCircle, label: 'AI Chat', badge: 'AI' },
 ]
 
