@@ -1,7 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { useEffect, useState, MouseEvent } from 'react'
+import { motion, useMotionValue, useMotionTemplate, animate } from 'framer-motion'
 
 interface MetricCardProps {
   title: string
@@ -22,6 +22,16 @@ export default function MetricCard({
   const [displayValue, setDisplayValue] = useState(
     typeof value === 'number' && shouldAnimate ? '0' : new Intl.NumberFormat('en-IN').format(Number(value) || 0)
   );
+  
+  // Spotlight effect
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
 
   useEffect(() => {
     if (!shouldAnimate || typeof value !== 'number') {
@@ -30,8 +40,8 @@ export default function MetricCard({
     }
 
     const controls = animate(0, value, {
-      duration: 0.25,
-      ease: "easeOut",
+      duration: 1.5,
+      ease: [0.16, 1, 0.3, 1], // Custom spring-like ease
       onUpdate(v) {
         setDisplayValue(new Intl.NumberFormat('en-IN').format(Math.round(v)));
       }
@@ -42,15 +52,31 @@ export default function MetricCard({
 
   return (
     <motion.div 
-      whileHover={{ y: -4, scale: 1.01 }}
-      className="relative overflow-hidden bg-background border border-border rounded-xl p-5 premium-shadow transition-shadow hover:premium-shadow-hover"
+      onMouseMove={handleMouseMove}
+      whileHover={{ y: -4, scale: 1.02 }}
+      transition={{ type: "spring", stiffness: 400, damping: 25 }}
+      className="group relative overflow-hidden bg-background border border-border rounded-xl p-5 premium-shadow transition-shadow hover:premium-shadow-hover"
     >
+      <motion.div
+        className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition duration-300 group-hover:opacity-100 z-0"
+        style={{
+          background: useMotionTemplate`radial-gradient(400px circle at ${mouseX}px ${mouseY}px, hsl(var(--primary) / 0.1), transparent 80%)`,
+        }}
+      />
+      
       <div className="relative z-10 flex flex-col h-full justify-between">
         <div className="flex items-center justify-between pb-2">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
             {title}
           </p>
-          {icon && <div className="text-muted-foreground/70">{icon}</div>}
+          {icon && (
+            <motion.div 
+              whileHover={{ rotate: 15, scale: 1.2 }}
+              className="text-primary/70"
+            >
+              {icon}
+            </motion.div>
+          )}
         </div>
         
         <div className="text-3xl font-bold text-foreground tracking-tight mt-1">
