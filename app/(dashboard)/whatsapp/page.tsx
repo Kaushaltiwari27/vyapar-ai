@@ -97,20 +97,20 @@ export default function WhatsAppPage() {
       <div className="p-8 max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-green-500/20 text-green-500 rounded-xl flex items-center justify-center">
+            <div className="w-10 h-10 bg-green-500/20 text-green-600 dark:text-green-500 rounded-xl flex items-center justify-center">
               <MessageCircle className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-white">WhatsApp OS</h2>
-              <p className="text-sm text-slate-400">Manage WhatsApp integrations & alerts</p>
+              <h2 className="text-2xl font-bold text-foreground">WhatsApp OS</h2>
+              <p className="text-sm text-muted-foreground">Manage WhatsApp integrations & alerts</p>
             </div>
           </div>
           {settings?.is_active ? (
-            <Badge className="bg-green-500/10 text-green-500 border-green-500/20 px-3 py-1">
+            <Badge className="bg-green-500/10 text-green-600 dark:text-green-500 border-green-500/20 px-3 py-1">
               <CheckCircle2 className="w-3.5 h-3.5 mr-1.5" /> Active
             </Badge>
           ) : (
-            <Badge className="bg-red-500/10 text-red-500 border-red-500/20 px-3 py-1">
+            <Badge className="bg-red-500/10 text-red-600 dark:text-red-500 border-red-500/20 px-3 py-1">
               <XCircle className="w-3.5 h-3.5 mr-1.5" /> Inactive
             </Badge>
           )}
@@ -118,45 +118,45 @@ export default function WhatsAppPage() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* SECTION 1: SETUP */}
-          <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] rounded-2xl p-6 shadow-xl animate-card">
-            <h3 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-xl animate-card">
+            <h3 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
               Connection Setup
             </h3>
             
             <div className="space-y-5">
               <div>
-                <label className="text-xs font-medium text-slate-400 mb-1.5 block">Owner Phone Number (with country code)</label>
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Owner Phone Number (with country code)</label>
                 <div className="flex gap-2">
                   <Input 
                     value={settings?.owner_phone || ''} 
                     onChange={e => setSettings({...settings, owner_phone: e.target.value})}
                     placeholder="919876543210" 
-                    className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.1)] text-white"
+                    className="bg-muted border-input text-foreground"
                   />
-                  <Button variant="outline" onClick={() => updateSetting('owner_phone', settings.owner_phone)} className="border-[rgba(255,255,255,0.1)] text-white hover:bg-[rgba(255,255,255,0.05)]">
+                  <Button variant="outline" onClick={() => updateSetting('owner_phone', settings.owner_phone)} className="border-border text-foreground hover:bg-accent">
                     Save
                   </Button>
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-medium text-slate-400 mb-1.5 block">Webhook URL (For Meta App)</label>
-                <div className="flex items-center gap-2 bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.1)] rounded-lg p-2">
-                  <code className="text-sm text-green-400 flex-1 truncate">{typeof window !== 'undefined' ? `${window.location.origin}/api/whatsapp` : ''}</code>
-                  <Button size="icon" variant="ghost" onClick={copyWebhook} className="h-8 w-8 text-slate-400 hover:text-white">
+                <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Webhook URL (For Meta App)</label>
+                <div className="flex items-center gap-2 bg-muted border border-border rounded-lg p-2">
+                  <code className="text-sm text-green-600 dark:text-green-400 flex-1 truncate">{typeof window !== 'undefined' ? `${window.location.origin}/api/whatsapp` : ''}</code>
+                  <Button size="icon" variant="ghost" onClick={copyWebhook} className="h-8 w-8 text-muted-foreground hover:text-foreground">
                     <Copy className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
 
-              <div className="pt-4 border-t border-[rgba(255,255,255,0.05)]">
-                <label className="text-xs font-medium text-slate-400 mb-2 block">Test Connection</label>
+              <div className="pt-4 border-t border-border">
+                <label className="text-xs font-medium text-muted-foreground mb-2 block">Test Connection</label>
                 <div className="flex gap-2">
                   <Input 
                     value={testMsg} 
                     onChange={e => setTestMsg(e.target.value)}
                     placeholder="Type a message..." 
-                    className="bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.1)] text-white"
+                    className="bg-muted border-input text-foreground"
                   />
                   <Button onClick={handleTestMessage} className="bg-green-600 hover:bg-green-700 text-white">
                     <Send className="w-4 h-4 mr-2" /> Send
@@ -167,14 +167,14 @@ export default function WhatsAppPage() {
           </div>
 
           {/* SECTION 2: ALERTS */}
-          <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] rounded-2xl p-6 shadow-xl animate-card">
-            <h3 className="text-lg font-semibold text-white mb-4">Smart Alerts</h3>
+          <div className="bg-card border border-border rounded-2xl p-6 shadow-xl animate-card">
+            <h3 className="text-lg font-semibold text-foreground mb-4">Smart Alerts</h3>
             
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
                 <div>
-                  <p className="text-sm font-medium text-white">Morning Briefing</p>
-                  <p className="text-xs text-slate-400">Daily summary at 8:00 AM</p>
+                  <p className="text-sm font-medium text-foreground">Morning Briefing</p>
+                  <p className="text-xs text-muted-foreground">Daily summary at 8:00 AM</p>
                 </div>
                 <Switch 
                   checked={settings?.morning_briefing_enabled || false}
@@ -182,10 +182,10 @@ export default function WhatsAppPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
                 <div>
-                  <p className="text-sm font-medium text-white">Invoice Alerts</p>
-                  <p className="text-xs text-slate-400">Notify when invoices are overdue</p>
+                  <p className="text-sm font-medium text-foreground">Invoice Alerts</p>
+                  <p className="text-xs text-muted-foreground">Notify when invoices are overdue</p>
                 </div>
                 <Switch 
                   checked={settings?.invoice_alerts || false}
@@ -193,10 +193,10 @@ export default function WhatsAppPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
                 <div>
-                  <p className="text-sm font-medium text-white">Low Stock Alerts</p>
-                  <p className="text-xs text-slate-400">Alert when inventory is running low</p>
+                  <p className="text-sm font-medium text-foreground">Low Stock Alerts</p>
+                  <p className="text-xs text-muted-foreground">Alert when inventory is running low</p>
                 </div>
                 <Switch 
                   checked={settings?.low_stock_alerts || false}
@@ -204,10 +204,10 @@ export default function WhatsAppPage() {
                 />
               </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)]">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
                 <div>
-                  <p className="text-sm font-medium text-white">Compliance Alerts</p>
-                  <p className="text-xs text-slate-400">Deadlines for GST, TDS, PF</p>
+                  <p className="text-sm font-medium text-foreground">Compliance Alerts</p>
+                  <p className="text-xs text-muted-foreground">Deadlines for GST, TDS, PF</p>
                 </div>
                 <Switch 
                   checked={settings?.compliance_alerts || false}
@@ -219,15 +219,15 @@ export default function WhatsAppPage() {
         </div>
 
         {/* SECTION 3: MESSAGE LOG */}
-        <div className="bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] rounded-2xl shadow-xl overflow-hidden animate-card">
-          <div className="p-5 border-b border-[rgba(255,255,255,0.05)] flex justify-between items-center">
-            <h3 className="text-lg font-semibold text-white">Message Log</h3>
-            <Button variant="ghost" size="sm" onClick={fetchSettings} className="text-slate-400 hover:text-white">Refresh</Button>
+        <div className="bg-card border border-border rounded-2xl shadow-xl overflow-hidden animate-card">
+          <div className="p-5 border-b border-border flex justify-between items-center">
+            <h3 className="text-lg font-semibold text-foreground">Message Log</h3>
+            <Button variant="ghost" size="sm" onClick={fetchSettings} className="text-muted-foreground hover:text-foreground">Refresh</Button>
           </div>
           
           <div className="overflow-x-auto">
-            <table className="w-full text-sm text-left text-slate-300">
-              <thead className="text-xs text-slate-400 uppercase bg-[rgba(0,0,0,0.2)] border-b border-[rgba(255,255,255,0.05)]">
+            <table className="w-full text-sm text-left text-muted-foreground">
+              <thead className="text-xs text-muted-foreground uppercase bg-muted/50 border-b border-border">
                 <tr>
                   <th className="px-6 py-3">Time</th>
                   <th className="px-6 py-3">Type</th>
@@ -236,32 +236,32 @@ export default function WhatsAppPage() {
                   <th className="px-6 py-3">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[rgba(255,255,255,0.05)]">
+              <tbody className="divide-y divide-border">
                 {messages.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="px-6 py-8 text-center text-slate-500">No messages found.</td>
+                    <td colSpan={5} className="px-6 py-8 text-center text-muted-foreground">No messages found.</td>
                   </tr>
                 ) : (
                   messages.map(msg => (
-                    <tr key={msg.id} className="hover:bg-[rgba(255,255,255,0.02)] transition-colors">
-                      <td className="px-6 py-3 whitespace-nowrap text-xs text-slate-400">
+                    <tr key={msg.id} className="hover:bg-muted/50 transition-colors">
+                      <td className="px-6 py-3 whitespace-nowrap text-xs text-muted-foreground">
                         {new Date(msg.created_at).toLocaleString('en-IN', { hour: '2-digit', minute: '2-digit', day: '2-digit', month: 'short' })}
                       </td>
                       <td className="px-6 py-3">
                         {msg.direction === 'incoming' ? (
-                          <Badge className="bg-blue-500/10 text-blue-400 border-0"><ArrowDownLeft className="w-3 h-3 mr-1" /> IN</Badge>
+                          <Badge className="bg-blue-500/10 text-blue-600 dark:text-blue-400 border-0"><ArrowDownLeft className="w-3 h-3 mr-1" /> IN</Badge>
                         ) : (
-                          <Badge className="bg-green-500/10 text-green-400 border-0"><ArrowUpRight className="w-3 h-3 mr-1" /> OUT</Badge>
+                          <Badge className="bg-green-500/10 text-green-600 dark:text-green-400 border-0"><ArrowUpRight className="w-3 h-3 mr-1" /> OUT</Badge>
                         )}
                       </td>
-                      <td className="px-6 py-3 text-white truncate max-w-md">
+                      <td className="px-6 py-3 text-foreground truncate max-w-md">
                         {msg.content}
                       </td>
-                      <td className="px-6 py-3 text-xs text-slate-400">
+                      <td className="px-6 py-3 text-xs text-muted-foreground">
                         {msg.intent_type || '-'}
                       </td>
                       <td className="px-6 py-3">
-                        <span className="text-xs text-slate-400 capitalize">{msg.status}</span>
+                        <span className="text-xs text-muted-foreground capitalize">{msg.status}</span>
                       </td>
                     </tr>
                   ))
