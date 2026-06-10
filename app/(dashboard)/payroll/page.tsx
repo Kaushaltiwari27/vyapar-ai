@@ -6,6 +6,7 @@ import { PayrollRun } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import { Wallet, Users, FileText, CheckCircle2, AlertCircle, ArrowRight, Download } from "lucide-react";
 import Link from "next/link";
 import { getMonthName } from "@/lib/payroll";

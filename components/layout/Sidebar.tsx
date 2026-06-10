@@ -8,7 +8,9 @@ import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
 import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone, Settings } from "lucide-react"
 
-const crmItems = [
+type NavItem = { href: string; icon: React.ElementType; label: string; badge?: string };
+
+const crmItems: NavItem[] = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/customers', icon: Users, label: 'Customers' },
   { href: '/deals', icon: TrendingUp, label: 'Deals' },
@@ -18,7 +20,7 @@ const crmItems = [
   { href: '/purchase-orders', icon: ClipboardList, label: 'POs' },
 ]
 
-const hrmsItems = [
+const hrmsItems: NavItem[] = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
   { href: '/employees', icon: Users, label: 'Employees' },
   { href: '/attendance', icon: ClipboardList, label: 'Attendance' },
@@ -27,7 +29,7 @@ const hrmsItems = [
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance' },
 ]
 
-const commonItems = [
+const commonItems: NavItem[] = [
   { href: '/whatsapp', icon: Smartphone, label: 'WhatsApp OS', badge: 'NEW' },
   { href: '/chat', icon: MessageCircle, label: 'AI Chat', badge: 'AI' },
 ]

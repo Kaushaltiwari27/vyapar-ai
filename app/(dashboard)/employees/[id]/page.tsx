@@ -250,15 +250,15 @@ export default function EmployeeDetailPage({ params }: { params: { id: string } 
                   <dl className="divide-y divide-slate-100 text-sm">
                     <div className="px-6 py-3 flex justify-between items-center bg-white">
                       <dt className="font-medium text-slate-500">Basic Salary</dt>
-                      <dd className="font-bold text-slate-900">{formatCurrency(employee.basic_salary)}</dd>
+                      <dd className="font-bold text-slate-900">{formatCurrency(employee.basic_salary || 0)}</dd>
                     </div>
                     <div className="px-6 py-3 flex justify-between items-center bg-white">
                       <dt className="font-medium text-slate-500">HRA</dt>
-                      <dd className="font-bold text-slate-900">{formatCurrency(employee.hra)}</dd>
+                      <dd className="font-bold text-slate-900">{formatCurrency(employee.hra || 0)}</dd>
                     </div>
                     <div className="px-6 py-3 flex justify-between items-center bg-white">
                       <dt className="font-medium text-slate-500">Other Allowances</dt>
-                      <dd className="font-bold text-slate-900">{formatCurrency(employee.other_allowances)}</dd>
+                      <dd className="font-bold text-slate-900">{formatCurrency(employee.other_allowances || 0)}</dd>
                     </div>
                     <div className="px-6 py-4 flex justify-between items-center bg-slate-50 font-bold border-y border-slate-200">
                       <dt className="text-slate-800">Gross Salary</dt>

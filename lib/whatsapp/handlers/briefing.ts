@@ -24,7 +24,7 @@ export async function generateMorningBriefing(businessId: string): Promise<strin
       .order('due_date', { ascending: true })
       .limit(5),
 
-    supabase.from('attendance').select('employees(full_name)', { foreignTable: 'employees' })
+    supabase.from('attendance').select('employees(full_name)')
       .eq('business_id', businessId)
       .eq('date', today)
       .eq('status', 'present'),

@@ -8,7 +8,7 @@ import { getMonthName } from "@/lib/payroll";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { PayslipDocument } from "@/components/payroll/PayslipDocument";
-import { ArrowLeft, Download, Printer, Users, Wallet } from "lucide-react";
+import { ArrowLeft, Download, Printer, Users, Wallet, FileText } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
