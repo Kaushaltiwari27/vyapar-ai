@@ -17,6 +17,28 @@ export default function WhatsAppPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [testPhone, setTestPhone] = useState("");
   const [testMsg, setTestMsg] = useState("");
+  const [activeApp, setActiveApp] = useState<'crm' | 'hrms'>('crm');
+
+  useEffect(() => {
+    const savedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+    if (savedApp) setActiveApp(savedApp);
+
+    const handleStorageChange = () => {
+      const updatedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+      if (updatedApp && updatedApp !== activeApp) setActiveApp(updatedApp);
+    };
+    
+    window.addEventListener('storage', handleStorageChange);
+    const interval = setInterval(() => {
+      const currentApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
+      if (currentApp && currentApp !== activeApp) setActiveApp(currentApp);
+    }, 1000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, [activeApp]);
 
   const fetchSettings = async () => {
     setLoading(true);
@@ -101,7 +123,12 @@ export default function WhatsAppPage() {
               <MessageCircle className="w-5 h-5" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-foreground">WhatsApp OS</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-2xl font-bold text-foreground">WhatsApp OS</h2>
+                <Badge variant="outline" className="text-xs bg-primary/5 text-primary border-primary/20">
+                  {activeApp.toUpperCase()} Context
+                </Badge>
+              </div>
               <p className="text-sm text-muted-foreground">Manage WhatsApp integrations & alerts</p>
             </div>
           </div>
@@ -168,52 +195,60 @@ export default function WhatsAppPage() {
 
           {/* SECTION 2: ALERTS */}
           <div className="bg-card border border-border rounded-2xl p-6 shadow-xl animate-card">
-            <h3 className="text-lg font-semibold text-foreground mb-4">Smart Alerts</h3>
+            <h3 className="text-lg font-semibold text-foreground mb-4">Smart Alerts ({activeApp.toUpperCase()})</h3>
             
             <div className="space-y-4">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Morning Briefing</p>
-                  <p className="text-xs text-muted-foreground">Daily summary at 8:00 AM</p>
-                </div>
-                <Switch 
-                  checked={settings?.morning_briefing_enabled || false}
-                  onCheckedChange={v => updateSetting('morning_briefing_enabled', v)}
-                />
-              </div>
+              {activeApp === 'hrms' && (
+                <>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Morning Briefing</p>
+                      <p className="text-xs text-muted-foreground">Daily summary at 8:00 AM</p>
+                    </div>
+                    <Switch 
+                      checked={settings?.morning_briefing_enabled || false}
+                      onCheckedChange={v => updateSetting('morning_briefing_enabled', v)}
+                    />
+                  </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Invoice Alerts</p>
-                  <p className="text-xs text-muted-foreground">Notify when invoices are overdue</p>
-                </div>
-                <Switch 
-                  checked={settings?.invoice_alerts || false}
-                  onCheckedChange={v => updateSetting('invoice_alerts', v)}
-                />
-              </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Compliance Alerts</p>
+                      <p className="text-xs text-muted-foreground">Deadlines for GST, TDS, PF</p>
+                    </div>
+                    <Switch 
+                      checked={settings?.compliance_alerts || false}
+                      onCheckedChange={v => updateSetting('compliance_alerts', v)}
+                    />
+                  </div>
+                </>
+              )}
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Low Stock Alerts</p>
-                  <p className="text-xs text-muted-foreground">Alert when inventory is running low</p>
-                </div>
-                <Switch 
-                  checked={settings?.low_stock_alerts || false}
-                  onCheckedChange={v => updateSetting('low_stock_alerts', v)}
-                />
-              </div>
+              {activeApp === 'crm' && (
+                <>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Invoice Alerts</p>
+                      <p className="text-xs text-muted-foreground">Notify when invoices are overdue</p>
+                    </div>
+                    <Switch 
+                      checked={settings?.invoice_alerts || false}
+                      onCheckedChange={v => updateSetting('invoice_alerts', v)}
+                    />
+                  </div>
 
-              <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
-                <div>
-                  <p className="text-sm font-medium text-foreground">Compliance Alerts</p>
-                  <p className="text-xs text-muted-foreground">Deadlines for GST, TDS, PF</p>
-                </div>
-                <Switch 
-                  checked={settings?.compliance_alerts || false}
-                  onCheckedChange={v => updateSetting('compliance_alerts', v)}
-                />
-              </div>
+                  <div className="flex items-center justify-between p-3 rounded-lg bg-muted border border-border">
+                    <div>
+                      <p className="text-sm font-medium text-foreground">Low Stock Alerts</p>
+                      <p className="text-xs text-muted-foreground">Alert when inventory is running low</p>
+                    </div>
+                    <Switch 
+                      checked={settings?.low_stock_alerts || false}
+                      onCheckedChange={v => updateSetting('low_stock_alerts', v)}
+                    />
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
