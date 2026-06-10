@@ -5,10 +5,16 @@
 
 @layer base {
   :root {
-    /* 2026 Clean SaaS Base (Zinc/Slate) */
-    --background: 240 5% 98%; /* Light gray background */
-    --foreground: 240 10% 3.9%;
+    /* 2026 Clean SaaS Base (Light) */
+    --background: 0 0% 100%; /* Pure white background */
+    --foreground: 240 10% 3.9%; /* Very dark text */
     
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
     /* Vibrant Indigo Primary */
     --primary: 243 75% 59%;
     --primary-foreground: 0 0% 100%;
@@ -32,7 +38,7 @@
     /* Radius for Shadcn components */
     --radius: 0.75rem;
 
-    /* Custom Design Tokens */
+    /* Sidebar - pure light matching dashboard */
     --sidebar-bg: 240 5% 98%;
     --sidebar-border: 240 5.9% 90%;
     --sidebar-text: 240 3.8% 46.1%;
@@ -42,35 +48,42 @@
   }
 
   .dark {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
+    /* Enterprise Dark Mode (Zinc 950 base) */
+    --background: 240 10% 3.9%; /* #09090b */
+    --foreground: 0 0% 98%; /* #fafafa */
     
-    --primary: 243 75% 59%;
+    --card: 240 5% 7.8%; /* #141416 - Slightly lighter than bg */
+    --card-foreground: 0 0% 98%;
+    
+    --popover: 240 5% 7.8%;
+    --popover-foreground: 0 0% 98%;
+    
+    --primary: 243 75% 59%; /* Same vibrant indigo */
     --primary-foreground: 0 0% 100%;
     
-    --secondary: 240 3.7% 15.9%;
+    --secondary: 240 4% 12%; /* #1d1d20 - Used for buttons/hover, not main cards */
     --secondary-foreground: 0 0% 98%;
     
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
+    --muted: 240 4% 12%; /* Subdued backgrounds */
+    --muted-foreground: 240 5% 64.9%; /* Readable muted text */
     
-    --accent: 240 3.7% 15.9%;
+    --accent: 240 4% 12%;
     --accent-foreground: 0 0% 98%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
+    --border: 240 4% 16%; /* Delicate borders */
+    --input: 240 4% 16%;
     --ring: 243 75% 59%;
 
-    /* Custom Design Tokens */
+    /* Sidebar - dark matching dashboard */
     --sidebar-bg: 240 10% 3.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-border: 240 4% 16%;
     --sidebar-text: 240 5% 64.9%;
     --sidebar-text-active: 0 0% 98%;
-    --sidebar-item-active: 240 3.7% 15.9%;
-    --sidebar-item-hover: 240 3.7% 15.9%;
+    --sidebar-item-active: 240 4% 12%;
+    --sidebar-item-hover: 240 4% 12%;
   }
 }
 
@@ -96,27 +109,28 @@
 /* Selection color */
 ::selection { background: hsla(var(--primary) / 0.2); color: hsl(var(--primary)); }
 
-/* Hide ugly focus rings globally unless navigating by keyboard (optional, handled by ring-offset in Tailwind) */
+/* Hide ugly focus rings globally unless navigating by keyboard */
 *:focus-visible {
   outline: none;
 }
 
-/* Glass effect (Used minimally in 2026 design) */
-.glass-effect {
-  background: hsla(var(--background) / 0.8);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid hsl(var(--border));
-}
-
-/* Neo-brutalist / Clean shadows */
+/* Neo-brutalist / Clean shadows - Subtler in dark mode */
 .premium-shadow {
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05), 0 1px 3px 0 rgb(0 0 0 / 0.05);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+}
+.dark .premium-shadow {
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.5);
 }
 .premium-shadow-hover {
   box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-  transition: box-shadow 0.2s ease-in-out;
+  transition: box-shadow 0.15s ease-in-out, transform 0.15s ease-in-out;
+}
+.dark .premium-shadow-hover {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.5);
 }
 .premium-shadow-hover:hover {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+}
+.dark .premium-shadow-hover:hover {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.6);
 }

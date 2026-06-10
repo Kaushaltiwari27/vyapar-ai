@@ -16,22 +16,22 @@ export function DealCard({ deal, onEdit }: DealCardProps) {
     : 'VM'; // Fallback initials
 
   return (
-    <div className="group bg-white p-3 rounded-lg border border-slate-200 shadow-sm cursor-grab hover:shadow-md hover:border-indigo-200 transition-all active:cursor-grabbing relative">
+    <div className="group bg-background p-3 rounded-lg border border-border shadow-sm cursor-grab hover:shadow-md hover:border-primary/50 transition-all active:cursor-grabbing relative">
       
       {/* Edit Button (Visible on Hover) */}
       <button 
         onClick={(e) => { e.stopPropagation(); onEdit(); }}
-        className="absolute top-3 right-3 p-1.5 bg-white border border-slate-200 rounded-md text-slate-400 opacity-0 group-hover:opacity-100 hover:text-indigo-600 hover:border-indigo-200 transition-all z-10"
+        className="absolute top-3 right-3 p-1.5 bg-background border border-border rounded-md text-muted-foreground opacity-0 group-hover:opacity-100 hover:text-primary hover:border-primary/50 transition-all z-10"
         title="Edit Deal"
       >
         <Edit2 className="w-3.5 h-3.5" />
       </button>
 
       <div className="pr-8">
-        <h4 className="font-bold text-sm text-slate-900 leading-tight mb-1">{deal.title}</h4>
+        <h4 className="font-bold text-sm text-foreground leading-tight mb-1">{deal.title}</h4>
         
         {deal.customer_name && (
-          <div className="flex items-center text-xs text-slate-500 mb-2 gap-1.5">
+          <div className="flex items-center text-xs text-muted-foreground mb-2 gap-1.5">
             <Building2 className="w-3 h-3 flex-shrink-0" />
             <span className="truncate">{deal.customer_name}</span>
           </div>
@@ -40,11 +40,11 @@ export function DealCard({ deal, onEdit }: DealCardProps) {
 
       <div className="flex items-end justify-between mt-3">
         <div className="space-y-1">
-          <div className="font-semibold text-slate-900 text-sm">
+          <div className="font-semibold text-foreground text-sm">
             {formatCurrency(deal.value)}
           </div>
           {deal.expected_close_date && (
-            <div className="flex items-center text-[11px] text-slate-500 gap-1 font-medium">
+            <div className="flex items-center text-[11px] text-muted-foreground gap-1 font-medium">
               <Calendar className="w-3 h-3" />
               {formatDate(deal.expected_close_date)}
             </div>
@@ -52,7 +52,7 @@ export function DealCard({ deal, onEdit }: DealCardProps) {
         </div>
         
         <div 
-          className="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center text-[10px] font-bold border border-slate-200"
+          className="w-6 h-6 rounded-full bg-muted text-muted-foreground flex items-center justify-center text-[10px] font-bold border border-border"
           title={deal.owner_name || 'Owner'}
         >
           {initials}

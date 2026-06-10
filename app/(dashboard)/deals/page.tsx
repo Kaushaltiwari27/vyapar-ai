@@ -70,9 +70,9 @@ export default function DealsPage() {
   return (
     <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
       <div className="flex justify-between items-center mb-6 flex-shrink-0">
-        <h2 className="text-2xl font-bold text-slate-900">Sales Pipeline</h2>
+        <h2 className="text-2xl font-bold text-foreground">Sales Pipeline</h2>
         <Button 
-          className="bg-indigo-600 hover:bg-indigo-700"
+          className="bg-primary text-primary-foreground hover:bg-primary/90"
           onClick={() => { setSelectedDeal(null); setIsFormOpen(true); }}
         >
           <Plus className="w-4 h-4 mr-2" /> New Deal

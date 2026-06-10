@@ -85,7 +85,7 @@ export default function LandingPage() {
               {APP_FEATURES.map((feature, idx) => {
                 const Icon = feature.icon;
                 return (
-                  <div key={feature.id} className="relative group glass-card p-8 transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(79,70,229,0.15)] bg-[rgba(255,255,255,0.02)] border-[rgba(255,255,255,0.05)]">
+                  <div key={feature.id} className="relative group p-8 rounded-2xl transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_10px_40px_rgba(79,70,229,0.15)] bg-zinc-900/40 border border-zinc-800/50 backdrop-blur-xl">
                     {feature.isNew && (
                       <div className="absolute top-6 right-6 bg-[rgba(79,70,229,0.2)] text-[#8B5CF6] text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider border border-[rgba(79,70,229,0.3)]">
                         New
@@ -108,7 +108,7 @@ export default function LandingPage() {
           <div className="max-w-3xl mx-auto px-6 text-center">
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-16">Enterprise power, SMB pricing.</h2>
             
-            <div className="glass-card p-10 relative max-w-md mx-auto bg-[rgba(255,255,255,0.02)] border-[rgba(79,70,229,0.3)] shadow-[0_0_40px_rgba(79,70,229,0.1)]">
+            <div className="p-10 relative max-w-md mx-auto rounded-3xl bg-zinc-900/80 border border-zinc-800 shadow-[0_0_40px_rgba(79,70,229,0.1)] backdrop-blur-xl">
               <div className="absolute top-0 right-0 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-xl">
                 MOST POPULAR
               </div>

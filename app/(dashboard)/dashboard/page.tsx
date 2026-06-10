@@ -279,7 +279,7 @@ export default function DashboardPage() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3 }}
+          transition={{ duration: 0.15 }}
           className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-background p-6 rounded-2xl border border-border shadow-sm mb-6"
         >
           <div className="flex items-center gap-4">
@@ -309,7 +309,7 @@ export default function DashboardPage() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
+          transition={{ duration: 0.15 }}
           className="mb-6 p-5 bg-background rounded-2xl border border-border shadow-sm flex items-end gap-2 h-20"
         >
           <div className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mr-4 mb-2">Pipeline Trend</div>
@@ -326,7 +326,7 @@ export default function DashboardPage() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.15 }}
+          transition={{ duration: 0.15 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6"
         >
           <MetricCard title="Pipeline Value" value={pipelineValue} prefix="₹" icon={<TrendingUp className="w-5 h-5"/>} />
@@ -338,7 +338,7 @@ export default function DashboardPage() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
+          transition={{ duration: 0.15 }}
           className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"
         >
           <div className="lg:col-span-2">
@@ -391,7 +391,7 @@ export default function DashboardPage() {
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, delay: 0.25 }}
+          transition={{ duration: 0.15 }}
           className="grid grid-cols-1 gap-6"
         >
           {/* Recent Deals Table */}
@@ -444,7 +444,7 @@ export default function DashboardPage() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.15 }}
         className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-background p-6 rounded-2xl border border-border shadow-sm mb-6"
       >
         <div className="flex items-center gap-4">
@@ -469,7 +469,7 @@ export default function DashboardPage() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.1 }}
+        transition={{ duration: 0.15 }}
         className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"
       >
         <MetricCard title="Total Employees" value={totalEmployees} icon={<Users className="w-5 h-5"/>} />
@@ -481,7 +481,7 @@ export default function DashboardPage() {
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, delay: 0.2 }}
+        transition={{ duration: 0.15 }}
         className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6"
       >
         <div className="lg:col-span-2">

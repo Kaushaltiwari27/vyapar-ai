@@ -30,7 +30,7 @@ export default function MetricCard({
     }
 
     const controls = animate(0, value, {
-      duration: 1.2,
+      duration: 0.25,
       ease: "easeOut",
       onUpdate(v) {
         setDisplayValue(new Intl.NumberFormat('en-IN').format(Math.round(v)));

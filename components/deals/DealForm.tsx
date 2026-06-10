@@ -174,11 +174,11 @@ export function DealForm({ deal, onSuccess, onCancel }: DealFormProps) {
         </div>
       </form>
 
-      <div className="pt-6 mt-4 border-t flex gap-3">
+      <div className="pt-6 mt-4 border-t border-border flex gap-3">
         <Button type="button" variant="outline" className="flex-1" onClick={onCancel} disabled={loading}>
           Cancel
         </Button>
-        <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-700" onClick={handleSubmit} disabled={loading}>
+        <Button type="submit" className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90" onClick={handleSubmit} disabled={loading}>
           {loading ? "Saving..." : "Save Deal"}
         </Button>
       </div>

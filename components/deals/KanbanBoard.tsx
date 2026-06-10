@@ -45,14 +45,14 @@ function KanbanColumn({
   const totalValue = deals.reduce((sum, d) => sum + Number(d.value), 0);
 
   return (
-    <div className="flex flex-col bg-slate-100 rounded-xl min-w-[300px] max-w-[300px] h-full overflow-hidden border border-slate-200">
-      <div className={`px-4 py-3 border-b border-slate-200 flex items-center justify-between bg-white`}>
+    <div className="flex flex-col bg-muted/30 rounded-xl min-w-[300px] max-w-[300px] h-full overflow-hidden border border-border">
+      <div className={`px-4 py-3 border-b border-border flex items-center justify-between bg-card`}>
         <div className="flex items-center gap-2">
           <div className={`w-3 h-3 rounded-full ${STAGE_CONFIG[stage].color.split(' ')[0]}`} />
-          <h3 className="font-bold text-slate-800">{stage}</h3>
-          <span className="text-xs font-semibold bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded">{deals.length}</span>
+          <h3 className="font-bold text-foreground">{stage}</h3>
+          <span className="text-xs font-semibold bg-muted text-muted-foreground px-1.5 py-0.5 rounded">{deals.length}</span>
         </div>
-        <div className="text-xs font-semibold text-slate-600">
+        <div className="text-xs font-semibold text-muted-foreground">
           {formatCurrency(totalValue)}
         </div>
       </div>
