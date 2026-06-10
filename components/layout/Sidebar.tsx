@@ -1,12 +1,12 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { gsap } from 'gsap'
+import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
-import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone } from "lucide-react"
+import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone, Settings } from "lucide-react"
 
 const crmItems = [
   { href: '/dashboard', icon: Home, label: 'Dashboard' },
@@ -33,7 +33,6 @@ const commonItems = [
 ]
 
 export function Sidebar() {
-  const sidebarRef = useRef<HTMLElement>(null)
   const pathname = usePathname()
   const router = useRouter()
   const supabase = createClient()
@@ -50,24 +49,11 @@ export function Sidebar() {
     }
     window.addEventListener('storage', handleStorageChange)
     
-    // Poll localstorage periodically just in case TopNavigation changed it
     const interval = setInterval(() => {
       const currentApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms';
       if (currentApp && currentApp !== activeApp) setActiveApp(currentApp);
     }, 1000);
-    // GSAP stagger animation on mount
-    gsap.fromTo(
-      '.nav-item',
-      { opacity: 0, x: -20 },
-      { opacity: 1, x: 0, duration: 0.4, stagger: 0.05, ease: 'power2.out', delay: 0.2 }
-    )
-    gsap.fromTo(
-      '.sidebar-logo',
-      { opacity: 0, scale: 0.8 },
-      { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.7)' }
-    )
     
-    // Fetch business name
     async function loadBusiness() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -109,101 +95,116 @@ export function Sidebar() {
     }
   }
 
+  const currentItems = [...(activeApp === 'crm' ? crmItems : hrmsItems), ...commonItems];
+
   return (
-    <aside ref={sidebarRef} className="fixed left-0 top-0 z-40 h-screen w-64 bg-[#0A0A14] border-r border-[rgba(255,255,255,0.06)] flex flex-col transition-transform shadow-2xl">
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-background border-r border-border flex flex-col transition-colors duration-200">
       {/* Logo */}
-      <div className="h-20 flex items-center px-6 border-b border-[rgba(255,255,255,0.06)] sidebar-logo">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
-          <div className="w-9 h-9 bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-all duration-300">
-            <span className="text-white font-extrabold text-lg">V</span>
-          </div>
+      <div className="h-16 flex items-center px-6 border-b border-border">
+        <Link href="/dashboard" className="flex items-center gap-3 group w-full">
+          <motion.div 
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm"
+          >
+            <span className="text-white font-bold text-lg leading-none">V</span>
+          </motion.div>
           <div className="flex flex-col">
-            <span className="text-xl font-extrabold text-white tracking-tight leading-none">VyaparAI</span>
-            <span className="text-[10px] text-[#8B5CF6] font-medium tracking-widest uppercase mt-1">Business Brain</span>
+            <span className="text-lg font-bold text-foreground tracking-tight leading-none">VyaparAI</span>
+            <span className="text-[10px] text-muted-foreground font-medium tracking-widest uppercase mt-0.5">Workspace</span>
           </div>
         </Link>
       </div>
 
       {/* App Switcher */}
-      <div className="px-4 py-3 border-b border-[rgba(255,255,255,0.06)]">
-        <div className="flex p-1 bg-[rgba(255,255,255,0.05)] rounded-lg">
+      <div className="px-4 py-4 border-b border-border">
+        <div className="flex p-1 bg-muted rounded-lg shadow-sm border border-border/50 relative">
           <button
             onClick={() => toggleApp('crm')}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-              activeApp === 'crm' 
-                ? 'bg-[rgba(79,70,229,0.8)] text-white shadow-sm' 
-                : 'text-[rgba(255,255,255,0.5)] hover:text-white'
+            className={`relative flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors z-10 ${
+              activeApp === 'crm' ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            CRM & ERP
+            CRM
           </button>
           <button
             onClick={() => toggleApp('hrms')}
-            className={`flex-1 py-1.5 text-xs font-bold rounded-md transition-all ${
-              activeApp === 'hrms' 
-                ? 'bg-[rgba(124,58,237,0.8)] text-white shadow-sm' 
-                : 'text-[rgba(255,255,255,0.5)] hover:text-white'
+            className={`relative flex-1 py-1.5 text-xs font-semibold rounded-md transition-colors z-10 ${
+              activeApp === 'hrms' ? 'text-primary-foreground' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             HRMS
           </button>
+          <motion.div
+            className="absolute top-1 bottom-1 w-[calc(50%-4px)] bg-primary rounded-md shadow-sm z-0"
+            initial={false}
+            animate={{ 
+              x: activeApp === 'crm' ? 0 : '100%',
+              left: activeApp === 'crm' ? '4px' : '0px'
+            }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          />
         </div>
       </div>
 
-      {/* Nav */}
-      <div className="flex-1 py-6 px-3 space-y-1 overflow-y-auto custom-scrollbar">
-        {[...(activeApp === 'crm' ? crmItems : hrmsItems), ...commonItems].map((item) => {
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-          const Icon = item.icon
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`nav-item relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                isActive 
-                  ? 'text-[#ffffff] bg-[rgba(79,70,229,0.15)]' 
-                  : 'text-[rgba(255,255,255,0.55)] hover:text-[#ffffff] hover:bg-[rgba(255,255,255,0.05)]'
-              }`}
-              onMouseEnter={e => {
-                if (!isActive) {
-                  gsap.to(e.currentTarget, { x: 4, duration: 0.2, ease: 'power2.out' })
-                }
-              }}
-              onMouseLeave={e => {
-                if (!isActive) {
-                  gsap.to(e.currentTarget, { x: 0, duration: 0.2, ease: 'power2.out' })
-                }
-              }}
-            >
-              {isActive && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-[#4F46E5] rounded-r-full shadow-[0_0_10px_#4F46E5]" />
-              )}
-              <Icon className={`w-4 h-4 ${isActive ? "text-[#8B5CF6]" : "opacity-70"}`} />
-              {item.label}
-              {item.badge && (
-                <span className="ml-auto bg-[rgba(79,70,229,0.2)] text-[#8B5CF6] text-[10px] px-2 py-0.5 rounded-full font-bold tracking-wider border border-[rgba(79,70,229,0.3)]">
-                  {item.badge}
-                </span>
-              )}
-            </Link>
-          )
-        })}
+      {/* Nav Links */}
+      <div className="flex-1 py-4 px-3 space-y-1 overflow-y-auto custom-scrollbar">
+        <AnimatePresence mode="popLayout">
+          {currentItems.map((item, index) => {
+            const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
+            const Icon = item.icon
+            return (
+              <motion.div
+                key={item.href}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -10 }}
+                transition={{ duration: 0.2, delay: index * 0.03 }}
+              >
+                <Link
+                  href={item.href}
+                  className={`relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group ${
+                    isActive 
+                      ? 'text-primary bg-primary/10' 
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                  }`}
+                >
+                  {isActive && (
+                    <motion.div 
+                      layoutId="sidebar-active-indicator"
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-full" 
+                    />
+                  )}
+                  <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "opacity-70 group-hover:opacity-100 transition-opacity"}`} />
+                  {item.label}
+                  {item.badge && (
+                    <span className="ml-auto bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-md font-bold tracking-wider">
+                      {item.badge}
+                    </span>
+                  )}
+                </Link>
+              </motion.div>
+            )
+          })}
+        </AnimatePresence>
       </div>
 
-      {/* Business name at bottom */}
-      <div className="p-4 border-t border-[rgba(255,255,255,0.06)] bg-[rgba(0,0,0,0.2)]">
-        <div className="flex items-center justify-between bg-[rgba(255,255,255,0.03)] rounded-xl p-3 border border-[rgba(255,255,255,0.05)]">
+      {/* User Footer */}
+      <div className="p-4 border-t border-border bg-muted/30">
+        <div className="flex items-center justify-between bg-background rounded-lg p-3 border border-border premium-shadow">
           <div className="truncate pr-2">
-            <p className="text-[10px] font-bold text-[rgba(255,255,255,0.4)] uppercase tracking-widest mb-0.5">Workspace</p>
-            <p className="text-sm font-bold text-white truncate">{businessName}</p>
+            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Business</p>
+            <p className="text-sm font-semibold text-foreground truncate">{businessName}</p>
           </div>
-          <button 
+          <motion.button 
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
             onClick={handleLogout}
-            className="p-2 text-[rgba(255,255,255,0.5)] hover:text-rose-400 hover:bg-[rgba(244,63,94,0.1)] rounded-lg transition-colors flex-shrink-0"
+            className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors flex-shrink-0"
             title="Logout"
           >
             <LogOut className="w-4 h-4" />
-          </button>
+          </motion.button>
         </div>
       </div>
     </aside>

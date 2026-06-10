@@ -1,48 +1,38 @@
-'use client'
-import { useEffect, useRef } from 'react'
-import { gsap } from 'gsap'
+"use client";
 
-export default function PageWrapper({ children, title }: { children: React.ReactNode, title?: string }) {
-  const wrapperRef = useRef<HTMLDivElement>(null)
-  const titleRef = useRef<HTMLHeadingElement>(null)
+import { motion } from "framer-motion";
 
-  useEffect(() => {
-    // Page enter animation
-    const tl = gsap.timeline()
-    
-    if (wrapperRef.current) {
-      tl.fromTo(wrapperRef.current,
-        { opacity: 0 },
-        { opacity: 1, duration: 0.3, ease: 'power2.out' }
-      )
-    }
-    
-    if (titleRef.current) {
-      tl.fromTo(titleRef.current,
-        { opacity: 0, y: -10 },
-        { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' },
-        '-=0.2'
-      )
-    }
-    
-    // Stagger all cards with the animate-card class
-    tl.fromTo('.animate-card',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 0.4, stagger: 0.08, ease: 'power2.out' },
-      '-=0.2'
-    )
-  }, [])
-
+export default function PageWrapper({ 
+  children, 
+  title 
+}: { 
+  children: React.ReactNode;
+  title?: string;
+}) {
   return (
-    <div ref={wrapperRef} className="opacity-0 min-h-screen">
+    <motion.div 
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+      className="min-h-screen"
+    >
       <div className="p-6 md:p-8 max-w-7xl mx-auto space-y-6">
         {title && (
-          <h1 ref={titleRef} className="text-3xl font-extrabold text-slate-900 tracking-tight mb-8">
+          <motion.h1 
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
+            className="text-3xl font-extrabold text-slate-900 tracking-tight mb-8"
+          >
             {title}
-          </h1>
+          </motion.h1>
         )}
+        
+        {/* Child elements can be staggered if they are wrapped in motion components, 
+            but standard layout wrapper ensures no more GSAP glitches. */}
         {children}
       </div>
-    </div>
-  )
+    </motion.div>
+  );
 }
