@@ -72,7 +72,7 @@ export function AuthTestimonialCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 1000); // 1 second as requested by user
+    }, 2000); // Changed to 2 seconds as requested
 
     return () => clearInterval(timer);
   }, []);
