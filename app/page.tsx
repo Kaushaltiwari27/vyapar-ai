@@ -191,35 +191,80 @@ export default function LandingPage() {
         <section className="py-24 bg-white border-t border-slate-100 relative">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-50 rounded-full blur-[100px] opacity-50 pointer-events-none" />
           
-          <div className="max-w-3xl mx-auto px-6 text-center relative z-10">
+          <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
             <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-16">Enterprise power, SMB pricing.</h2>
-            
-            <div className="p-10 relative max-w-md mx-auto rounded-3xl bg-white border border-slate-200 shadow-2xl shadow-blue-900/5">
-              <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-lg">
-                MOST POPULAR
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 mb-2 mt-2">Premium Edition</h3>
-              <div className="text-5xl font-extrabold text-slate-900 mb-6 mt-4 flex items-baseline justify-center">
-                ₹2,499<span className="text-sm text-slate-500 font-medium ml-2">/ user / month</span>
-              </div>
-              <p className="text-slate-600 mb-8 pb-8 border-b border-slate-100 text-sm">Billed annually. Full access to CRM, HRMS, and AI.</p>
+            <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left items-stretch">
               
-              <ul className="space-y-4 text-left mb-10">
-                {['Unlimited Customers & Invoices', 'Full HRMS & Payroll Engine', 'Advanced WhatsApp AI Agent', '24/7 Priority Support'].map((feature, i) => (
-                  <li key={i} className="flex items-center gap-3 text-sm">
-                    <CheckCircle2 className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                    <span className="text-slate-700 font-semibold">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              <Link 
-                href="/signup"
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-base font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
-                style={{ background: 'var(--grad-button)' }}
-              >
-                Start Free Trial
-              </Link>
+              {/* Starter Tier */}
+              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-full mb-6 w-fit">
+                  Starter
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
+                  ₹999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="text-slate-700 font-medium">Freelancers, solo founders</li>
+                  <li className="text-slate-700 font-medium">CRM + Invoice + AI chat</li>
+                  <li className="text-slate-700 font-medium">Up to 5 users</li>
+                </ul>
+                <div className="mt-auto">
+                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                    <div className="w-1/3 h-full bg-indigo-500 rounded-full"></div>
+                  </div>
+                  <p className="text-slate-500 text-sm font-medium">Entry point — free trial se convert karo</p>
+                </div>
+              </div>
+
+              {/* Growth Tier */}
+              <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-100 text-blue-800 font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap">
+                  Growth — Push this
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 mb-6 mt-2 flex items-baseline">
+                  ₹2,499<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="text-slate-700 font-medium">10-50 employee SMBs</li>
+                  <li className="text-slate-700 font-medium">Full CRM + ERP + HRMS</li>
+                  <li className="text-slate-700 font-medium">WhatsApp OS + GST filing</li>
+                </ul>
+                <div className="mt-auto">
+                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                    <div className="w-2/3 h-full bg-indigo-500 rounded-full"></div>
+                  </div>
+                  <p className="text-blue-600 text-sm font-bold">Yahi tier pitch karo hamesha</p>
+                  <Link 
+                    href="/signup"
+                    className="mt-6 flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
+                    style={{ background: 'var(--grad-button)' }}
+                  >
+                    Start Free Trial
+                  </Link>
+                </div>
+              </div>
+
+              {/* Business Tier */}
+              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+                <div className="inline-block px-3 py-1 bg-purple-100 text-purple-800 font-bold text-xs rounded-full mb-6 w-fit">
+                  Business
+                </div>
+                <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
+                  ₹4,999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
+                </div>
+                <ul className="space-y-3 mb-8 flex-1">
+                  <li className="text-slate-700 font-medium">50-200 employee companies</li>
+                  <li className="text-slate-700 font-medium">Sab kuch + priority support</li>
+                  <li className="text-slate-700 font-medium">Dedicated onboarding</li>
+                </ul>
+                <div className="mt-auto">
+                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
+                    <div className="w-[90%] h-full bg-indigo-500 rounded-full"></div>
+                  </div>
+                  <p className="text-slate-500 text-sm font-medium">Upsell baad mein</p>
+                </div>
+              </div>
+
             </div>
           </div>
         </section>
