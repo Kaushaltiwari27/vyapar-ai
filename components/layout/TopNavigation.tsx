@@ -1,34 +1,14 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Bell } from 'lucide-react'
+import { Bell, Menu } from 'lucide-react'
 import { createClient } from "@/lib/client"
 import Image from "next/image"
 
 export function TopNavigation() {
   const [userInitials, setUserInitials] = useState("V")
   const supabase = createClient()
-
-  useEffect(() => {
-    async function loadUser() {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) return
-      const { data } = await supabase
-        .from('profiles')
-        .select('full_name')
-        .eq('id', user.id)
-        .single()
-      
-      if (data?.full_name) {
-        const names = data.full_name.split(' ')
-        const initials = names.length > 1 
-          ? `${names[0][0]}${names[names.length-1][0]}` 
-          : data.full_name.substring(0, 2)
-        setUserInitials(initials.toUpperCase())
-      }
-    }
-    loadUser()
-  }, [supabase])
+  const [pageTitle, setPageTitle] = useState('Dashboard')
 
   // Get dynamic page title based on URL (simple mapping)
   const getPageTitle = () => {
@@ -51,15 +31,42 @@ export function TopNavigation() {
     return 'Dashboard'
   }
 
-  const [pageTitle, setPageTitle] = useState('Dashboard')
-
   useEffect(() => {
     setPageTitle(getPageTitle())
   }, [])
 
+  useEffect(() => {
+    async function loadUser() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single()
+      
+      if (data?.full_name) {
+        const names = data.full_name.split(' ')
+        const initials = names.length > 1 
+          ? `${names[0][0]}${names[names.length-1][0]}` 
+          : data.full_name.substring(0, 2)
+        setUserInitials(initials.toUpperCase())
+      }
+    }
+    loadUser()
+  }, [supabase])
+
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between px-8 py-4 bg-[rgba(255,255,255,0.7)] backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)]">
-      <div className="flex items-center gap-4">
+    <header className="sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8 py-4 bg-[rgba(255,255,255,0.7)] backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)]">
+      <div className="flex items-center gap-3 lg:gap-4">
+        {/* Mobile Hamburger */}
+        <button 
+          className="lg:hidden p-2 -ml-2 text-slate-600 hover:text-slate-900 rounded-md hover:bg-slate-100"
+          onClick={() => window.dispatchEvent(new Event('toggle-sidebar'))}
+        >
+          <Menu className="w-6 h-6" />
+        </button>
+        
         {/* Small Logo for Mobile/Topbar */}
         <div className="block lg:hidden">
           <Image src="/logo.png" alt="VyaparAI" width={32} height={32} className="object-contain" />

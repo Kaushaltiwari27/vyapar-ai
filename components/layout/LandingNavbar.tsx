@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, ArrowRight, Home, Users, TrendingUp, FileText, Smartphone, ShieldCheck, Truck, Package } from 'lucide-react'
+import { ChevronDown, ArrowRight, Home, Users, TrendingUp, FileText, Smartphone, ShieldCheck, Truck, Package, Menu, X } from 'lucide-react'
 
 const productsMenu = [
   { name: 'Vyapar CRM', icon: TrendingUp, href: '/signup', description: 'Close more deals faster with AI.' },
@@ -18,6 +18,7 @@ const productsMenu = [
 export function LandingNavbar() {
   const [scrolled, setScrolled] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,8 +94,8 @@ export function LandingNavbar() {
           </div>
         </div>
 
-        <div className="flex items-center gap-6">
-          <Link href="/login" className="hidden sm:block text-slate-600 hover:text-slate-900 font-bold text-sm transition-colors">
+        <div className="hidden lg:flex items-center gap-6">
+          <Link href="/login" className="text-slate-600 hover:text-slate-900 font-bold text-sm transition-colors">
             Log In
           </Link>
           <Link 
@@ -105,7 +106,59 @@ export function LandingNavbar() {
             Try for Free <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
+
+        {/* Mobile Menu Toggle */}
+        <button 
+          className="lg:hidden p-2 text-slate-600 hover:text-slate-900 transition-colors"
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        >
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3 }}
+            className="lg:hidden bg-white border-b border-slate-200 overflow-hidden"
+          >
+            <div className="px-6 py-4 flex flex-col gap-4">
+              <div className="font-bold text-slate-900 mb-2">Products</div>
+              <div className="grid grid-cols-1 gap-4 pl-4 border-l-2 border-slate-100">
+                {productsMenu.map((item) => {
+                  const Icon = item.icon
+                  return (
+                    <Link key={item.name} href={item.href} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-3">
+                      <Icon className="w-5 h-5 text-blue-600" />
+                      <span className="text-sm font-semibold text-slate-700">{item.name}</span>
+                    </Link>
+                  )
+                })}
+              </div>
+              <hr className="border-slate-100 my-2" />
+              <Link href="#solutions" onClick={() => setIsMobileMenuOpen(false)} className="font-bold text-slate-900 py-2">Solutions</Link>
+              <Link href="#customers" onClick={() => setIsMobileMenuOpen(false)} className="font-bold text-slate-900 py-2">Customer Success</Link>
+              
+              <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-slate-100">
+                <Link href="/login" className="text-center py-3 rounded-xl font-bold text-slate-700 bg-slate-50 border border-slate-200">
+                  Log In
+                </Link>
+                <Link 
+                  href="/signup"
+                  className="text-center py-3 rounded-xl font-bold text-white shadow-lg shadow-blue-500/20"
+                  style={{ background: 'var(--grad-button)' }}
+                >
+                  Start Free Trial
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   )
 }

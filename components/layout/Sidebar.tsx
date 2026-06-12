@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
 import Image from "next/image"
-import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone, Settings } from "lucide-react"
+import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone, Settings, X } from "lucide-react"
 
 type NavItem = { href: string; icon: React.ElementType; label: string; badge?: string };
 
@@ -41,6 +41,13 @@ export function Sidebar() {
   const supabase = createClient()
   const [businessName, setBusinessName] = useState("Loading...")
   const [activeApp, setActiveApp] = useState<'crm' | 'hrms'>('crm')
+  const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+  useEffect(() => {
+    const handleToggle = () => setIsMobileOpen(prev => !prev)
+    window.addEventListener('toggle-sidebar', handleToggle)
+    return () => window.removeEventListener('toggle-sidebar', handleToggle)
+  }, [])
 
   useEffect(() => {
     const savedApp = localStorage.getItem('vyapar_active_app') as 'crm' | 'hrms'
@@ -101,20 +108,40 @@ export function Sidebar() {
   const currentItems = [...(activeApp === 'crm' ? crmItems : hrmsItems), ...commonItems];
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] flex flex-col transition-colors duration-200">
-      {/* Logo */}
-      <div className="h-16 flex items-center px-6 border-b border-border">
-        <Link href="/dashboard" className="flex items-center group w-full">
-          <Image 
-            src="/logo.png" 
-            alt="VyaparAI" 
-            width={140} 
-            height={40} 
-            className="opacity-90 transition-opacity group-hover:opacity-100 object-contain"
-            priority
+    <>
+      {/* Mobile Overlay */}
+      <AnimatePresence>
+        {isMobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsMobileOpen(false)}
+            className="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-40 lg:hidden"
           />
-        </Link>
-      </div>
+        )}
+      </AnimatePresence>
+
+      <aside className={`fixed left-0 top-0 z-50 h-screen w-64 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] flex flex-col transition-transform duration-300 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        {/* Logo and Mobile Close */}
+        <div className="h-16 flex items-center justify-between px-6 border-b border-border">
+          <Link href="/dashboard" className="flex items-center group">
+            <Image 
+              src="/logo.png" 
+              alt="VyaparAI" 
+              width={140} 
+              height={40} 
+              className="opacity-90 transition-opacity group-hover:opacity-100 object-contain"
+              priority
+            />
+          </Link>
+          <button 
+            className="lg:hidden text-slate-400 hover:text-white"
+            onClick={() => setIsMobileOpen(false)}
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
       {/* App Switcher */}
       <div className="px-4 py-4 border-b border-border">
@@ -209,5 +236,6 @@ export function Sidebar() {
         </div>
       </div>
     </aside>
+    </>
   )
 }
