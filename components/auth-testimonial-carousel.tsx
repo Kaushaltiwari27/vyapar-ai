@@ -72,7 +72,7 @@ export function AuthTestimonialCarousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % testimonials.length);
-    }, 4000); // Changed to 4 seconds to allow reading, 2 seconds is too fast to read 2 sentences.
+    }, 1000); // 1 second as requested by user
 
     return () => clearInterval(timer);
   }, []);
