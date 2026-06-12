@@ -101,7 +101,7 @@ export function Sidebar() {
   const currentItems = [...(activeApp === 'crm' ? crmItems : hrmsItems), ...commonItems];
 
   return (
-    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-background border-r border-border flex flex-col transition-colors duration-200">
+    <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-[var(--sidebar-bg)] border-r border-[var(--sidebar-border)] flex flex-col transition-colors duration-200">
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-border">
         <Link href="/dashboard" className="flex items-center group w-full">
@@ -110,7 +110,7 @@ export function Sidebar() {
             alt="VyaparAI" 
             width={140} 
             height={40} 
-            className="filter brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100 object-contain"
+            className="opacity-90 transition-opacity group-hover:opacity-100 object-contain"
             priority
           />
         </Link>
@@ -165,8 +165,8 @@ export function Sidebar() {
                   href={item.href}
                   className={`relative flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium transition-colors group ${
                     isActive 
-                      ? 'text-primary bg-primary/10' 
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
+                      ? 'text-[var(--sidebar-text-active)] bg-[var(--sidebar-item-active)]' 
+                      : 'text-[var(--sidebar-text)] hover:text-[var(--sidebar-text-active)] hover:bg-[var(--sidebar-item-active)]'
                   }`}
                 >
                   {isActive && (
@@ -176,7 +176,7 @@ export function Sidebar() {
                       style={{ background: 'var(--sidebar-accent-bar)' }}
                     />
                   )}
-                  <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "opacity-70 group-hover:opacity-100 transition-opacity"}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? "text-[var(--sidebar-text-active)]" : "opacity-70 group-hover:opacity-100 transition-opacity"}`} />
                   {item.label}
                   {item.badge && (
                     <span className="ml-auto bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded-md font-bold tracking-wider">
@@ -191,11 +191,11 @@ export function Sidebar() {
       </div>
 
       {/* User Footer */}
-      <div className="p-4 border-t border-border bg-muted/30">
-        <div className="flex items-center justify-between bg-background rounded-lg p-3 border border-border premium-shadow">
+      <div className="p-4 border-t border-[var(--sidebar-border)] bg-black/20">
+        <div className="flex items-center justify-between bg-[var(--sidebar-bg)] rounded-lg p-3 border border-[var(--sidebar-border)] premium-shadow">
           <div className="truncate pr-2">
-            <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest mb-0.5">Business</p>
-            <p className="text-sm font-semibold text-foreground truncate">{businessName}</p>
+            <p className="text-[10px] font-bold text-[var(--sidebar-text)] uppercase tracking-widest mb-0.5">Business</p>
+            <p className="text-sm font-semibold text-[var(--sidebar-text-active)] truncate">{businessName}</p>
           </div>
           <motion.button 
             whileHover={{ scale: 1.1 }}

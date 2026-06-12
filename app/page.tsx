@@ -15,7 +15,7 @@ export default function LandingPage() {
               alt="VyaparAI" 
               width={160} 
               height={45} 
-              className="filter brightness-0 invert object-contain"
+              className="object-contain"
               priority
             />
           </div>
@@ -150,7 +150,7 @@ export default function LandingPage() {
               alt="VyaparAI" 
               width={120} 
               height={32} 
-              className="filter brightness-0 invert object-contain"
+              className="object-contain"
             />
           </div>
           <div className="flex gap-8 text-sm text-[rgba(255,255,255,0.5)]">

@@ -24,7 +24,7 @@ export default function AuthLayout({
               alt="VyaparAI" 
               width={180} 
               height={50} 
-              className="filter brightness-0 invert object-contain"
+              className="object-contain"
               priority
             />
           </Link>
