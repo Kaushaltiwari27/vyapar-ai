@@ -110,7 +110,7 @@ export function Sidebar() {
             alt="VyaparAI" 
             width={140} 
             height={40} 
-            className="filter brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100 object-contain"
+            className="opacity-90 transition-opacity group-hover:opacity-100 object-contain"
             priority
           />
         </Link>
@@ -191,7 +191,7 @@ export function Sidebar() {
       </div>
 
       {/* User Footer */}
-      <div className="p-4 border-t border-[var(--sidebar-border)] bg-black/20">
+      <div className="p-4 border-t border-[var(--sidebar-border)] bg-slate-50/80">
         <div className="flex items-center justify-between bg-[var(--sidebar-bg)] rounded-lg p-3 border border-[var(--sidebar-border)] premium-shadow">
           <div className="truncate pr-2">
             <p className="text-[10px] font-bold text-[var(--sidebar-text)] uppercase tracking-widest mb-0.5">Business</p>

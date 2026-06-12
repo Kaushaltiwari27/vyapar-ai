@@ -7,7 +7,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-[#0A0A14] flex flex-col font-sans selection:bg-[#4F46E5]/30 selection:text-white">
       {/* Navigation */}
-      <nav className="fixed w-full z-50 top-0 bg-[rgba(10,10,20,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]">
+      <nav className="fixed w-full z-50 top-0 bg-white/80 backdrop-blur-xl border-b border-slate-200/50 shadow-sm">
         <div className="w-full flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
             <Image 
@@ -15,12 +15,12 @@ export default function LandingPage() {
               alt="VyaparAI" 
               width={160} 
               height={45} 
-              className="filter brightness-0 invert object-contain"
+              className="object-contain"
               priority
             />
           </div>
           <div className="space-x-6 flex items-center">
-            <Link href="/login" className="text-[rgba(255,255,255,0.7)] hover:text-white font-medium text-sm transition-colors">
+            <Link href="/login" className="text-slate-600 hover:text-slate-900 font-bold text-sm transition-colors">
               Log In
             </Link>
             <Link 
@@ -150,7 +150,7 @@ export default function LandingPage() {
               alt="VyaparAI" 
               width={120} 
               height={32} 
-              className="filter brightness-0 invert object-contain"
+              className="object-contain"
             />
           </div>
           <div className="flex gap-8 text-sm text-[rgba(255,255,255,0.5)]">
