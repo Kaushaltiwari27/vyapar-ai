@@ -197,46 +197,46 @@ export default function LandingPage() {
               
               {/* Starter Tier */}
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
-                <div className="inline-block px-3 py-1 bg-emerald-100 text-emerald-800 font-bold text-xs rounded-full mb-6 w-fit">
+                <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
                   Starter
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                   ₹999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="text-slate-700 font-medium">Freelancers, solo founders</li>
-                  <li className="text-slate-700 font-medium">CRM + Invoice + AI chat</li>
-                  <li className="text-slate-700 font-medium">Up to 5 users</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Freelancers, solo founders</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM + Invoice + AI chat</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Up to 5 users</li>
                 </ul>
-                <div className="mt-auto">
-                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
-                    <div className="w-1/3 h-full bg-indigo-500 rounded-full"></div>
-                  </div>
-                  <p className="text-slate-500 text-sm font-medium">Entry point — free trial se convert karo</p>
+                <div className="mt-auto pt-6 border-t border-slate-100">
+                  <p className="text-slate-500 text-sm font-medium mb-4 text-center">Perfect for small teams starting out.</p>
+                  <Link 
+                    href="/signup"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
+                  >
+                    Start 14-Day Trial
+                  </Link>
                 </div>
               </div>
 
               {/* Growth Tier */}
               <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-blue-100 text-blue-800 font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap">
-                  Growth — Push this
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap shadow-md">
+                  MOST POPULAR
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 mt-2 flex items-baseline">
                   ₹2,499<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="text-slate-700 font-medium">10-50 employee SMBs</li>
-                  <li className="text-slate-700 font-medium">Full CRM + ERP + HRMS</li>
-                  <li className="text-slate-700 font-medium">WhatsApp OS + GST filing</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> 10-50 employee SMBs</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Full CRM + ERP + HRMS</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> WhatsApp OS + GST filing</li>
                 </ul>
-                <div className="mt-auto">
-                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
-                    <div className="w-2/3 h-full bg-indigo-500 rounded-full"></div>
-                  </div>
-                  <p className="text-blue-600 text-sm font-bold">Yahi tier pitch karo hamesha</p>
+                <div className="mt-auto pt-6 border-t border-slate-100">
+                  <p className="text-slate-500 text-sm font-medium mb-4 text-center">Everything you need to scale your business.</p>
                   <Link 
                     href="/signup"
-                    className="mt-6 flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
                     style={{ background: 'var(--grad-button)' }}
                   >
                     Start Free Trial
@@ -246,22 +246,25 @@ export default function LandingPage() {
 
               {/* Business Tier */}
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
-                <div className="inline-block px-3 py-1 bg-purple-100 text-purple-800 font-bold text-xs rounded-full mb-6 w-fit">
+                <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
                   Business
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                   ₹4,999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="text-slate-700 font-medium">50-200 employee companies</li>
-                  <li className="text-slate-700 font-medium">Sab kuch + priority support</li>
-                  <li className="text-slate-700 font-medium">Dedicated onboarding</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> 50-200 employee companies</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Sab kuch + priority support</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Dedicated onboarding</li>
                 </ul>
-                <div className="mt-auto">
-                  <div className="w-full h-2 bg-slate-100 rounded-full mb-3 overflow-hidden">
-                    <div className="w-[90%] h-full bg-indigo-500 rounded-full"></div>
-                  </div>
-                  <p className="text-slate-500 text-sm font-medium">Upsell baad mein</p>
+                <div className="mt-auto pt-6 border-t border-slate-100">
+                  <p className="text-slate-500 text-sm font-medium mb-4 text-center">Advanced features for large teams.</p>
+                  <Link 
+                    href="/signup"
+                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
+                  >
+                    Contact Sales
+                  </Link>
                 </div>
               </div>
 
