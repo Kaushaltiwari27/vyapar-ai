@@ -63,7 +63,7 @@ export default function LeavesPage() {
   if (loading) return <div className="p-8 text-slate-500">Loading leave requests...</div>;
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="leaves">
   
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header */}

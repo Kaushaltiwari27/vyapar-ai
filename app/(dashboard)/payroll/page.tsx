@@ -52,7 +52,7 @@ export default function PayrollDashboard() {
   const isCurrentProcessed = currentMonthRun?.status === 'processed';
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="payroll">
   
     <div className="p-8 max-w-7xl mx-auto space-y-8">
       {/* Header */}

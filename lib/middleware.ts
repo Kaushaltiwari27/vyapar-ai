@@ -38,28 +38,64 @@ export async function updateSession(request: NextRequest) {
   const { data } = await supabase.auth.getClaims()
   const user = data?.claims
 
-  if (
-    !user &&
-    request.nextUrl.pathname.startsWith('/dashboard')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  const pathname = request.nextUrl.pathname
+  const PUBLIC_ROUTES = ['/login', '/signup', '/', '/pricing', '/subscribe', '/payment-success', '/payment-failed']
+  const AUTH_ROUTES = ['/login', '/signup']
+  const isPublic = PUBLIC_ROUTES.some(r => pathname === r || pathname.startsWith(r + '/'))
+  const isAuthRoute = AUTH_ROUTES.some(r => pathname === r)
+  
+  const protectedRoutes = ['/dashboard', '/customers', '/deals', '/invoices', '/inventory', '/vendors', '/purchase-orders', '/employees', '/attendance', '/leaves', '/payroll', '/compliance', '/whatsapp', '/chat']
+  const isDashboardRoute = protectedRoutes.some(r => pathname.startsWith(r))
+
+  if (!user) {
+    if (isPublic) return supabaseResponse
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is.
-  // If you're creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally:
-  //    return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
+  if (isAuthRoute) {
+    const url = request.nextUrl.clone()
+    url.pathname = '/dashboard'
+    return NextResponse.redirect(url)
+  }
+
+  if (isDashboardRoute) {
+    // Check user's business subscription status
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('business_id')
+      .eq('id', user.sub)
+      .single()
+
+    if (!profile?.business_id) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/select-plan'
+      return NextResponse.redirect(url)
+    }
+
+    const { data: business } = await supabase
+      .from('businesses')
+      .select('plan, subscription_status, trial_ends_at')
+      .eq('id', profile.business_id)
+      .single()
+
+    if (!business || !business.plan || (business.plan === 'trial' && !business.trial_ends_at)) {
+      const url = request.nextUrl.clone()
+      url.pathname = '/select-plan'
+      return NextResponse.redirect(url)
+    }
+
+    const isExpired = business.subscription_status !== 'active' && 
+      (business.subscription_status === 'expired' || 
+       new Date(business.trial_ends_at) < new Date())
+
+    if (isExpired && pathname !== '/subscribe') {
+      const url = request.nextUrl.clone()
+      url.pathname = '/subscribe'
+      return NextResponse.redirect(url)
+    }
+  }
 
   return supabaseResponse
 }

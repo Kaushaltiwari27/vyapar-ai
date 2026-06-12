@@ -79,7 +79,7 @@ function SignupForm() {
         router.push("/login");
       } else {
         toast.success("Account created successfully!");
-        router.push("/dashboard");
+        router.push("/select-plan");
         router.refresh();
       }
     } catch {

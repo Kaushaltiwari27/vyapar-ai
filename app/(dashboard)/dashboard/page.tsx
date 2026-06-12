@@ -252,7 +252,7 @@ export default function DashboardPage() {
     };
   }, [supabase, activeApp]);
 
-  const { plan } = usePlan();
+  const { plan, planConfig, daysLeft } = usePlan();
 
   const getStageColor = (stage: string) => {
     switch (stage) {
@@ -277,6 +277,32 @@ export default function DashboardPage() {
   // --- UNIFIED VIEW ---
   return (
     <PageWrapper>
+        {/* Trial Expiring Warning Banner */}
+        {planConfig.name === 'Free Trial' && daysLeft <= 7 && (
+          <motion.div 
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className={`mb-6 p-4 rounded-xl flex flex-col md:flex-row items-center justify-between gap-4 border ${daysLeft <= 3 ? 'bg-rose-50 border-rose-200 text-rose-800' : 'bg-amber-50 border-amber-200 text-amber-800'}`}
+          >
+            <div className="flex items-center gap-3">
+              <AlertTriangle className={`w-6 h-6 ${daysLeft <= 3 ? 'text-rose-600' : 'text-amber-600'}`} />
+              <div>
+                <h3 className="font-bold">
+                  {daysLeft <= 3 ? 'Urgent: ' : ''}Aapka free trial {daysLeft} din mein khatam hoga
+                </h3>
+                <p className={`text-sm mt-0.5 ${daysLeft <= 3 ? 'text-rose-600' : 'text-amber-700'}`}>
+                  Ab tak ka poora data safe rahega jab bhi aap upgrade karenge.
+                </p>
+              </div>
+            </div>
+            <Link href="/subscribe">
+              <Button className={daysLeft <= 3 ? 'bg-rose-600 hover:bg-rose-700 text-white font-bold' : 'bg-amber-500 hover:bg-amber-600 text-white font-bold'}>
+                Plan kharido
+              </Button>
+            </Link>
+          </motion.div>
+        )}
+
         {/* Header & Quick Actions */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}

@@ -118,7 +118,7 @@ export default function AttendancePage() {
   if (loading) return <div className="p-8 text-slate-500">Loading attendance data...</div>;
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="attendance">
   
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header */}

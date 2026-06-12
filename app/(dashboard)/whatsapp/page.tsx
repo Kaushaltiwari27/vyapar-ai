@@ -116,7 +116,7 @@ export default function WhatsAppPage() {
   };
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="whatsapp">
       <PageWrapper>
       <div className="p-8 max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center mb-6">

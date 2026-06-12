@@ -114,7 +114,7 @@ export default function CompliancePage() {
   });
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="compliance">
       <div className="p-8 max-w-7xl mx-auto space-y-8">
         {/* Header */}
         <div className="flex items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">

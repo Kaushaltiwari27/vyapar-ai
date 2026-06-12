@@ -112,7 +112,7 @@ export default function EmployeesPage() {
   if (loading) return <div className="p-8 text-slate-500">Loading HRMS data...</div>;
 
   return (
-    <PlanGuard>
+    <PlanGuard feature="employees">
   
     <div className="p-8 max-w-7xl mx-auto space-y-8">
       {/* Header & Actions */}
