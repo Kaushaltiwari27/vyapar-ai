@@ -79,7 +79,7 @@ export default function LandingPage() {
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
               <Link 
-                href="/signup"
+                href="/signup?plan=growth"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-bold text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-blue-500/20"
                 style={{ background: 'var(--grad-button)' }}
               >
@@ -211,7 +211,7 @@ export default function LandingPage() {
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Perfect for small teams starting out.</p>
                   <Link 
-                    href="/signup"
+                    href="/signup?plan=starter"
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
                   >
                     Start 14-Day Trial
@@ -235,7 +235,7 @@ export default function LandingPage() {
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Everything you need to scale your business.</p>
                   <Link 
-                    href="/signup"
+                    href="/signup?plan=growth"
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
                     style={{ background: 'var(--grad-button)' }}
                   >
@@ -260,7 +260,7 @@ export default function LandingPage() {
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Advanced features for large teams.</p>
                   <Link 
-                    href="/signup"
+                    href="/signup?plan=business"
                     className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
                   >
                     Contact Sales

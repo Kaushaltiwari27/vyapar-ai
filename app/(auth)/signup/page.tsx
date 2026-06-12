@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,10 +11,12 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { Mail, Lock, User, Phone, Building, MapPin, FileText, ArrowRight, ArrowLeft } from "lucide-react";
 
-export default function SignupPage() {
+function SignupForm() {
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const plan = searchParams.get("plan") || "starter";
   const supabase = createClient();
 
   // Step 1 State
@@ -53,7 +55,8 @@ export default function SignupPage() {
           businessName,
           phone,
           city,
-          gstin
+          gstin,
+          plan
         }),
       });
 
@@ -295,5 +298,13 @@ export default function SignupPage() {
         </form>
       )}
     </div>
+  );
+}
+
+export default function SignupPage() {
+  return (
+    <Suspense fallback={<div className="p-8 text-center text-slate-500 animate-pulse">Loading setup...</div>}>
+      <SignupForm />
+    </Suspense>
   );
 }
