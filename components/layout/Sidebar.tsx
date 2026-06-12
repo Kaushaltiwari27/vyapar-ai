@@ -110,7 +110,7 @@ export function Sidebar() {
             alt="VyaparAI" 
             width={140} 
             height={40} 
-            className="opacity-90 transition-opacity group-hover:opacity-100 object-contain"
+            className="filter brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100 object-contain"
             priority
           />
         </Link>
