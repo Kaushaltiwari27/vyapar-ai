@@ -1,6 +1,7 @@
 import { ShieldCheck, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { AuthTestimonialCarousel } from "@/components/auth-testimonial-carousel";
 
 export default function AuthLayout({
   children,
@@ -53,20 +54,7 @@ export default function AuthLayout({
           </div>
 
           <div className="relative z-10 mt-12">
-            <div className="bg-white/60 backdrop-blur-md border border-white p-6 rounded-2xl max-w-md shadow-xl">
-              <p className="text-slate-700 italic font-medium">
-                &quot;VyaparAI has completely transformed how we handle our daily billing and inventory. It feels like having a dedicated accountant who never sleeps.&quot;
-              </p>
-              <div className="mt-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold" style={{ background: 'var(--grad-button)' }}>
-                  SR
-                </div>
-                <div>
-                  <p className="text-slate-900 font-bold text-sm">Sanjay Rastogi</p>
-                  <p className="text-blue-700 text-xs font-bold">Rastogi Enterprises</p>
-                </div>
-              </div>
-            </div>
+            <AuthTestimonialCarousel />
           </div>
         </div>
 
