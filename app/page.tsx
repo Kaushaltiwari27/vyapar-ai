@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database } from "lucide-react";
+import Image from "next/image";
 import { APP_FEATURES } from "@/lib/features";
 
 export default function LandingPage() {
@@ -9,13 +10,14 @@ export default function LandingPage() {
       <nav className="fixed w-full z-50 top-0 bg-[rgba(10,10,20,0.7)] backdrop-blur-xl border-b border-[rgba(255,255,255,0.06)]">
         <div className="w-full flex justify-between items-center px-6 py-4 max-w-7xl mx-auto">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[#4F46E5] to-[#7C3AED] rounded-xl flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
-              <span className="text-white font-extrabold text-xl">V</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-extrabold text-white tracking-tight leading-none">VyaparAI</span>
-              <span className="text-[10px] text-[#8B5CF6] font-medium tracking-widest uppercase mt-1">Business Brain</span>
-            </div>
+            <Image 
+              src="/logo.png" 
+              alt="VyaparAI" 
+              width={160} 
+              height={45} 
+              className="filter brightness-0 invert object-contain"
+              priority
+            />
           </div>
           <div className="space-x-6 flex items-center">
             <Link href="/login" className="text-[rgba(255,255,255,0.7)] hover:text-white font-medium text-sm transition-colors">
@@ -23,8 +25,8 @@ export default function LandingPage() {
             </Link>
             <Link 
               href="/signup"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_0_20px_rgba(79,70,229,0.3)] hover:shadow-[0_0_30px_rgba(79,70,229,0.5)]"
-              style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_4px_15px_rgba(37,99,235,0.35)]"
+              style={{ background: 'var(--grad-button)' }}
             >
               Try for Free <ArrowRight className="w-4 h-4" />
             </Link>
@@ -36,8 +38,8 @@ export default function LandingPage() {
       <main className="flex-1 pt-20">
         <section className="relative pt-32 pb-40 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
           {/* Animated gradient orbs in background */}
-          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[#4F46E5] rounded-full blur-[120px] opacity-20 animate-float" />
-          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#7C3AED] rounded-full blur-[100px] opacity-20 animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--primary-brand)] rounded-full blur-[120px] opacity-20 animate-float" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--accent-brand)] rounded-full blur-[100px] opacity-20 animate-float" style={{ animationDelay: '1s' }} />
           
           <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[rgba(255,255,255,0.05)] border border-[rgba(255,255,255,0.1)] mb-8 animate-fade-in">
@@ -58,8 +60,8 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <Link 
                 href="/signup"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_10px_40px_rgba(79,70,229,0.4)]"
-                style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-semibold text-white transition-all duration-300 hover:scale-105 active:scale-95 shadow-[0_4px_15px_rgba(37,99,235,0.35)]"
+                style={{ background: 'var(--grad-button)' }}
               >
                 Start Free Trial <ArrowRight className="w-5 h-5" />
               </Link>
@@ -91,8 +93,8 @@ export default function LandingPage() {
                         New
                       </div>
                     )}
-                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110" style={{ background: 'linear-gradient(135deg, rgba(79,70,229,0.2), rgba(124,58,237,0.2))' }}>
-                      <Icon className="w-6 h-6 text-[#8B5CF6]" />
+                    <div className="w-12 h-12 rounded-xl flex items-center justify-center mb-6 transition-all duration-300 group-hover:scale-110" style={{ background: 'var(--grad-subtle)' }}>
+                      <Icon className="w-6 h-6 text-[#2563EB]" />
                     </div>
                     <h3 className="text-xl font-bold mb-3 text-white">{feature.title}</h3>
                     <p className="text-[rgba(255,255,255,0.5)] text-sm leading-relaxed">{feature.description}</p>
@@ -109,7 +111,7 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-5xl font-bold text-white mb-16">Enterprise power, SMB pricing.</h2>
             
             <div className="p-10 relative max-w-md mx-auto rounded-3xl bg-zinc-900/80 border border-zinc-800 shadow-[0_0_40px_rgba(79,70,229,0.1)] backdrop-blur-xl">
-              <div className="absolute top-0 right-0 bg-gradient-to-r from-[#4F46E5] to-[#7C3AED] text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-xl">
+              <div className="absolute top-0 right-0 bg-gradient-to-r from-[var(--primary-brand)] to-[var(--accent-brand)] text-white text-xs font-bold px-4 py-1.5 rounded-bl-xl rounded-tr-xl">
                 MOST POPULAR
               </div>
               <h3 className="text-2xl font-bold text-white mb-2 mt-2">Premium Edition</h3>
@@ -121,7 +123,7 @@ export default function LandingPage() {
               <ul className="space-y-4 text-left mb-10">
                 {['Unlimited Customers & Invoices', 'Full HRMS & Payroll Engine', 'Advanced AI Chat Assistant', '24/7 Priority Support'].map((feature, i) => (
                   <li key={i} className="flex items-center gap-3 text-sm">
-                    <CheckCircle2 className="w-5 h-5 text-[#8B5CF6] flex-shrink-0" />
+                    <CheckCircle2 className="w-5 h-5 text-[var(--primary-brand)] flex-shrink-0" />
                     <span className="text-[rgba(255,255,255,0.8)]">{feature}</span>
                   </li>
                 ))}
@@ -129,8 +131,8 @@ export default function LandingPage() {
               
               <Link 
                 href="/signup"
-                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_10px_20px_rgba(79,70,229,0.3)]"
-                style={{ background: 'linear-gradient(135deg, #4F46E5, #7C3AED)' }}
+                className="flex items-center justify-center gap-2 w-full py-4 rounded-xl text-base font-semibold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-[0_4px_15px_rgba(37,99,235,0.35)]"
+                style={{ background: 'var(--grad-button)' }}
               >
                 Start Free Trial
               </Link>
@@ -143,8 +145,13 @@ export default function LandingPage() {
       <footer className="bg-[#05050A] border-t border-[rgba(255,255,255,0.05)] py-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-3">
-            <span className="text-white font-extrabold text-xl">V</span>
-            <span className="font-bold text-lg text-white">VyaparAI</span>
+            <Image 
+              src="/logo.png" 
+              alt="VyaparAI" 
+              width={120} 
+              height={32} 
+              className="filter brightness-0 invert object-contain"
+            />
           </div>
           <div className="flex gap-8 text-sm text-[rgba(255,255,255,0.5)]">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>

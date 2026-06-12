@@ -3,6 +3,7 @@ import { PayrollDetail, Business } from '@/lib/types';
 import { formatCurrency } from '@/lib/utils';
 import { getMonthName } from '@/lib/payroll';
 import { ToWords } from 'to-words';
+import Image from 'next/image';
 
 interface PayslipDocumentProps {
   business: Business;
@@ -30,7 +31,7 @@ export const PayslipDocument: React.FC<PayslipDocumentProps> = ({ business, payr
           
       {/* Header */}
       <div className="text-center border-b-2 border-slate-800 pb-6 mb-6">
-        <h1 className="text-2xl font-black uppercase tracking-widest text-[#0176D3]">{business.name}</h1>
+        <h1 className="text-2xl font-black uppercase tracking-widest text-[var(--primary-brand)]">{business.name}</h1>
         {business.address && <p className="text-xs text-slate-500 mt-1">{business.address}, {business.city}, {business.state}</p>}
         <h2 className="text-lg font-bold mt-4 uppercase tracking-wider bg-slate-100 inline-block px-4 py-1 border border-slate-300">
           Payslip for {getMonthName(payroll.month)} {payroll.year}
@@ -133,8 +134,8 @@ export const PayslipDocument: React.FC<PayslipDocumentProps> = ({ business, payr
       </div>
 
       {/* Net Pay */}
-      <div className="border-2 border-[#0176D3] bg-blue-50 p-6 text-center mb-8">
-        <h3 className="text-xl font-bold uppercase tracking-wider text-[#0176D3] mb-1">Net Pay: {formatCurrency(payroll.net_pay)}</h3>
+      <div className="border-2 border-[var(--primary-brand)] bg-blue-50 p-6 text-center mb-8">
+        <h3 className="text-xl font-bold uppercase tracking-wider text-[var(--primary-brand)] mb-1">Net Pay: {formatCurrency(payroll.net_pay)}</h3>
         <p className="text-sm text-slate-700 font-semibold italic">{netPayWords}</p>
       </div>
 
@@ -146,9 +147,12 @@ export const PayslipDocument: React.FC<PayslipDocumentProps> = ({ business, payr
           <p>Employer ESIC: {formatCurrency(payroll.esic_employer)}</p>
           <p className="mt-1 font-bold text-slate-700">Monthly CTC: {formatCurrency(ctcMonthly)}</p>
         </div>
-        <div className="text-right flex flex-col justify-end">
-          <p className="italic">This is a computer-generated payslip.</p>
-          <p className="italic">No signature is required.</p>
+        <div className="text-right flex flex-col justify-end items-end">
+          <p className="italic mb-2">This is a computer-generated payslip. No signature is required.</p>
+          <div className="flex items-center gap-2 mt-2">
+            <span>Powered by</span>
+            <Image src="/logo.png" alt="VyaparAI" width={80} height={20} className="object-contain opacity-50 grayscale" />
+          </div>
         </div>
       </div>
     </div>

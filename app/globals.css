@@ -15,8 +15,8 @@
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
 
-    /* Vibrant Indigo Primary */
-    --primary: 243 75% 59%;
+    /* Vibrant Indigo Primary -> Blue */
+    --primary: 221.2 83.2% 53.3%; /* #2563EB */
     --primary-foreground: 0 0% 100%;
     
     --secondary: 240 4.8% 95.9%;
@@ -25,7 +25,7 @@
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
     
-    --accent: 240 4.8% 95.9%;
+    --accent: 262.1 83.3% 57.8%; /* #7C3AED */
     --accent-foreground: 240 5.9% 10%;
     
     --destructive: 0 84.2% 60.2%;
@@ -33,18 +33,35 @@
 
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
-    --ring: 243 75% 59%;
+    --ring: 221.2 83.2% 53.3%;
 
     /* Radius for Shadcn components */
     --radius: 0.75rem;
 
-    /* Sidebar - pure light matching dashboard */
-    --sidebar-bg: 240 5% 98%;
-    --sidebar-border: 240 5.9% 90%;
-    --sidebar-text: 240 3.8% 46.1%;
-    --sidebar-text-active: 240 10% 3.9%;
-    --sidebar-item-active: 240 4.8% 95.9%;
-    --sidebar-item-hover: 240 4.8% 95.9%;
+    /* BRAND COLORS (User Requested) */
+    --primary-brand: #2563EB;
+    --primary-dark: #1D4ED8;
+    --primary-light: #3B82F6;
+
+    --accent-brand: #7C3AED;
+    --accent-dark: #6D28D9;
+    --accent-light: #9333EA;
+
+    --navy: #1A1A4E;
+    --navy-dark: #0F0F30;
+
+    /* Logo gradients */
+    --grad-brand: linear-gradient(135deg, #1A1A4E 0%, #2563EB 50%, #9333EA 100%);
+    --grad-button: linear-gradient(135deg, #2563EB 0%, #7C3AED 100%);
+    --grad-subtle: linear-gradient(135deg, rgba(37,99,235,0.08) 0%, rgba(124,58,237,0.05) 100%);
+
+    /* Sidebar — navy from logo */
+    --sidebar-bg: #0F0F2E;
+    --sidebar-border: rgba(255,255,255,0.07);
+    --sidebar-text: rgba(255,255,255,0.5);
+    --sidebar-text-active: #ffffff;
+    --sidebar-item-active: rgba(37,99,235,0.25);
+    --sidebar-accent-bar: #2563EB;
   }
 
   .dark {
@@ -58,32 +75,33 @@
     --popover: 240 5% 7.8%;
     --popover-foreground: 0 0% 98%;
     
-    --primary: 243 75% 59%; /* Same vibrant indigo */
+    /* Vibrant Indigo Primary */
+    --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 100%;
     
-    --secondary: 240 4% 12%; /* #1d1d20 - Used for buttons/hover, not main cards */
+    --secondary: 240 4% 12%;
     --secondary-foreground: 0 0% 98%;
     
-    --muted: 240 4% 12%; /* Subdued backgrounds */
-    --muted-foreground: 240 5% 64.9%; /* Readable muted text */
+    --muted: 240 4% 12%;
+    --muted-foreground: 240 5% 64.9%;
     
-    --accent: 240 4% 12%;
+    --accent: 262.1 83.3% 57.8%;
     --accent-foreground: 0 0% 98%;
     
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
     
-    --border: 240 4% 16%; /* Delicate borders */
+    --border: 240 4% 16%;
     --input: 240 4% 16%;
-    --ring: 243 75% 59%;
+    --ring: 221.2 83.2% 53.3%;
 
     /* Sidebar - dark matching dashboard */
-    --sidebar-bg: 240 10% 3.9%;
-    --sidebar-border: 240 4% 16%;
-    --sidebar-text: 240 5% 64.9%;
-    --sidebar-text-active: 0 0% 98%;
-    --sidebar-item-active: 240 4% 12%;
-    --sidebar-item-hover: 240 4% 12%;
+    --sidebar-bg: #0F0F2E;
+    --sidebar-border: rgba(255,255,255,0.07);
+    --sidebar-text: rgba(255,255,255,0.5);
+    --sidebar-text-active: #ffffff;
+    --sidebar-item-active: rgba(37,99,235,0.25);
+    --sidebar-accent-bar: #2563EB;
   }
 }
 

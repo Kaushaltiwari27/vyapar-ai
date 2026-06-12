@@ -6,6 +6,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import { createClient } from "@/lib/client"
 import { toast } from "react-hot-toast"
+import Image from "next/image"
 import { LogOut, Home, Users, TrendingUp, FileText, MessageCircle, Package, Truck, ClipboardList, ShieldCheck, Smartphone, Settings } from "lucide-react"
 
 type NavItem = { href: string; icon: React.ElementType; label: string; badge?: string };
@@ -103,18 +104,15 @@ export function Sidebar() {
     <aside className="fixed left-0 top-0 z-40 h-screen w-64 bg-background border-r border-border flex flex-col transition-colors duration-200">
       {/* Logo */}
       <div className="h-16 flex items-center px-6 border-b border-border">
-        <Link href="/dashboard" className="flex items-center gap-3 group w-full">
-          <motion.div 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center shadow-sm"
-          >
-            <span className="text-white font-bold text-lg leading-none">V</span>
-          </motion.div>
-          <div className="flex flex-col">
-            <span className="text-lg font-bold text-foreground tracking-tight leading-none">VyaparAI</span>
-            <span className="text-[10px] text-muted-foreground font-medium tracking-widest uppercase mt-0.5">Workspace</span>
-          </div>
+        <Link href="/dashboard" className="flex items-center group w-full">
+          <Image 
+            src="/logo.png" 
+            alt="VyaparAI" 
+            width={140} 
+            height={40} 
+            className="filter brightness-0 invert opacity-90 transition-opacity group-hover:opacity-100 object-contain"
+            priority
+          />
         </Link>
       </div>
 
@@ -174,7 +172,8 @@ export function Sidebar() {
                   {isActive && (
                     <motion.div 
                       layoutId="sidebar-active-indicator"
-                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 bg-primary rounded-r-full" 
+                      className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-1/2 rounded-r-full" 
+                      style={{ background: 'var(--sidebar-accent-bar)' }}
                     />
                   )}
                   <Icon className={`w-4 h-4 ${isActive ? "text-primary" : "opacity-70 group-hover:opacity-100 transition-opacity"}`} />

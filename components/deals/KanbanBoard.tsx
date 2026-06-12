@@ -22,12 +22,12 @@ import { useState } from "react";
 const STAGES: Deal['stage'][] = ['Lead', 'Contacted', 'Proposal', 'Negotiation', 'Won', 'Lost'];
 
 const STAGE_CONFIG = {
-  'Lead': { color: 'bg-slate-200 border-slate-300 text-slate-700' },
-  'Contacted': { color: 'bg-blue-200 border-blue-300 text-blue-700' },
-  'Proposal': { color: 'bg-yellow-200 border-yellow-300 text-yellow-800' },
-  'Negotiation': { color: 'bg-orange-200 border-orange-300 text-orange-800' },
-  'Won': { color: 'bg-green-200 border-green-300 text-green-800' },
-  'Lost': { color: 'bg-red-200 border-red-300 text-red-800' },
+  'Lead': { color: 'bg-[#EFF6FF] border-[#BFDBFE] text-[#1D4ED8]' },
+  'Contacted': { color: 'bg-[#EDE9FE] border-[#DDD6FE] text-[#6D28D9]' },
+  'Proposal': { color: 'bg-[#FEF3C7] border-[#FDE68A] text-[#92400E]' },
+  'Negotiation': { color: 'bg-[#FFF7ED] border-[#FFEDD5] text-[#C2410C]' },
+  'Won': { color: 'bg-[#ECFDF5] border-[#D1FAE5] text-[#065F46]' },
+  'Lost': { color: 'bg-[#FEF2F2] border-[#FECACA] text-[#991B1B]' },
 };
 
 // Sortable Column Component

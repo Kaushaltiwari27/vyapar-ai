@@ -1,5 +1,6 @@
 import { ShieldCheck, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function AuthLayout({
   children,
@@ -12,16 +13,20 @@ export default function AuthLayout({
       <div className="hidden lg:flex w-1/2 bg-slate-900 flex-col justify-between p-12 relative overflow-hidden">
         {/* Abstract Background Elements */}
         <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-          <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-indigo-600/20 blur-3xl" />
-          <div className="absolute bottom-[10%] right-[0%] w-[50%] h-[50%] rounded-full bg-blue-600/20 blur-3xl" />
+          <div className="absolute -top-[20%] -left-[10%] w-[70%] h-[70%] rounded-full bg-[var(--primary-brand)]/20 blur-3xl" />
+          <div className="absolute bottom-[10%] right-[0%] w-[50%] h-[50%] rounded-full bg-[var(--accent-brand)]/20 blur-3xl" />
         </div>
 
         <div className="relative z-10">
           <Link href="/" className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <ShieldCheck className="text-white w-7 h-7" />
-            </div>
-            <span className="text-3xl font-black text-white tracking-tight">VyaparAI</span>
+            <Image 
+              src="/logo.png" 
+              alt="VyaparAI" 
+              width={180} 
+              height={50} 
+              className="filter brightness-0 invert object-contain"
+              priority
+            />
           </Link>
           
           <div className="mt-24 max-w-md">
@@ -71,10 +76,13 @@ export default function AuthLayout({
         {/* Mobile Logo (Visible only on mobile) */}
         <div className="lg:hidden flex justify-center mb-8 absolute top-8 w-full left-0">
           <Link href="/" className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-              <ShieldCheck className="text-white w-6 h-6" />
-            </div>
-            <span className="text-2xl font-extrabold text-slate-900 tracking-tight">VyaparAI</span>
+            <Image 
+              src="/logo.png" 
+              alt="VyaparAI" 
+              width={140} 
+              height={40} 
+              className="object-contain"
+            />
           </Link>
         </div>
 

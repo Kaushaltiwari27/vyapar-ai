@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { Bell } from 'lucide-react'
 import { createClient } from "@/lib/client"
+import Image from "next/image"
 
 export function TopNavigation() {
   const [userInitials, setUserInitials] = useState("V")
@@ -58,11 +59,17 @@ export function TopNavigation() {
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between px-8 py-4 bg-[rgba(255,255,255,0.7)] backdrop-blur-xl border-b border-[rgba(0,0,0,0.06)]">
-      <div>
-        <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">{pageTitle}</h1>
-        <p className="text-sm text-slate-500 font-medium">
-          {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
-        </p>
+      <div className="flex items-center gap-4">
+        {/* Small Logo for Mobile/Topbar */}
+        <div className="block lg:hidden">
+          <Image src="/logo.png" alt="VyaparAI" width={32} height={32} className="object-contain" />
+        </div>
+        <div>
+          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">{pageTitle}</h1>
+          <p className="text-sm text-slate-500 font-medium">
+            {new Date().toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' })}
+          </p>
+        </div>
       </div>
       
       <div className="flex items-center gap-4">
@@ -72,7 +79,10 @@ export function TopNavigation() {
           <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
         </button>
         {/* Avatar */}
-        <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#4F46E5] to-[#7C3AED] text-white flex items-center justify-center font-bold shadow-[0_4px_10px_rgba(79,70,229,0.3)] cursor-pointer hover:scale-105 transition-transform">
+        <div 
+          className="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold shadow-[0_4px_10px_rgba(37,99,235,0.3)] cursor-pointer hover:scale-105 transition-transform"
+          style={{ background: 'var(--grad-button)' }}
+        >
           {userInitials}
         </div>
       </div>
