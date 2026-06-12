@@ -252,9 +252,7 @@ export default function DashboardPage() {
     };
   }, [supabase, activeApp]);
 
-  // Force activeApp to 'crm' if user is on 'starter' plan
   const { plan } = usePlan();
-  const effectiveApp = plan === 'starter' ? 'crm' : activeApp;
 
   const getStageColor = (stage: string) => {
     switch (stage) {
@@ -276,10 +274,9 @@ export default function DashboardPage() {
     );
   }
 
-  // --- CRM VIEW ---
-  if (effectiveApp === 'crm') {
-    return (
-      <PageWrapper>
+  // --- UNIFIED VIEW ---
+  return (
+    <PageWrapper>
         {/* Header & Quick Actions */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
@@ -438,13 +435,19 @@ export default function DashboardPage() {
             </CardContent>
           </Card>
         </motion.div>
-      </PageWrapper>
-    );
-  }
+      {plan !== 'starter' && (
+        <div className="mt-12 mb-6 border-t border-slate-200 pt-8">
+           <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 bg-primary/10 text-primary rounded-xl flex items-center justify-center">
+                <Users className="w-5 h-5" />
+              </div>
+              <h2 className="text-2xl font-bold text-slate-900 tracking-tight">HRMS Overview</h2>
+           </div>
+        </div>
+      )}
 
-  // --- HRMS VIEW ---
-  return (
-    <PageWrapper>
+      {plan !== 'starter' && (
+        <>
       {/* Header & Quick Actions */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }}
@@ -547,6 +550,8 @@ export default function DashboardPage() {
           )}
         </div>
       </motion.div>
+        </>
+      )}
     </PageWrapper>
   );
 }
