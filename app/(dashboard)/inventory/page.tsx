@@ -15,6 +15,8 @@ import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { ProductForm } from "@/components/inventory/ProductForm";
 import { StockAdjustForm } from "@/components/inventory/StockAdjustForm";
+import PageWrapper from "@/components/ui/PageWrapper";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function InventoryPage() {
   const supabase = createClient();
@@ -144,195 +146,199 @@ export default function InventoryPage() {
   });
 
   return (
-    <div className="p-8 max-w-7xl mx-auto space-y-6">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
-            <Package className="w-6 h-6 text-indigo-600" />
-            Inventory
-          </h1>
-          <p className="text-slate-500 mt-1">Manage products, stock levels, and pricing</p>
-        </div>
-        <Button onClick={() => setIsProductSheetOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
-          <Plus className="w-4 h-4 mr-2" /> New Product
-        </Button>
-      </div>
-
-      {/* Metrics Row */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="shadow-sm">
-          <CardContent className="p-6">
-            <p className="text-sm font-medium text-slate-500">Total Products</p>
-            <div className="text-3xl font-bold text-slate-900 mt-2">{totalProducts}</div>
-          </CardContent>
-        </Card>
-        
-        <Card className="shadow-sm">
-          <CardContent className="p-6">
-            <p className="text-sm font-medium text-slate-500">Total Stock Value</p>
-            <div className="text-3xl font-bold text-slate-900 mt-2">{formatCurrency(totalValue)}</div>
-          </CardContent>
-        </Card>
-
-        <Card className={`shadow-sm ${lowStockCount > 0 ? 'border-amber-300 bg-amber-50/30' : ''}`}>
-          <CardContent className="p-6 flex items-center justify-between">
+    <PlanGuard>
+      <PageWrapper>
+        <div className="p-8 max-w-7xl mx-auto space-y-6">
+          <div className="flex justify-between items-center">
             <div>
-              <p className="text-sm font-medium text-slate-500">Low Stock Items</p>
-              <div className={`text-3xl font-bold mt-2 ${lowStockCount > 0 ? 'text-amber-600' : 'text-slate-900'}`}>
-                {lowStockCount}
+              <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                <Package className="w-6 h-6 text-indigo-600" />
+                Inventory
+              </h1>
+              <p className="text-slate-500 mt-1">Manage products, stock levels, and pricing</p>
+            </div>
+            <Button onClick={() => setIsProductSheetOpen(true)} className="bg-indigo-600 hover:bg-indigo-700">
+              <Plus className="w-4 h-4 mr-2" /> New Product
+            </Button>
+          </div>
+
+          {/* Metrics Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <Card className="shadow-sm">
+              <CardContent className="p-6">
+                <p className="text-sm font-medium text-slate-500">Total Products</p>
+                <div className="text-3xl font-bold text-slate-900 mt-2">{totalProducts}</div>
+              </CardContent>
+            </Card>
+            
+            <Card className="shadow-sm">
+              <CardContent className="p-6">
+                <p className="text-sm font-medium text-slate-500">Total Stock Value</p>
+                <div className="text-3xl font-bold text-slate-900 mt-2">{formatCurrency(totalValue)}</div>
+              </CardContent>
+            </Card>
+
+            <Card className={`shadow-sm ${lowStockCount > 0 ? 'border-amber-300 bg-amber-50/30' : ''}`}>
+              <CardContent className="p-6 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-500">Low Stock Items</p>
+                  <div className={`text-3xl font-bold mt-2 ${lowStockCount > 0 ? 'text-amber-600' : 'text-slate-900'}`}>
+                    {lowStockCount}
+                  </div>
+                </div>
+                {lowStockCount > 0 && <AlertTriangle className="w-8 h-8 text-amber-500 opacity-50" />}
+              </CardContent>
+            </Card>
+
+            <Card className={`shadow-sm ${outOfStockCount > 0 ? 'border-red-300 bg-red-50/30' : ''}`}>
+              <CardContent className="p-6 flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-medium text-slate-500">Out of Stock</p>
+                  <div className={`text-3xl font-bold mt-2 ${outOfStockCount > 0 ? 'text-red-600' : 'text-slate-900'}`}>
+                    {outOfStockCount}
+                  </div>
+                </div>
+                {outOfStockCount > 0 && <XCircle className="w-8 h-8 text-red-500 opacity-50" />}
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div className="p-4 border-b border-slate-100 bg-slate-50 flex gap-4 items-center">
+              <div className="relative flex-1 max-w-md">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                <Input 
+                  placeholder="Search by product name or SKU..." 
+                  value={searchQuery}
+                  onChange={e => setSearchQuery(e.target.value)}
+                  className="pl-9 bg-white"
+                />
+              </div>
+              <div className="flex gap-2">
+                <Button 
+                  variant={filterType === 'all' ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={() => setFilterType('all')}
+                  className={filterType === 'all' ? 'bg-slate-800 text-white' : ''}
+                >
+                  Sab
+                </Button>
+                <Button 
+                  variant={filterType === 'low' ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={() => setFilterType('low')}
+                  className={filterType === 'low' ? 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' : ''}
+                >
+                  Low Stock
+                </Button>
+                <Button 
+                  variant={filterType === 'out' ? 'default' : 'outline'} 
+                  size="sm"
+                  onClick={() => setFilterType('out')}
+                  className={filterType === 'out' ? 'bg-red-100 text-red-700 hover:bg-red-200 border-red-200' : ''}
+                >
+                  Out of Stock
+                </Button>
               </div>
             </div>
-            {lowStockCount > 0 && <AlertTriangle className="w-8 h-8 text-amber-500 opacity-50" />}
-          </CardContent>
-        </Card>
 
-        <Card className={`shadow-sm ${outOfStockCount > 0 ? 'border-red-300 bg-red-50/30' : ''}`}>
-          <CardContent className="p-6 flex items-center justify-between">
-            <div>
-              <p className="text-sm font-medium text-slate-500">Out of Stock</p>
-              <div className={`text-3xl font-bold mt-2 ${outOfStockCount > 0 ? 'text-red-600' : 'text-slate-900'}`}>
-                {outOfStockCount}
+            {loading ? (
+              <div className="p-8 text-center text-slate-500">Loading products...</div>
+            ) : filteredProducts.length === 0 ? (
+              <div className="p-12 text-center">
+                <Package className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                <h3 className="text-lg font-medium text-slate-900">No products found</h3>
+                <p className="text-slate-500 mt-1">Add your first product to start tracking inventory.</p>
               </div>
-            </div>
-            {outOfStockCount > 0 && <XCircle className="w-8 h-8 text-red-500 opacity-50" />}
-          </CardContent>
-        </Card>
-      </div>
-
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-        <div className="p-4 border-b border-slate-100 bg-slate-50 flex gap-4 items-center">
-          <div className="relative flex-1 max-w-md">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
-            <Input 
-              placeholder="Search by product name or SKU..." 
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              className="pl-9 bg-white"
-            />
-          </div>
-          <div className="flex gap-2">
-            <Button 
-              variant={filterType === 'all' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => setFilterType('all')}
-              className={filterType === 'all' ? 'bg-slate-800 text-white' : ''}
-            >
-              Sab
-            </Button>
-            <Button 
-              variant={filterType === 'low' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => setFilterType('low')}
-              className={filterType === 'low' ? 'bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200' : ''}
-            >
-              Low Stock
-            </Button>
-            <Button 
-              variant={filterType === 'out' ? 'default' : 'outline'} 
-              size="sm"
-              onClick={() => setFilterType('out')}
-              className={filterType === 'out' ? 'bg-red-100 text-red-700 hover:bg-red-200 border-red-200' : ''}
-            >
-              Out of Stock
-            </Button>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="p-8 text-center text-slate-500">Loading products...</div>
-        ) : filteredProducts.length === 0 ? (
-          <div className="p-12 text-center">
-            <Package className="w-12 h-12 text-slate-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-slate-900">No products found</h3>
-            <p className="text-slate-500 mt-1">Add your first product to start tracking inventory.</p>
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50">
-                <TableHead>Product / SKU</TableHead>
-                <TableHead>Category</TableHead>
-                <TableHead>Current Stock</TableHead>
-                <TableHead>Reorder Lvl</TableHead>
-                <TableHead>Price (Buy/Sell)</TableHead>
-                <TableHead className="text-right">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredProducts.map((product) => {
-                const status = getStockStatus(product.current_stock, product.reorder_level);
-                return (
-                  <TableRow key={product.id} className="group hover:bg-indigo-50/30">
-                    <TableCell>
-                      <Link href={`/inventory/${product.id}`} className="font-medium text-indigo-600 hover:underline">
-                        {product.name}
-                      </Link>
-                      {product.sku && <div className="text-xs text-slate-500 mt-0.5">{product.sku}</div>}
-                    </TableCell>
-                    <TableCell>{product.category || '-'}</TableCell>
-                    <TableCell>
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStockBadgeStyle(status)}`}>
-                        {product.current_stock} {product.unit}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-slate-500">{product.reorder_level} {product.unit}</TableCell>
-                    <TableCell>
-                      <div className="text-sm font-medium">{formatCurrency(product.selling_price)}</div>
-                      <div className="text-xs text-slate-500">Buy: {formatCurrency(product.purchase_price)}</div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={() => setAdjustStockProduct(product)}
-                        className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
-                      >
-                        <ArrowRightLeft className="w-4 h-4 mr-2" /> Adjust
-                      </Button>
-                    </TableCell>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50">
+                    <TableHead>Product / SKU</TableHead>
+                    <TableHead>Category</TableHead>
+                    <TableHead>Current Stock</TableHead>
+                    <TableHead>Reorder Lvl</TableHead>
+                    <TableHead>Price (Buy/Sell)</TableHead>
+                    <TableHead className="text-right">Actions</TableHead>
                   </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        )}
-      </div>
+                </TableHeader>
+                <TableBody>
+                  {filteredProducts.map((product) => {
+                    const status = getStockStatus(product.current_stock, product.reorder_level);
+                    return (
+                      <TableRow key={product.id} className="group hover:bg-indigo-50/30">
+                        <TableCell>
+                          <Link href={`/inventory/${product.id}`} className="font-medium text-indigo-600 hover:underline">
+                            {product.name}
+                          </Link>
+                          {product.sku && <div className="text-xs text-slate-500 mt-0.5">{product.sku}</div>}
+                        </TableCell>
+                        <TableCell>{product.category || '-'}</TableCell>
+                        <TableCell>
+                          <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${getStockBadgeStyle(status)}`}>
+                            {product.current_stock} {product.unit}
+                          </span>
+                        </TableCell>
+                        <TableCell className="text-slate-500">{product.reorder_level} {product.unit}</TableCell>
+                        <TableCell>
+                          <div className="text-sm font-medium">{formatCurrency(product.selling_price)}</div>
+                          <div className="text-xs text-slate-500">Buy: {formatCurrency(product.purchase_price)}</div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button 
+                            variant="ghost" 
+                            size="sm" 
+                            onClick={() => setAdjustStockProduct(product)}
+                            className="text-indigo-600 hover:text-indigo-700 hover:bg-indigo-50"
+                          >
+                            <ArrowRightLeft className="w-4 h-4 mr-2" /> Adjust
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            )}
+          </div>
 
-      {/* Add Product Sheet */}
-      <Sheet open={isProductSheetOpen} onOpenChange={setIsProductSheetOpen}>
-        <SheetContent className="sm:max-w-md overflow-y-auto">
-          <SheetHeader className="mb-6">
-            <SheetTitle>Add New Product</SheetTitle>
-            <SheetDescription>
-              Create a new product in your inventory.
-            </SheetDescription>
-          </SheetHeader>
-          <ProductForm 
-            onSave={handleSaveProduct} 
-            onCancel={() => setIsProductSheetOpen(false)} 
-          />
-        </SheetContent>
-      </Sheet>
+          {/* Add Product Sheet */}
+          <Sheet open={isProductSheetOpen} onOpenChange={setIsProductSheetOpen}>
+            <SheetContent className="sm:max-w-md overflow-y-auto">
+              <SheetHeader className="mb-6">
+                <SheetTitle>Add New Product</SheetTitle>
+                <SheetDescription>
+                  Create a new product in your inventory.
+                </SheetDescription>
+              </SheetHeader>
+              <ProductForm 
+                onSave={handleSaveProduct} 
+                onCancel={() => setIsProductSheetOpen(false)} 
+              />
+            </SheetContent>
+          </Sheet>
 
-      {/* Adjust Stock Dialog */}
-      <Dialog open={!!adjustStockProduct} onOpenChange={(open) => !open && setAdjustStockProduct(null)}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Adjust Stock</DialogTitle>
-            <DialogDescription>
-              Record a manual stock adjustment for <strong className="text-slate-900">{adjustStockProduct?.name}</strong>.
-            </DialogDescription>
-          </DialogHeader>
-          {adjustStockProduct && (
-            <StockAdjustForm
-              productId={adjustStockProduct.id}
-              currentStock={adjustStockProduct.current_stock}
-              onSave={handleAdjustStock}
-              onCancel={() => setAdjustStockProduct(null)}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
+          {/* Adjust Stock Dialog */}
+          <Dialog open={!!adjustStockProduct} onOpenChange={(open) => !open && setAdjustStockProduct(null)}>
+            <DialogContent className="sm:max-w-md">
+              <DialogHeader>
+                <DialogTitle>Adjust Stock</DialogTitle>
+                <DialogDescription>
+                  Record a manual stock adjustment for <strong className="text-slate-900">{adjustStockProduct?.name}</strong>.
+                </DialogDescription>
+              </DialogHeader>
+              {adjustStockProduct && (
+                <StockAdjustForm
+                  productId={adjustStockProduct.id}
+                  currentStock={adjustStockProduct.current_stock}
+                  onSave={handleAdjustStock}
+                  onCancel={() => setAdjustStockProduct(null)}
+                />
+              )}
+            </DialogContent>
+          </Dialog>
+        </div>
+      </PageWrapper>
+    </PlanGuard>
   );
 }

@@ -52,6 +52,8 @@ export default function PayrollDashboard() {
   const isCurrentProcessed = currentMonthRun?.status === 'processed';
 
   return (
+    <PlanGuard>
+  
     <div className="p-8 max-w-7xl mx-auto space-y-8">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-sm border border-slate-200 shadow-sm">
@@ -178,5 +180,7 @@ export default function PayrollDashboard() {
         </CardContent>
       </Card>
     </div>
+  
+    </PlanGuard>
   );
 }

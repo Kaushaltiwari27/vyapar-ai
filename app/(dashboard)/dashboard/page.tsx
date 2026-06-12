@@ -15,6 +15,7 @@ import { AttendanceChart } from "@/components/dashboard/AttendanceChart";
 import MetricCard from "@/components/ui/MetricCard";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { motion } from "framer-motion";
+import { usePlan } from "@/components/providers/PlanProvider";
 
 export default function DashboardPage() {
   const supabase = createClient();
@@ -251,6 +252,10 @@ export default function DashboardPage() {
     };
   }, [supabase, activeApp]);
 
+  // Force activeApp to 'crm' if user is on 'starter' plan
+  const { plan } = usePlan();
+  const effectiveApp = plan === 'starter' ? 'crm' : activeApp;
+
   const getStageColor = (stage: string) => {
     switch (stage) {
       case 'Won': return 'bg-[#e5f6e8] text-[#008a00] border-[#008a00]';
@@ -272,7 +277,7 @@ export default function DashboardPage() {
   }
 
   // --- CRM VIEW ---
-  if (activeApp === 'crm') {
+  if (effectiveApp === 'crm') {
     return (
       <PageWrapper>
         {/* Header & Quick Actions */}

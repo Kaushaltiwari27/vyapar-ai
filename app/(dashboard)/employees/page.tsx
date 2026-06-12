@@ -112,6 +112,8 @@ export default function EmployeesPage() {
   if (loading) return <div className="p-8 text-slate-500">Loading HRMS data...</div>;
 
   return (
+    <PlanGuard>
+  
     <div className="p-8 max-w-7xl mx-auto space-y-8">
       {/* Header & Actions */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -236,5 +238,7 @@ export default function EmployeesPage() {
         />
       )}
     </div>
+  
+    </PlanGuard>
   );
 }

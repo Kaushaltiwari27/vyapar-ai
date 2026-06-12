@@ -63,6 +63,8 @@ export default function LeavesPage() {
   if (loading) return <div className="p-8 text-slate-500">Loading leave requests...</div>;
 
   return (
+    <PlanGuard>
+  
     <div className="p-8 max-w-7xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -156,5 +158,7 @@ export default function LeavesPage() {
         onSuccess={loadRequests}
       />
     </div>
+  
+    </PlanGuard>
   );
 }

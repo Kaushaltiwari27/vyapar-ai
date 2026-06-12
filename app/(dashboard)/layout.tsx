@@ -3,6 +3,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { PlanProvider } from "@/components/providers/PlanProvider"
 
 export default async function DashboardLayout({
   children,
@@ -24,9 +25,6 @@ export default async function DashboardLayout({
               cookieStore.set(name, value, options)
             )
           } catch (error) {
-            // The `setAll` method was called from a Server Component.
-            // This can be ignored if you have middleware refreshing
-            // user sessions.
           }
         },
       },
@@ -45,14 +43,18 @@ export default async function DashboardLayout({
     .eq('id', user.id)
     .single()
 
+  let currentPlan = 'starter';
+
   if (profile?.business_id) {
     const { data: business } = await supabase
       .from('businesses')
-      .select('subscription_status, trial_ends_at')
+      .select('subscription_status, trial_ends_at, plan')
       .eq('id', profile.business_id)
       .single()
 
     if (business) {
+      if (business.plan) currentPlan = business.plan;
+
       if (business.subscription_status === 'expired') {
         redirect('/upgrade')
       } else if (business.subscription_status === 'trialing' && business.trial_ends_at) {
@@ -71,14 +73,16 @@ export default async function DashboardLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[var(--page-bg)] print:bg-white flex relative">
-      <Sidebar />
-      <div className="flex-1 flex flex-col ml-0 lg:ml-64 overflow-x-hidden print:ml-0 print:overflow-visible transition-all duration-300">
-        <TopNavigation />
-        <main className="flex-1">
-          {children}
-        </main>
+    <PlanProvider initialPlan={currentPlan}>
+      <div className="min-h-screen bg-[var(--page-bg)] print:bg-white flex relative">
+        <Sidebar />
+        <div className="flex-1 flex flex-col ml-0 lg:ml-64 overflow-x-hidden print:ml-0 print:overflow-visible transition-all duration-300">
+          <TopNavigation />
+          <main className="flex-1">
+            {children}
+          </main>
+        </div>
       </div>
-    </div>
+    </PlanProvider>
   );
 }

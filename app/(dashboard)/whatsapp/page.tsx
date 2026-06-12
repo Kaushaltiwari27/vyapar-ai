@@ -9,6 +9,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "react-hot-toast";
 import PageWrapper from "@/components/ui/PageWrapper";
 import { MessageCircle, CheckCircle2, XCircle, Send, Copy, AlertTriangle, ArrowUpRight, ArrowDownLeft } from "lucide-react";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function WhatsAppPage() {
   const supabase = createClient();
@@ -115,7 +116,8 @@ export default function WhatsAppPage() {
   };
 
   return (
-    <PageWrapper>
+    <PlanGuard>
+      <PageWrapper>
       <div className="p-8 max-w-7xl mx-auto space-y-6">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
@@ -307,5 +309,6 @@ export default function WhatsAppPage() {
         </div>
       </div>
     </PageWrapper>
+    </PlanGuard>
   );
 }

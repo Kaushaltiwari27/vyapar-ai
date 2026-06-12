@@ -114,6 +114,8 @@ export default function PurchaseOrdersPage() {
   });
 
   return (
+    <PlanGuard>
+  
     <div className="p-8 max-w-7xl mx-auto space-y-6 pb-20">
       <div className="flex justify-between items-center">
         <div>
@@ -216,5 +218,7 @@ export default function PurchaseOrdersPage() {
         )}
       </div>
     </div>
+  
+    </PlanGuard>
   );
 }
