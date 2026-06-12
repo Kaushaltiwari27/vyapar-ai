@@ -8,6 +8,7 @@ import { Calendar, List, Download } from "lucide-react";
 import { AttendanceMarker } from "@/components/hrms/AttendanceMarker";
 import { AttendanceGrid } from "@/components/hrms/AttendanceGrid";
 import toast from "react-hot-toast";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function AttendancePage() {
   const supabase = createClient();

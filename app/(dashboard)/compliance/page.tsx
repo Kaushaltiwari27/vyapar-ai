@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, ShieldCheck, Download, CheckCircle2, AlertTriangle, FileText } from "lucide-react";
 import { toast } from "react-hot-toast";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function CompliancePage() {
   const supabase = createClient();

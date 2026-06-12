@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, ClipboardList, Plus, PackageCheck } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function PurchaseOrdersPage() {
   const supabase = createClient();

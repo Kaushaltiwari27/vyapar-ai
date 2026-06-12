@@ -10,6 +10,7 @@ import { EmployeeTable } from "@/components/hrms/EmployeeTable";
 import { DepartmentOrgView } from "@/components/hrms/DepartmentOrgView";
 import { EmployeeForm } from "@/components/hrms/EmployeeForm";
 import { toast } from "react-hot-toast";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function EmployeesPage() {
   const supabase = createClient();

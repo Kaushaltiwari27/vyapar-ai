@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Wallet, Users, FileText, CheckCircle2, AlertCircle, ArrowRight, Download } from "lucide-react";
 import Link from "next/link";
 import { getMonthName } from "@/lib/payroll";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function PayrollDashboard() {
   const supabase = createClient();

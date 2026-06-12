@@ -8,6 +8,7 @@ import { LeaveApprovalModal } from "@/components/hrms/LeaveApprovalModal";
 import { NewLeaveRequestModal } from "@/components/hrms/NewLeaveRequestModal";
 import { Clock, CheckCircle2, XCircle, List, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function LeavesPage() {
   const supabase = createClient();

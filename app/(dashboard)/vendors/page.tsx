@@ -11,6 +11,7 @@ import { Plus, Search, Truck } from "lucide-react";
 import Link from "next/link";
 import { toast } from "react-hot-toast";
 import { VendorForm } from "@/components/vendors/VendorForm";
+import { PlanGuard } from "@/components/auth/PlanGuard";
 
 export default function VendorsPage() {
   const supabase = createClient();
