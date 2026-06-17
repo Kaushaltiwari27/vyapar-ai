@@ -1,178 +1,61 @@
-"use client";
-
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { PasswordInput } from "@/components/ui/password-input";
-import { Label } from "@/components/ui/label";
-import Link from "next/link";
-import { toast } from "react-hot-toast";
-import { Mail, Lock, ArrowRight, Sparkles } from "lucide-react";
+'use client'
+import { useState } from 'react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export default function LoginPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [useMagicLink, setUseMagicLink] = useState(false);
-  const router = useRouter();
-  const supabase = createClient();
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+  const router = useRouter()
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email) {
-      toast.error("Please enter your email");
-      return;
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault()
+    setError('')
+    setLoading(true)
+    const supabase = createClient()
+    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    if (authError) {
+      setError('Email ya password galat hai. Dobara try karo.')
+      setLoading(false)
+      return
     }
-    
-    setLoading(true);
+    router.push('/dashboard')
+    router.refresh()
+  }
 
-    if (useMagicLink) {
-      const { error } = await supabase.auth.signInWithOtp({
-        email: email.trim(),
-        options: {
-          emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-        },
-      });
-      if (error) {
-        toast.error(error.message);
-      } else {
-        toast.success("Magic link sent! Check your email.");
-      }
-      setLoading(false);
-      return;
-    }
-
-    if (!password) {
-      toast.error("Please enter your password");
-      setLoading(false);
-      return;
-    }
-
-    const { error } = await supabase.auth.signInWithPassword({
-      email: email.trim(),
-      password,
-    });
-
-    if (error) {
-      toast.error(error.message);
-      setLoading(false);
-    } else {
-      toast.success("Welcome back!");
-      router.push("/dashboard");
-      router.refresh();
-    }
-  };
+  const inputStyle = { width: '100%', padding: '10px 14px', borderRadius: 10, border: '1px solid #E5E7EB', fontSize: 14, outline: 'none', background: '#FAFAFA', color: '#111827' }
 
   return (
-    <div className="w-full">
-      <div className="mb-8">
-        <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight">Welcome back</h2>
-        <p className="text-slate-500 mt-2">Enter your details to log in to your account.</p>
+    <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA] p-4">
+      <div className="w-full max-w-md bg-white rounded-[24px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">VyaparAI</h1>
+          <p className="text-sm text-gray-500 mt-2">Wapas aaye! Login karo</p>
+        </div>
+        {error && <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">{error}</div>}
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">Email address</label>
+            <input required type="email" style={inputStyle} value={email} onChange={e => setEmail(e.target.value)} placeholder="aapka@email.com" />
+          </div>
+          <div>
+            <label className="block text-xs font-medium text-gray-700 mb-1.5">Password</label>
+            <input required type="password" style={inputStyle} value={password} onChange={e => setPassword(e.target.value)} placeholder="Aapka password" />
+          </div>
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs font-medium text-[#4F46E5] hover:underline">Password bhool gaye?</Link>
+          </div>
+          <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', borderRadius: 10, background: '#4F46E5', color: 'white', fontWeight: 500, fontSize: 14, marginTop: 10, opacity: loading ? 0.7 : 1 }}>
+            {loading ? 'Login ho raha hai...' : 'Login karo →'}
+          </button>
+        </form>
+        
+        <p className="mt-8 text-center text-sm text-gray-500">Naya account? <Link href="/signup" className="text-[#4F46E5] font-medium hover:underline">Free mein signup karo</Link></p>
       </div>
-
-      <form onSubmit={handleLogin} className="space-y-5">
-        <div className="space-y-2">
-          <Label htmlFor="email" className="text-slate-700 font-semibold">Email Address</Label>
-          <div className="relative">
-            <Mail className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
-            <Input
-              id="email"
-              type="email"
-              placeholder="vyapari@company.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="pl-10 h-11 bg-white border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl transition-all"
-            />
-          </div>
-        </div>
-
-        {!useMagicLink && (
-          <div className="space-y-2 animate-in fade-in slide-in-from-top-2 duration-300">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="password" className="text-slate-700 font-semibold">Password</Label>
-              <Link href="/forgot-password" className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors">
-                Forgot password?
-              </Link>
-            </div>
-            <div className="relative">
-              <Lock className="absolute left-3 top-3 h-5 w-5 text-slate-400" />
-              <PasswordInput
-                id="password"
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required={!useMagicLink}
-                className="pl-10 h-11 bg-white border-slate-200 focus:border-indigo-500 focus:ring-indigo-500 rounded-xl transition-all"
-              />
-            </div>
-          </div>
-        )}
-
-        <Button type="submit" className="w-full h-11 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl shadow-md shadow-indigo-200 transition-all" disabled={loading}>
-          {loading ? "Please wait..." : (useMagicLink ? "Send Magic Link" : "Sign In")}
-          {!loading && <ArrowRight className="ml-2 w-4 h-4" />}
-        </Button>
-
-        <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-slate-50 text-slate-500 font-medium">Or continue with</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3">
-          <Button 
-            type="button" 
-            variant="outline" 
-            className="w-full h-11 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold rounded-xl transition-all shadow-sm"
-            onClick={async () => {
-              const { error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: {
-                  redirectTo: `${window.location.origin}/api/auth/callback`
-                }
-              });
-              if (error) toast.error(error.message);
-            }}
-          >
-            <svg className="mr-2 w-5 h-5" viewBox="0 0 24 24">
-              <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-              <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-              <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-              <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            Continue with Google
-          </Button>
-
-          <Button 
-            type="button" 
-            variant="outline" 
-            className="w-full h-11 bg-white border-slate-200 text-slate-700 hover:bg-slate-50 font-semibold rounded-xl transition-all shadow-sm"
-            onClick={() => setUseMagicLink(!useMagicLink)}
-          >
-            {useMagicLink ? (
-              <>Login with Password</>
-            ) : (
-              <>
-                <Sparkles className="mr-2 w-4 h-4 text-indigo-500" />
-                Magic Link (Email OTP)
-              </>
-            )}
-          </Button>
-        </div>
-
-        <div className="text-center mt-8 text-slate-500 font-medium">
-          Don&apos;t have an account?{" "}
-          <Link href="/signup" className="text-indigo-600 hover:text-indigo-700 font-bold transition-colors">
-            Sign up now
-          </Link>
-        </div>
-      </form>
     </div>
-  );
+  )
 }

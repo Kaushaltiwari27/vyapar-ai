@@ -1,7 +1,6 @@
 import { TopNavigation } from "@/components/layout/TopNavigation";
 import { Sidebar } from "@/components/layout/Sidebar";
-import { createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PlanProvider } from "@/components/providers/PlanProvider"
 
@@ -10,67 +9,23 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = cookies()
-  const supabase = createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        getAll() {
-          return cookieStore.getAll()
-        },
-        setAll(cookiesToSet) {
-          try {
-            cookiesToSet.forEach(({ name, value, options }) =>
-              cookieStore.set(name, value, options)
-            )
-          } catch (error) {
-          }
-        },
-      },
-    }
-  )
-
+  const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  
-  if (!user) {
-    redirect('/login')
-  }
+  if (!user) redirect('/login')
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('business_id')
+    .select('plan, subscription_status, trial_ends_at, business_id')
     .eq('id', user.id)
     .single()
 
-  let currentPlan = 'starter';
+  if (!profile?.plan) redirect('/select-plan')
 
-  if (profile?.business_id) {
-    const { data: business } = await supabase
-      .from('businesses')
-      .select('subscription_status, trial_ends_at, plan')
-      .eq('id', profile.business_id)
-      .single()
+  const expired = profile.subscription_status !== 'active' && 
+    profile.trial_ends_at && new Date(profile.trial_ends_at) < new Date()
+  if (expired || profile.subscription_status === 'expired') redirect('/subscribe')
 
-    if (business) {
-      if (business.plan) currentPlan = business.plan;
-
-      if (business.subscription_status === 'expired') {
-        redirect('/upgrade')
-      } else if (business.subscription_status === 'trialing' && business.trial_ends_at) {
-        const trialEnd = new Date(business.trial_ends_at)
-        if (trialEnd < new Date()) {
-          // Trial has expired
-          await supabase
-            .from('businesses')
-            .update({ subscription_status: 'expired' })
-            .eq('id', profile.business_id)
-          
-          redirect('/upgrade')
-        }
-      }
-    }
-  }
+  let currentPlan = profile.plan;
 
   return (
     <PlanProvider initialPlan={currentPlan}>
