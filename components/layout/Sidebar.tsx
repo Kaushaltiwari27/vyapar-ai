@@ -110,7 +110,12 @@ export function Sidebar() {
   }
 
   const baseItems = activeApp === 'crm' ? crmItems : hrmsItems;
-  const currentItems = [...baseItems, ...commonItems];
+  const currentItems = [...baseItems, ...commonItems].filter(item => {
+    if (item.feature === 'whatsapp' && plan === 'starter') {
+      return false
+    }
+    return true
+  });
 
   return (
     <>

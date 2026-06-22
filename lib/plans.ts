@@ -47,7 +47,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
     razorpayPlanId: ''
   },
   starter: {
-    name: 'Starter',
+    name: 'Basic',
     price: 999,
     priceDisplay: '₹999/month',
     description: 'Solo founders ke liye',
@@ -57,13 +57,13 @@ export const PLANS: Record<Plan, PlanConfig> = {
     features: {
       dashboard: true, customers: true, deals: true, invoices: true,
       aiChat: true, inventory: false, vendors: false, purchaseOrders: false,
-      employees: false, attendance: false, leaves: false, payroll: false,
+      employees: true, attendance: true, leaves: true, payroll: false,
       compliance: false, whatsapp: false, gstFiling: false
     },
     razorpayPlanId: process.env.RAZORPAY_PLAN_STARTER || ''
   },
   growth: {
-    name: 'Growth',
+    name: 'Intermediate',
     price: 2499,
     priceDisplay: '₹2,499/month',
     description: '10-50 employee businesses',
@@ -74,12 +74,12 @@ export const PLANS: Record<Plan, PlanConfig> = {
       dashboard: true, customers: true, deals: true, invoices: true,
       aiChat: true, inventory: true, vendors: true, purchaseOrders: true,
       employees: true, attendance: true, leaves: true, payroll: false,
-      compliance: false, whatsapp: true, gstFiling: true
+      compliance: false, whatsapp: false, gstFiling: true
     },
     razorpayPlanId: process.env.RAZORPAY_PLAN_GROWTH || ''
   },
   business: {
-    name: 'Business',
+    name: 'Advance',
     price: 4999,
     priceDisplay: '₹4,999/month',
     description: 'Full enterprise stack',
@@ -98,7 +98,7 @@ export const PLANS: Record<Plan, PlanConfig> = {
 
 export function hasFeature(plan: Plan, status: SubscriptionStatus, feature: keyof PlanConfig['features']): boolean {
   if (status === 'expired') return false
-  if (status === 'trial') return true
+  // Return feature availability based on selected plan
   return PLANS[plan]?.features[feature] ?? false
 }
 

@@ -1,16 +1,17 @@
 'use client'
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useState, Suspense } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 
-export default function LoginPage() {
+function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const router = useRouter()
+  const searchParams = useSearchParams()
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault()
@@ -23,7 +24,8 @@ export default function LoginPage() {
       setLoading(false)
       return
     }
-    router.push('/dashboard')
+    const redirectUrl = searchParams?.get('redirect') || '/dashboard'
+    router.push(redirectUrl)
     router.refresh()
   }
 
@@ -57,5 +59,17 @@ export default function LoginPage() {
         <p className="mt-8 text-center text-sm text-gray-500">Naya account? <Link href="/signup" className="text-[#4F46E5] font-medium hover:underline">Free mein signup karo</Link></p>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-[#FAFAFA]">
+        <div className="text-gray-500">Loading form...</div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }

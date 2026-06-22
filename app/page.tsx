@@ -7,6 +7,9 @@ import { APP_FEATURES } from "@/lib/features";
 import { LandingNavbar } from "@/components/layout/LandingNavbar";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import PlanSelectModal from "@/components/auth/PlanSelectModal";
 
 function Preloader({ onComplete }: { onComplete: () => void }) {
   useEffect(() => {
@@ -40,6 +43,28 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 
 export default function LandingPage() {
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<any>(null);
+  const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
+  const [redirectPath, setRedirectPath] = useState('/dashboard');
+
+  const router = useRouter();
+  const supabase = createClient();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) setUser(user);
+    });
+  }, [supabase]);
+
+  const handleActionClick = (e: React.MouseEvent<any>, path: string = '/dashboard') => {
+    if (user) {
+      router.push(path);
+      return;
+    }
+    e.preventDefault();
+    setRedirectPath(path);
+    setIsPlanModalOpen(true);
+  };
 
   return (
     <>
@@ -78,15 +103,31 @@ export default function LandingPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
-              <Link 
-                href="/signup?plan=growth"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-bold text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-blue-500/20"
-                style={{ background: 'var(--grad-button)' }}
-              >
-                Start Free Trial
-              </Link>
+              {user ? (
+                <Link 
+                  href="/dashboard"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-bold text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-blue-500/20"
+                  style={{ background: 'var(--grad-button)' }}
+                >
+                  Go to Dashboard
+                </Link>
+              ) : (
+                <button 
+                  onClick={(e) => handleActionClick(e, '/dashboard')}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-bold text-white transition-all duration-300 hover:scale-105 shadow-xl shadow-blue-500/20"
+                  style={{ background: 'var(--grad-button)' }}
+                >
+                  Start Free Trial
+                </button>
+              )}
               <Link 
                 href="/login"
+                onClick={(e) => {
+                  if (!user) {
+                    e.preventDefault();
+                    setIsPlanModalOpen(true);
+                  }
+                }}
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 w-full sm:w-auto rounded-2xl text-base font-bold text-slate-700 bg-white border border-slate-200 transition-all duration-300 hover:bg-slate-50 hover:border-slate-300 shadow-sm"
               >
                 <PlayCircle className="w-5 h-5 text-blue-600" /> Watch Demo
@@ -195,31 +236,45 @@ export default function LandingPage() {
             <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-16">Enterprise power, SMB pricing.</h2>
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left items-stretch">
               
-              {/* Starter Tier */}
+              {/* Basic Tier */}
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
                 <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
-                  Starter
+                  Basic
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                   ₹999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Freelancers, solo founders</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM + Invoice + AI chat</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Up to 5 users</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM (Customers, Deals & Invoices)</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> HRMS (Employees, Attendance & Leaves)</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> AI Chat Assistant</li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Perfect for small teams starting out.</p>
-                  <Link 
-                    href="/signup?plan=starter"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
-                  >
-                    Start 14-Day Trial
-                  </Link>
+                  {user ? (
+                    <Link 
+                      href="/dashboard"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-md"
+                      style={{ background: 'var(--grad-button)' }}
+                    >
+                      Go to Dashboard
+                    </Link>
+                  ) : (
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setRedirectPath('/dashboard');
+                        setIsPlanModalOpen(true);
+                      }}
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
+                    >
+                      Choose Basic
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Growth Tier */}
+              {/* Intermediate Tier */}
               <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap shadow-md">
                   MOST POPULAR
@@ -228,43 +283,71 @@ export default function LandingPage() {
                   ₹2,499<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> 10-50 employee SMBs</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Full CRM + ERP + HRMS</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> WhatsApp OS + GST filing</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Everything in Basic plan</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Inventory & Vendor Management</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Purchase Orders & GST tools</li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Everything you need to scale your business.</p>
-                  <Link 
-                    href="/signup?plan=growth"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
-                    style={{ background: 'var(--grad-button)' }}
-                  >
-                    Start Free Trial
-                  </Link>
+                  {user ? (
+                    <Link 
+                      href="/dashboard"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-md"
+                      style={{ background: 'var(--grad-button)' }}
+                    >
+                      Go to Dashboard
+                    </Link>
+                  ) : (
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setRedirectPath('/dashboard');
+                        setIsPlanModalOpen(true);
+                      }}
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
+                      style={{ background: 'var(--grad-button)' }}
+                    >
+                      Start 14-Day Free Trial
+                    </button>
+                  )}
                 </div>
               </div>
 
-              {/* Business Tier */}
+              {/* Advance Tier */}
               <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
                 <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
-                  Business
+                  Advance
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                   ₹4,999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> 50-200 employee companies</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Sab kuch + priority support</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Dedicated onboarding</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Everything in Intermediate</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> WhatsApp OS Integration</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Payroll & Compliance Automations</li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Advanced features for large teams.</p>
-                  <Link 
-                    href="/signup?plan=business"
-                    className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
-                  >
-                    Contact Sales
-                  </Link>
+                  {user ? (
+                    <Link 
+                      href="/dashboard"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-md"
+                      style={{ background: 'var(--grad-button)' }}
+                    >
+                      Go to Dashboard
+                    </Link>
+                  ) : (
+                    <button 
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setRedirectPath('/dashboard');
+                        setIsPlanModalOpen(true);
+                      }}
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
+                    >
+                      Choose Advance
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -294,6 +377,13 @@ export default function LandingPage() {
         </div>
       </footer>
       </motion.div>
+
+      {/* Plan Selection Modal */}
+      <PlanSelectModal 
+        isOpen={isPlanModalOpen} 
+        onClose={() => setIsPlanModalOpen(false)} 
+        redirectPath={redirectPath} 
+      />
     </>
   );
 }

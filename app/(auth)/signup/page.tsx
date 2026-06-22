@@ -48,6 +48,9 @@ function SignupForm() {
       if (authError) throw authError
 
       if (authData.user) {
+        const trialEndsAt = new Date(Date.now() + 14 * 86400000).toISOString()
+        const selectedPlan = planFromUrl === 'starter' || planFromUrl === 'growth' || planFromUrl === 'business' ? planFromUrl : 'growth'
+
         const { data: biz, error: bizError } = await supabase
           .from('businesses')
           .insert({
@@ -55,7 +58,10 @@ function SignupForm() {
             owner_name: formData.ownerName,
             phone: formData.phone,
             city: formData.city,
-            gstin: formData.gstin || null
+            gstin: formData.gstin || null,
+            plan: selectedPlan,
+            subscription_status: 'trial',
+            trial_ends_at: trialEndsAt
           })
           .select().single()
         if (bizError) throw bizError
@@ -66,11 +72,16 @@ function SignupForm() {
             id: authData.user.id,
             full_name: formData.fullName,
             business_id: biz.id,
-            role: 'owner'
+            role: 'owner',
+            plan: selectedPlan,
+            subscription_status: 'trial',
+            trial_ends_at: trialEndsAt
           })
         if (profileError) throw profileError
 
-        router.push('/select-plan')
+        const redirectFromUrl = searchParams?.get('redirect') || '/dashboard'
+        router.push(redirectFromUrl)
+        router.refresh()
       }
     } catch (err: any) {
       setError(err.message || 'Kuch gadbad ho gayi. Dobara try karo.')
