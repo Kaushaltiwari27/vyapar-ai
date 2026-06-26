@@ -27,9 +27,11 @@ export async function POST(request: Request) {
     }
 
     // The database trigger automatically creates a business with plan='starter'.
-    // If the user selected a different plan during signup, update it now.
+    // Update both business and profile with chosen plan details.
     const chosenPlan = plan || 'starter';
-    if (data.user && chosenPlan !== 'starter') {
+    const trialEndsAt = new Date(Date.now() + 14 * 86400000).toISOString();
+
+    if (data.user) {
       const { data: profile } = await adminAuthClient
         .from('profiles')
         .select('business_id')
@@ -37,10 +39,25 @@ export async function POST(request: Request) {
         .single();
 
       if (profile?.business_id) {
+        // Update business subscription details
         await adminAuthClient
           .from('businesses')
-          .update({ plan: chosenPlan })
+          .update({ 
+            plan: chosenPlan,
+            subscription_status: 'trialing',
+            trial_ends_at: trialEndsAt
+          })
           .eq('id', profile.business_id);
+
+        // Update profile subscription details
+        await adminAuthClient
+          .from('profiles')
+          .update({
+            plan: chosenPlan,
+            subscription_status: 'trial',
+            trial_ends_at: trialEndsAt
+          })
+          .eq('id', data.user.id);
       }
     }
 
