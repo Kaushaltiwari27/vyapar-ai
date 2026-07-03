@@ -315,3 +315,31 @@ export interface ComplianceCalendar {
   notes?: string;
   created_at?: string;
 }
+
+export interface QuotationItem {
+  product_id?: string;
+  description: string;
+  hsn?: string;
+  quantity: number;
+  rate: number;
+  amount: number;
+}
+
+export interface Quotation {
+  id: string;
+  business_id: string;
+  customer_id: string | null;
+  customer_name: string | null;
+  quotation_number: string;
+  issue_date: string;
+  valid_until: string | null;
+  status: 'draft' | 'sent' | 'accepted' | 'declined' | 'invoiced';
+  subtotal: number;
+  gst_rate: number;
+  gst_amount: number;
+  total_amount: number;
+  notes: string | null;
+  items: QuotationItem[] | null;
+  invoice_id: string | null;
+  created_at: string;
+}

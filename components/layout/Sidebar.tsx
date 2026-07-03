@@ -17,6 +17,7 @@ const crmItems: NavItem[] = [
   { href: '/dashboard', icon: Home, label: 'Dashboard', feature: 'dashboard' },
   { href: '/customers', icon: Users, label: 'Customers', feature: 'customers' },
   { href: '/deals', icon: TrendingUp, label: 'Deals', feature: 'deals' },
+  { href: '/quotations', icon: FileText, label: 'Quotations', feature: 'invoices' },
   { href: '/invoices', icon: FileText, label: 'Invoices', feature: 'invoices' },
   { href: '/inventory', icon: Package, label: 'Inventory', feature: 'inventory' },
   { href: '/vendors', icon: Truck, label: 'Vendors', feature: 'vendors' },

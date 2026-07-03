@@ -42,7 +42,7 @@ export async function middleware(request: NextRequest) {
 
   // Subscription check for dashboard routes
   const isDashboard = pathname.startsWith('/dashboard') || 
-    ['/customers', '/deals', '/invoices', '/inventory', '/vendors', 
+    ['/customers', '/deals', '/invoices', '/quotations', '/inventory', '/vendors', 
      '/purchase-orders', '/employees', '/attendance', '/leaves', 
      '/payroll', '/compliance', '/whatsapp', '/chat'].some(r => pathname.startsWith(r))
 
