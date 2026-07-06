@@ -112,10 +112,11 @@
 @layer base {
   * {
     @apply border-border;
+    font-family: 'DM Serif Display', Georgia, serif !important;
   }
   body {
     @apply bg-background text-foreground;
-    font-family: 'Geist', 'Inter', sans-serif;
+    font-family: 'DM Serif Display', Georgia, serif !important;
   }
 }
 

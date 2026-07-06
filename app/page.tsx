@@ -82,10 +82,10 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative pt-28 pb-20 overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-[#EFFDF0]/40">
+        <section className="relative pt-28 pb-20 overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-slate-50/40">
           {/* Animated gradient orbs in background */}
-          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] opacity-30 animate-float" />
-          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] opacity-30 animate-float" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] opacity-30 animate-float" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px] opacity-30 animate-float" style={{ animationDelay: '1s' }} />
 
           {/* Left CRM Side Card */}
           <div 
@@ -94,7 +94,7 @@ export default function LandingPage() {
             <div className="aspect-[240/220] rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 flex items-center justify-center p-3 relative group">
               <div className="w-full h-full flex flex-col justify-between">
                 <div className="flex justify-between items-center">
-                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Active Deal</span>
+                  <span className="text-[10px] bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-full">Active Deal</span>
                   <span className="text-[9px] text-slate-400 font-medium">9:30 AM</span>
                 </div>
                 <div className="h-14 w-full flex items-end gap-1.5 pt-2">
