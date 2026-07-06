@@ -9,9 +9,12 @@ import { AttendanceMarker } from "@/components/hrms/AttendanceMarker";
 import { AttendanceGrid } from "@/components/hrms/AttendanceGrid";
 import toast from "react-hot-toast";
 import { PlanGuard } from "@/components/auth/PlanGuard";
+import { useRouter } from "next/navigation";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function AttendancePage() {
   const supabase = createClient();
+  const router = useRouter();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [attendanceData, setAttendanceData] = useState<Attendance[]>([]);
   const [loading, setLoading] = useState(true);
@@ -148,7 +151,15 @@ export default function AttendancePage() {
         </div>
       </div>
 
-      {viewMode === 'daily' ? (
+      {employees.length === 0 ? (
+        <EmptyState 
+          icon={Calendar}
+          title="No Active Employees"
+          description="Attendance mark karne ke liye active employees ka hona zaroori hai. Pehle employee directory mein members add karein."
+          actionLabel="Add Employees"
+          onAction={() => router.push('/employees')}
+        />
+      ) : viewMode === 'daily' ? (
         <div className="space-y-6">
           <div className="flex items-center gap-4 bg-white p-4 rounded-xl border border-slate-200 shadow-sm w-fit">
             <span className="text-sm font-bold text-slate-700">Select Date:</span>

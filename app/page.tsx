@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database, Globe, Lock, PlayCircle, Star, MessageSquare } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database, Globe, Lock, PlayCircle, Star, MessageSquare, XCircle } from "lucide-react";
 import Image from "next/image";
 import { APP_FEATURES } from "@/lib/features";
 import { LandingNavbar } from "@/components/layout/LandingNavbar";
@@ -133,6 +133,105 @@ export default function LandingPage() {
                 <PlayCircle className="w-5 h-5 text-blue-600" /> Watch Demo
               </Link>
             </div>
+
+            {/* Premium SaaS Mockup Preview */}
+            <motion.div 
+              initial={{ y: 60, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+              className="mt-16 w-full max-w-4xl mx-auto rounded-3xl bg-slate-950 border border-slate-800/80 p-2.5 shadow-2xl relative z-10 overflow-hidden text-left"
+            >
+              {/* Window Header */}
+              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-slate-850 bg-slate-900/40">
+                <span className="w-3 h-3 rounded-full bg-rose-500/80" />
+                <span className="w-3 h-3 rounded-full bg-amber-500/80" />
+                <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
+                <span className="text-[10px] text-slate-500 font-bold ml-4 tracking-widest uppercase">dashboard.vyapar.ai</span>
+              </div>
+
+              {/* Layout body */}
+              <div className="grid md:grid-cols-4 gap-4 p-4">
+                {/* Sidebar Mockup */}
+                <div className="hidden md:flex flex-col gap-3 border-r border-slate-900 pr-4">
+                  <div className="h-6 bg-slate-900 rounded-md w-3/4 animate-pulse" />
+                  <div className="h-5 bg-slate-900/50 rounded-md w-full" />
+                  <div className="h-5 bg-slate-900/50 rounded-md w-5/6" />
+                  <div className="h-5 bg-slate-900/50 rounded-md w-4/5" />
+                  <div className="h-5 bg-slate-900/50 rounded-md w-full" />
+                  
+                  <div className="mt-auto h-12 bg-slate-900/30 border border-slate-850 rounded-xl p-2 flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-sm shadow-blue-500/30">RK</div>
+                    <div className="flex-1 min-w-0">
+                      <div className="h-2.5 bg-slate-800 rounded-full w-2/3" />
+                      <div className="h-2 bg-slate-800 rounded-full w-1/2 mt-1.5" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Mockup */}
+                <div className="md:col-span-3 space-y-4">
+                  {/* Top Bar Mockup */}
+                  <div className="flex justify-between items-center pb-2 border-b border-slate-900">
+                    <div className="h-4 bg-slate-900 rounded-full w-1/3" />
+                    <div className="flex items-center gap-2">
+                      <span className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-850 flex items-center justify-center text-xs">🔔</span>
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-bold text-xs flex items-center justify-center">RK</div>
+                    </div>
+                  </div>
+
+                  {/* Dashboard stats row */}
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
+                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Pipeline</p>
+                      <p className="text-sm md:text-base font-extrabold text-white mt-1">₹4,85,000</p>
+                      <span className="text-[8px] text-emerald-500 font-bold mt-0.5 inline-block">↑ 15% this month</span>
+                    </div>
+                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
+                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Invoices Due</p>
+                      <p className="text-sm md:text-base font-extrabold text-rose-500 mt-1">₹1,24,500</p>
+                      <span className="text-[8px] text-rose-400 font-bold mt-0.5 inline-block">2 Overdue</span>
+                    </div>
+                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
+                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">HR Active</p>
+                      <p className="text-sm md:text-base font-extrabold text-blue-400 mt-1">12 / 13</p>
+                      <span className="text-[8px] text-slate-400 font-semibold mt-0.5 inline-block">1 Leave request</span>
+                    </div>
+                  </div>
+
+                  {/* AI Chat Box */}
+                  <div className="border border-slate-850 bg-slate-900/20 rounded-xl p-4 space-y-3 relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
+                    
+                    {/* User */}
+                    <div className="flex gap-2 items-start justify-end">
+                      <div className="bg-blue-600 text-white text-[11px] px-3 py-1.5 rounded-xl rounded-tr-none font-medium max-w-[80%]">
+                        Show me today's business health summary.
+                      </div>
+                      <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-[9px] font-bold flex items-center justify-center shrink-0">U</span>
+                    </div>
+
+                    {/* AI Agent */}
+                    <div className="flex gap-2 items-start">
+                      <span className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-[9px] font-bold flex items-center justify-center shrink-0">AI</span>
+                      <div className="bg-slate-900/80 text-slate-200 text-[11px] px-3 py-2 rounded-xl rounded-tl-none font-medium max-w-[85%] border border-slate-850 leading-relaxed">
+                        Good morning Ramesh! Today your Sales Pipeline is up by <span className="text-emerald-400 font-bold">15%</span>, 2 invoices are overdue, and low stock alert triggered for <span className="text-amber-400 font-semibold">Fortune Oil</span>. Should I generate a purchase order?
+                      </div>
+                    </div>
+
+                    {/* Quick action buttons */}
+                    <div className="flex gap-2 pl-7 pt-1">
+                      <button className="bg-slate-900 border border-slate-800 text-[9px] text-slate-400 font-bold px-2.5 py-1 rounded-md hover:bg-slate-850 hover:text-white transition-colors cursor-pointer">
+                        Generate PO
+                      </button>
+                      <button className="bg-slate-900 border border-slate-800 text-[9px] text-slate-400 font-bold px-2.5 py-1 rounded-md hover:bg-slate-850 hover:text-white transition-colors cursor-pointer">
+                        Email Overdue Customers
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </motion.div>
             
             <div className="mt-12 text-sm font-semibold text-slate-500">
               Trusted by 10,000+ modern Indian SMBs
@@ -245,9 +344,12 @@ export default function LandingPage() {
                   ₹999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM (Customers, Deals & Invoices)</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> HRMS (Employees, Attendance & Leaves)</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM (Customers & Deals & Invoices)</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> HRMS (Employees & Attendance & Leaves)</li>
                   <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> AI Chat Assistant</li>
+                  <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Inventory Management</span></li>
+                  <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">WhatsApp Automation</span></li>
+                  <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Payroll Compliance</span></li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Perfect for small teams starting out.</p>
@@ -277,15 +379,18 @@ export default function LandingPage() {
               {/* Intermediate Tier */}
               <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap shadow-md">
-                  MOST POPULAR
+                  MOST POPULAR (14-DAY TRIAL)
                 </div>
                 <div className="text-3xl font-extrabold text-slate-900 mb-6 mt-2 flex items-baseline">
                   ₹2,499<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
                   <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Everything in Basic plan</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Inventory & Vendor Management</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Purchase Orders & GST tools</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Inventory & Stock Management</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Vendor Directory & POs</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> GST Report Filing</li>
+                  <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">WhatsApp Automation</span></li>
+                  <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Payroll Compliance</span></li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Everything you need to scale your business.</p>
@@ -324,7 +429,8 @@ export default function LandingPage() {
                 <ul className="space-y-3 mb-8 flex-1">
                   <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Everything in Intermediate</li>
                   <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> WhatsApp OS Integration</li>
-                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Payroll & Compliance Automations</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Payroll & Statutory Compliance</li>
+                  <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Priority Support & Onboarding</li>
                 </ul>
                 <div className="mt-auto pt-6 border-t border-slate-100">
                   <p className="text-slate-500 text-sm font-medium mb-4 text-center">Advanced features for large teams.</p>

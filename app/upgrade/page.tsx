@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, ShieldCheck, Zap, AlertTriangle } from "lucide-react";
+import { CheckCircle2, ShieldCheck, Zap, AlertTriangle, XCircle } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -64,18 +64,21 @@ export default function UpgradePage() {
           {/* PRICING GRID */}
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left items-stretch">
             
-            {/* Starter Tier */}
+            {/* Basic Tier */}
             <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
               <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
-                Starter
+                Basic
               </div>
               <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                 ₹999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Freelancers, solo founders</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM + Invoice + AI chat</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> Up to 5 users</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> CRM (Customers & Deals & Invoices)</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> HRMS (Employees & Attendance & Leaves)</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> AI Chat Assistant</li>
+                <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Inventory Management</span></li>
+                <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">WhatsApp Automation</span></li>
+                <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Payroll Compliance</span></li>
               </ul>
               <div className="mt-auto pt-6 border-t border-slate-100">
                 <p className="text-slate-500 text-sm font-medium mb-4 text-center">Perfect for small teams starting out.</p>
@@ -84,23 +87,26 @@ export default function UpgradePage() {
                   disabled={loadingPlan !== null}
                   className="w-full py-6 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
                 >
-                  {loadingPlan === 'starter' ? 'Processing...' : 'Select Starter Plan'}
+                  {loadingPlan === 'starter' ? 'Processing...' : 'Select Basic Plan'}
                 </Button>
               </div>
             </div>
 
-            {/* Growth Tier */}
+            {/* Intermediate Tier */}
             <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap shadow-md">
-                MOST POPULAR
+                MOST POPULAR (14-DAY TRIAL)
               </div>
               <div className="text-3xl font-extrabold text-slate-900 mb-6 mt-2 flex items-baseline">
                 ₹2,499<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> 10-50 employee SMBs</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Full CRM + ERP + HRMS</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> WhatsApp OS + GST filing</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Everything in Basic plan</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Inventory & Stock Management</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> Vendor Directory & POs</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" /> GST Report Filing</li>
+                <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">WhatsApp Automation</span></li>
+                <li className="flex items-center gap-3 text-slate-400 font-medium opacity-60"><XCircle className="w-4 h-4 text-slate-400 shrink-0" /> <span className="line-through">Payroll Compliance</span></li>
               </ul>
               <div className="mt-auto pt-6 border-t border-slate-100">
                 <p className="text-slate-500 text-sm font-medium mb-4 text-center">Everything you need to scale your business.</p>
@@ -110,7 +116,7 @@ export default function UpgradePage() {
                   className="w-full py-6 rounded-xl text-sm font-bold text-white transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20"
                   style={{ background: 'var(--grad-button)' }}
                 >
-                  {loadingPlan === 'growth' ? 'Processing...' : 'Select Growth Plan'}
+                  {loadingPlan === 'growth' ? 'Processing...' : 'Select Intermediate Plan'}
                 </Button>
               </div>
             </div>
@@ -118,15 +124,16 @@ export default function UpgradePage() {
             {/* Business Tier */}
             <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
               <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
-                Business
+                Advance
               </div>
               <div className="text-3xl font-extrabold text-slate-900 mb-6 flex items-baseline">
                 ₹4,999<span className="text-base text-slate-500 font-medium ml-2">/ month</span>
               </div>
               <ul className="space-y-3 mb-8 flex-1">
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> 50-200 employee companies</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Sab kuch + priority support</li>
-                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Dedicated onboarding</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Everything in Intermediate</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> WhatsApp OS Integration</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Payroll & Statutory Compliance</li>
+                <li className="flex items-center gap-3 text-slate-700 font-medium"><CheckCircle2 className="w-4 h-4 text-purple-500 shrink-0" /> Priority Support & Onboarding</li>
               </ul>
               <div className="mt-auto pt-6 border-t border-slate-100">
                 <p className="text-slate-500 text-sm font-medium mb-4 text-center">Advanced features for large teams.</p>
@@ -135,7 +142,7 @@ export default function UpgradePage() {
                   disabled={loadingPlan !== null}
                   className="w-full py-6 rounded-xl text-sm font-bold text-slate-700 bg-slate-100 transition-all duration-300 hover:bg-slate-200"
                 >
-                  {loadingPlan === 'business' ? 'Processing...' : 'Select Business Plan'}
+                  {loadingPlan === 'business' ? 'Processing...' : 'Select Advance Plan'}
                 </Button>
               </div>
             </div>

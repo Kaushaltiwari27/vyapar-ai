@@ -5,13 +5,16 @@ import { createClient } from "@/lib/client";
 import { Invoice } from "@/lib/types";
 import { formatCurrency, formatDate } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Plus, Eye, CheckCircle, Trash2 } from "lucide-react";
+import { Plus, Eye, CheckCircle, Trash2, FileText } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function InvoicesPage() {
   const supabase = createClient();
+  const router = useRouter();
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<'all' | 'draft' | 'sent' | 'paid' | 'overdue'>('all');
@@ -118,71 +121,79 @@ export default function InvoicesPage() {
         ))}
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-4">Invoice #</th>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Amount</th>
-                <th className="px-6 py-4">Issue Date</th>
-                <th className="px-6 py-4">Due Date</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
+      {/* Table / Empty State */}
+      {loading ? (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center text-slate-500">Loading invoices...</div>
+      ) : invoices.length === 0 ? (
+        <EmptyState 
+          icon={FileText}
+          title="No Invoices Generated"
+          description="Aapne abhi tak koi invoice create nahi kiya hai. Apne customers ke liye tax invoice generate karein."
+          actionLabel="Create Invoice"
+          onAction={() => { router.push('/invoices/new') }}
+        />
+      ) : (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
                 <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">Loading invoices...</td>
+                  <th className="px-6 py-4">Invoice #</th>
+                  <th className="px-6 py-4">Customer</th>
+                  <th className="px-6 py-4">Amount</th>
+                  <th className="px-6 py-4">Issue Date</th>
+                  <th className="px-6 py-4">Due Date</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
-              ) : filteredInvoices.length === 0 ? (
-                <tr>
-                  <td colSpan={7} className="px-6 py-8 text-center text-slate-500">No invoices found.</td>
-                </tr>
-              ) : (
-                filteredInvoices.map(invoice => (
-                  <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
-                    <td className="px-6 py-4 font-semibold text-indigo-600">
-                      <Link href={`/invoices/${invoice.id}`} className="hover:underline">
-                        {invoice.invoice_number}
-                      </Link>
-                    </td>
-                    <td className="px-6 py-4 text-slate-900 font-medium">{invoice.customer_name || '-'}</td>
-                    <td className="px-6 py-4 font-bold text-slate-900">{formatCurrency(invoice.total_amount)}</td>
-                    <td className="px-6 py-4 text-slate-500">{formatDate(invoice.issue_date)}</td>
-                    <td className="px-6 py-4 text-slate-500">{formatDate(invoice.due_date)}</td>
-                    <td className="px-6 py-4">
-                      <Badge variant="secondary" className={`${getStatusColor(invoice.status)} border-0 uppercase text-[10px]`}>
-                        {invoice.status}
-                      </Badge>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        {(invoice.status === 'sent' || invoice.status === 'overdue') && (
-                          <Button variant="outline" size="sm" className="h-8 text-green-600 border-green-200 bg-green-50 hover:bg-green-100" onClick={() => handleMarkAsPaid(invoice.id)}>
-                            <CheckCircle className="w-3.5 h-3.5 mr-1" /> Paid
-                          </Button>
-                        )}
-                        <Link href={`/invoices/${invoice.id}`}>
-                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-indigo-600">
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                        </Link>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600" onClick={() => handleDelete(invoice.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredInvoices.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-8 text-center text-slate-500">No invoices match this filter.</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  filteredInvoices.map(invoice => (
+                    <tr key={invoice.id} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-6 py-4 font-semibold text-indigo-600">
+                        <Link href={`/invoices/${invoice.id}`} className="hover:underline">
+                          {invoice.invoice_number}
+                        </Link>
+                      </td>
+                      <td className="px-6 py-4 text-slate-900 font-medium">{invoice.customer_name || '-'}</td>
+                      <td className="px-6 py-4 font-bold text-slate-900">{formatCurrency(invoice.total_amount)}</td>
+                      <td className="px-6 py-4 text-slate-500">{formatDate(invoice.issue_date)}</td>
+                      <td className="px-6 py-4 text-slate-500">{formatDate(invoice.due_date)}</td>
+                      <td className="px-6 py-4">
+                        <Badge variant="secondary" className={`${getStatusColor(invoice.status)} border-0 uppercase text-[10px]`}>
+                          {invoice.status}
+                        </Badge>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {(invoice.status === 'sent' || invoice.status === 'overdue') && (
+                            <Button variant="outline" size="sm" className="h-8 text-green-600 border-green-200 bg-green-50 hover:bg-green-100" onClick={() => handleMarkAsPaid(invoice.id)}>
+                              <CheckCircle className="w-3.5 h-3.5 mr-1" /> Paid
+                            </Button>
+                          )}
+                          <Link href={`/invoices/${invoice.id}`}>
+                            <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-indigo-600">
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                          </Link>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600" onClick={() => handleDelete(invoice.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

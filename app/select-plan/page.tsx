@@ -25,9 +25,9 @@ function SelectPlanContent() {
   }, [supabase])
 
   const plans = [
-    { id: 'starter', name: 'Starter', price: '₹999/mo', desc: 'Solo founders', color: '#10b981', features: ['50 customers', '20 invoices/month', 'CRM + Deals', 'AI Chat (50 msgs/day)'] },
-    { id: 'growth', name: 'Growth', price: '₹2,499/mo', desc: 'Growing businesses', color: '#3b82f6', recommended: true, features: ['Unlimited customers', 'Unlimited invoices', 'CRM + ERP + HRMS', 'WhatsApp OS', 'AI Chat unlimited'] },
-    { id: 'business', name: 'Business', price: '₹4,999/mo', desc: 'Enterprise stack', color: '#8b5cf6', features: ['Sab Growth features', 'Payroll + PF/ESIC/TDS', 'Payslip PDF', 'Compliance calendar', 'Priority support'] }
+    { id: 'starter', name: 'Basic', price: '₹999/mo', desc: 'Solo founders', color: '#1D9E75', features: ['CRM (Customers, Deals, Invoices)', 'HRMS (Employees, Attendance, Leaves)', 'AI Chat (50 msgs/day)', 'No Inventory/WhatsApp/Payroll'] },
+    { id: 'growth', name: 'Intermediate', price: '₹2,499/mo', desc: 'Growing businesses', color: '#2563EB', recommended: true, features: ['Everything in Basic plan', 'Inventory & Stock Management', 'Vendor Directory & POs', 'GST Report Filing', 'No WhatsApp/Payroll'] },
+    { id: 'business', name: 'Advance', price: '₹4,999/mo', desc: 'Enterprise stack', color: '#7C3AED', features: ['Everything in Intermediate', 'WhatsApp OS Integration', 'Payroll & Statutory Compliance', 'Priority Support & Onboarding'] }
   ]
 
   async function startTrial() {

@@ -6,11 +6,12 @@ import { Customer } from "@/lib/types";
 import { formatCurrency } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Search, Edit2, Trash2 } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, Users } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { CustomerForm } from "@/components/customers/CustomerForm";
 import { CustomerDetail } from "@/components/customers/CustomerDetail";
 import { toast } from "react-hot-toast";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function CustomersPage() {
   const supabase = createClient();
@@ -125,65 +126,73 @@ export default function CustomersPage() {
         </Button>
       </div>
 
-      {/* Table */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left">
-            <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Company</th>
-                <th className="px-6 py-4">Phone</th>
-                <th className="px-6 py-4">City</th>
-                <th className="px-6 py-4">Total Revenue</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {loading ? (
+      {/* Table / Empty State */}
+      {loading ? (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-8 text-center text-slate-500">Loading customers...</div>
+      ) : customers.length === 0 ? (
+        <EmptyState 
+          icon={Users}
+          title="No Customers Yet"
+          description="Aapke business ke liye koi customer add nahi kiya gaya hai. Abhi add karein aur records track karna shuru karein."
+          actionLabel="Add Customer"
+          onAction={() => { setSelectedCustomer(null); setIsFormOpen(true); }}
+        />
+      ) : (
+        <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm text-left">
+              <thead className="bg-slate-50 text-slate-600 font-medium border-b border-slate-200">
                 <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">Loading customers...</td>
+                  <th className="px-6 py-4">Customer</th>
+                  <th className="px-6 py-4">Company</th>
+                  <th className="px-6 py-4">Phone</th>
+                  <th className="px-6 py-4">City</th>
+                  <th className="px-6 py-4">Total Revenue</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
-              ) : filteredCustomers.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-8 text-center text-slate-500">No customers found.</td>
-                </tr>
-              ) : (
-                filteredCustomers.map(customer => (
-                  <tr 
-                    key={customer.id} 
-                    className="hover:bg-slate-50 cursor-pointer transition-colors"
-                    onClick={() => handleRowClick(customer)}
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center">
-                          {customer.name.substring(0, 2).toUpperCase()}
-                        </div>
-                        <div className="font-medium text-slate-900">{customer.name}</div>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 text-slate-600">{customer.company || '-'}</td>
-                    <td className="px-6 py-4 text-slate-600">{customer.phone || '-'}</td>
-                    <td className="px-6 py-4 text-slate-600">{customer.city || '-'}</td>
-                    <td className="px-6 py-4 font-semibold text-slate-900">{formatCurrency(customer.total_revenue)}</td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-indigo-600" onClick={(e) => handleEdit(e, customer)}>
-                          <Edit2 className="w-4 h-4" />
-                        </Button>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600" onClick={(e) => handleDelete(e, customer.id)}>
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </td>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredCustomers.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-8 text-center text-slate-500">No customers match your search.</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  filteredCustomers.map(customer => (
+                    <tr 
+                      key={customer.id} 
+                      className="hover:bg-slate-50 cursor-pointer transition-colors"
+                      onClick={() => handleRowClick(customer)}
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex items-center gap-3">
+                          <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-700 font-bold flex items-center justify-center">
+                            {customer.name.substring(0, 2).toUpperCase()}
+                          </div>
+                          <div className="font-medium text-slate-900">{customer.name}</div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 text-slate-600">{customer.company || '-'}</td>
+                      <td className="px-6 py-4 text-slate-600">{customer.phone || '-'}</td>
+                      <td className="px-6 py-4 text-slate-600">{customer.city || '-'}</td>
+                      <td className="px-6 py-4 font-semibold text-slate-900">{formatCurrency(customer.total_revenue)}</td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-indigo-600" onClick={(e) => handleEdit(e, customer)}>
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+                          <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-red-600" onClick={(e) => handleDelete(e, customer.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Form Sheet */}
       <Sheet open={isFormOpen} onOpenChange={setIsFormOpen}>

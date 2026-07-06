@@ -23,9 +23,9 @@ export default function SubscribePage() {
   }, [supabase])
 
   const plans = [
-    { id: 'starter', name: 'Starter', amount: 99900, display: '₹999', desc: 'Solo founders', color: '#10b981' },
-    { id: 'growth', name: 'Growth', amount: 249900, display: '₹2,499', desc: 'Growing businesses', color: '#3b82f6', recommended: true },
-    { id: 'business', name: 'Business', amount: 499900, display: '₹4,999', desc: 'Full enterprise', color: '#8b5cf6' }
+    { id: 'starter', name: 'Basic', amount: 99900, display: '₹999', desc: 'Solo founders', color: '#1D9E75' },
+    { id: 'growth', name: 'Intermediate', amount: 249900, display: '₹2,499', desc: 'Growing businesses', color: '#2563EB', recommended: true },
+    { id: 'business', name: 'Advance', amount: 499900, display: '₹4,999', desc: 'Full enterprise stack', color: '#7C3AED' }
   ]
 
   async function handlePayment(plan: typeof plans[0]) {

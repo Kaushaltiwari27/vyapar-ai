@@ -22,6 +22,7 @@ const crmItems: NavItem[] = [
   { href: '/inventory', icon: Package, label: 'Inventory', feature: 'inventory' },
   { href: '/vendors', icon: Truck, label: 'Vendors', feature: 'vendors' },
   { href: '/purchase-orders', icon: ClipboardList, label: 'Purchase Orders', feature: 'purchaseOrders' },
+  { href: '/settings', icon: Settings, label: 'Settings', feature: 'dashboard' },
 ];
 
 const hrmsItems: NavItem[] = [
@@ -31,6 +32,7 @@ const hrmsItems: NavItem[] = [
   { href: '/leaves', icon: FileText, label: 'Leaves', feature: 'leaves' },
   { href: '/payroll', icon: FileText, label: 'Payroll', feature: 'payroll' },
   { href: '/compliance', icon: ShieldCheck, label: 'Compliance', feature: 'compliance' },
+  { href: '/settings', icon: Settings, label: 'Settings', feature: 'dashboard' },
 ];
 
 const commonItems: NavItem[] = [

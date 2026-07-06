@@ -11,6 +11,7 @@ import { DepartmentOrgView } from "@/components/hrms/DepartmentOrgView";
 import { EmployeeForm } from "@/components/hrms/EmployeeForm";
 import { toast } from "react-hot-toast";
 import { PlanGuard } from "@/components/auth/PlanGuard";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function EmployeesPage() {
   const supabase = createClient();
@@ -221,7 +222,15 @@ export default function EmployeesPage() {
 
       {/* Content */}
       <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
-        {viewMode === 'table' ? (
+        {employees.length === 0 ? (
+          <EmptyState 
+            icon={Users}
+            title="No Employees Added"
+            description="Aapki team mein abhi tak koi employee add nahi hua hai. Naya employee add karke attendance aur leaves manage karein."
+            actionLabel="Add Employee"
+            onAction={handleAddNew}
+          />
+        ) : viewMode === 'table' ? (
           <EmployeeTable employees={filteredEmployees} onEdit={handleEdit} onDelete={handleDelete} />
         ) : (
           <DepartmentOrgView employees={filteredEmployees} />

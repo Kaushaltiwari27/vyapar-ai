@@ -44,7 +44,7 @@ export async function middleware(request: NextRequest) {
   const isDashboard = pathname.startsWith('/dashboard') || 
     ['/customers', '/deals', '/invoices', '/quotations', '/inventory', '/vendors', 
      '/purchase-orders', '/employees', '/attendance', '/leaves', 
-     '/payroll', '/compliance', '/whatsapp', '/chat'].some(r => pathname.startsWith(r))
+     '/payroll', '/compliance', '/whatsapp', '/chat', '/settings'].some(r => pathname.startsWith(r))
 
   if (user && isDashboard) {
     const { data: profile } = await supabase

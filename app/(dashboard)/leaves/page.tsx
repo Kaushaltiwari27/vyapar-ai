@@ -6,9 +6,10 @@ import { LeaveRequest } from "@/lib/types";
 import { LeaveRequestCard } from "@/components/hrms/LeaveRequestCard";
 import { LeaveApprovalModal } from "@/components/hrms/LeaveApprovalModal";
 import { NewLeaveRequestModal } from "@/components/hrms/NewLeaveRequestModal";
-import { Clock, CheckCircle2, XCircle, List, Plus } from "lucide-react";
+import { Clock, CheckCircle2, XCircle, List, Plus, Calendar } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PlanGuard } from "@/components/auth/PlanGuard";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function LeavesPage() {
   const supabase = createClient();
@@ -123,8 +124,16 @@ export default function LeavesPage() {
         </button>
       </div>
 
-      {/* Grid */}
-      {filteredRequests.length === 0 ? (
+      {/* Grid / Empty State */}
+      {requests.length === 0 ? (
+        <EmptyState 
+          icon={Calendar}
+          title="No Leave Requests Yet"
+          description="Aapki team se abhi tak koi leave request submit nahi hui hai. Employee leave requests yahan manage karein."
+          actionLabel="Add Manual Leave"
+          onAction={() => setNewLeaveModalOpen(true)}
+        />
+      ) : filteredRequests.length === 0 ? (
         <div className="p-12 text-center bg-slate-50 rounded-xl border border-dashed border-slate-200">
           <p className="text-slate-500 font-medium text-lg">No {activeFilter !== 'all' ? activeFilter : ''} leave requests found.</p>
         </div>

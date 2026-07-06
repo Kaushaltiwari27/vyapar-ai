@@ -5,10 +5,11 @@ import { createClient } from "@/lib/client";
 import { Deal } from "@/lib/types";
 import { KanbanBoard } from "@/components/deals/KanbanBoard";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Plus, Briefcase } from "lucide-react";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { DealForm } from "@/components/deals/DealForm";
 import { toast } from "react-hot-toast";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function DealsPage() {
   const supabase = createClient();
@@ -82,6 +83,14 @@ export default function DealsPage() {
       <div className="flex-1 overflow-x-auto overflow-y-hidden pb-4">
         {loading ? (
           <div className="text-center text-slate-500 mt-20">Loading pipeline...</div>
+        ) : deals.length === 0 ? (
+          <EmptyState 
+            icon={Briefcase}
+            title="No Deals in Pipeline"
+            description="Aapki sales pipeline abhi khali hai. Naya deal add karein aur use leads se closed won tak track karein."
+            actionLabel="Add Deal"
+            onAction={() => { setSelectedDeal(null); setIsFormOpen(true); }}
+          />
         ) : (
           <KanbanBoard 
             deals={deals} 

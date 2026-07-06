@@ -152,3 +152,33 @@
 .dark .premium-shadow-hover:hover {
   box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.6);
 }
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  header.sticky {
+    background-color: rgba(255, 255, 255, 0.7) !important;
+    backdrop-filter: blur(16px) !important;
+  }
+  
+  .hero-section, 
+  main.flex-1.pt-20,
+  main.pt-24 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  .tabs-container,
+  div.flex.gap-2.border-b.border-slate-200 {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+  }
+}
