@@ -6,39 +6,51 @@ import Image from "next/image";
 import { APP_FEATURES } from "@/lib/features";
 import { LandingNavbar } from "@/components/layout/LandingNavbar";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import PlanSelectModal from "@/components/auth/PlanSelectModal";
+import { MaskedCard, useMaskPositions, useImageWidth, useIsMobile, useStaggeredReveal } from "@/components/ui/MaskedCard";
 
 function Preloader({ onComplete }: { onComplete: () => void }) {
+  const [counter, setCounter] = useState(0)
+  const [exiting, setExiting] = useState(false)
+
   useEffect(() => {
-    const timer = setTimeout(() => onComplete(), 1500);
-    return () => clearTimeout(timer);
-  }, [onComplete]);
+    let start = 0
+    const duration = 2000
+    const stepTime = 20
+    const totalSteps = duration / stepTime // 100 steps
+
+    const interval = setInterval(() => {
+      start += 1
+      if (start <= 100) {
+        setCounter(start)
+      } else {
+        clearInterval(interval)
+        // Wait 200ms after reaching 100, then exit
+        setTimeout(() => {
+          setExiting(true)
+          // 700ms transition duration
+          setTimeout(() => {
+            onComplete()
+          }, 700)
+        }, 200)
+      }
+    }, stepTime)
+
+    return () => clearInterval(interval)
+  }, [onComplete])
 
   return (
-    <motion.div 
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center"
+    <div 
+      className={`fixed inset-0 z-[100] bg-white flex items-end justify-start p-6 md:p-10 transition-opacity duration-700 ${exiting ? 'opacity-0' : 'opacity-100'}`}
     >
-      <motion.div
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: [0.8, 1.1, 1], opacity: 1 }}
-        transition={{ duration: 1, ease: "easeOut" }}
-      >
-        <Image src="/logo.png" alt="VyaparAI" width={200} height={60} className="object-contain" priority />
-      </motion.div>
-      <motion.div 
-        initial={{ width: 0 }}
-        animate={{ width: 200 }}
-        transition={{ duration: 1.2, ease: "easeInOut", delay: 0.2 }}
-        className="h-1 mt-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600"
-      />
-    </motion.div>
-  );
+      <div className="text-7xl md:text-9xl font-bold tabular-nums text-black leading-none select-none">
+        {counter}
+      </div>
+    </div>
+  )
 }
 
 export default function LandingPage() {
@@ -49,6 +61,21 @@ export default function LandingPage() {
 
   const router = useRouter();
   const supabase = createClient();
+
+  const sectionRef = useRef<HTMLDivElement>(null)
+  const cardRefs = useRef<Array<HTMLElement | null>>([])
+
+  // Setup cardRefs helper
+  const addToRefs = (el: HTMLElement | null) => {
+    if (el && !cardRefs.current.includes(el)) {
+      cardRefs.current.push(el)
+    }
+  }
+
+  const positions = useMaskPositions(sectionRef, cardRefs)
+  const sectionHeight = positions[0]?.sh || 600
+  const imageWidth = useImageWidth('/saas_dashboard_mockup.png', sectionHeight)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     supabase.auth.getUser().then(({ data: { user } }) => {
@@ -82,7 +109,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex-1">
-        <section className="relative pt-28 pb-20 overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-slate-50/40">
+        <section ref={sectionRef} className="relative pt-28 pb-20 overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-slate-50/40">
           {/* Animated gradient orbs in background */}
           <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-[120px] opacity-30 animate-float" />
           <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[100px] opacity-30 animate-float" style={{ animationDelay: '1s' }} />
@@ -197,40 +224,56 @@ export default function LandingPage() {
               </Link>
             </div>
 
-            {/* Bottom 3 Mockup Panels (reveal from bottom) */}
+            {/* Bottom 3 Mockup Panels (reveal from bottom using MaskedCard) */}
             <div className="hidden lg:flex items-end justify-center w-full max-w-5xl mx-auto mt-6 gap-4">
               {/* Left Panel */}
-              <div className="flex-1 bg-gradient-to-tr from-white to-indigo-50/50 border border-slate-200/80 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-800">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
-                <div className="text-left flex flex-col justify-between h-full">
+              <MaskedCard
+                bgImage="/saas_dashboard_mockup.png"
+                position={positions[0]}
+                imageWidth={imageWidth}
+                focalX={isMobile ? 0.65 : 0.8}
+                cardRef={addToRefs}
+                className="flex-1 border border-slate-800 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-800"
+              >
+                {/* Dark overlay to ensure contrast */}
+                <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
+                <div className="text-left flex flex-col justify-between h-full relative z-10">
                   <div>
-                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Active Database</span>
-                    <h3 className="text-2xl font-black text-slate-900 mt-1">98K+</h3>
-                    <p className="text-xs text-slate-500 font-semibold mt-1">Managed Leads & Deals</p>
+                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Active Database</span>
+                    <h3 className="text-2xl font-black text-white mt-1">98K+</h3>
+                    <p className="text-xs text-slate-350 font-semibold mt-1">Managed Leads & Deals</p>
                   </div>
                   
                   {/* Avatar stack */}
                   <div className="flex items-center -space-x-2 mt-4">
                     {["A", "B", "C", "D"].map((n, i) => (
-                      <div key={i} className="w-7 h-7 rounded-full bg-slate-800 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-white">
+                      <div key={i} className="w-7 h-7 rounded-full bg-slate-850 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
                         {n}
                       </div>
                     ))}
-                    <div className="w-7 h-7 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-white">
+                    <div className="w-7 h-7 rounded-full bg-indigo-650 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
                       +
                     </div>
                   </div>
                 </div>
-              </div>
+              </MaskedCard>
 
               {/* Center Panel (tallest) */}
-              <div className="flex-[1.2] bg-gradient-to-tr from-slate-950 to-indigo-950 border border-slate-800/80 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600">
-                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl" />
-                <div className="flex flex-col h-full justify-between">
+              <MaskedCard
+                bgImage="/saas_dashboard_mockup.png"
+                position={positions[1]}
+                imageWidth={imageWidth}
+                focalX={isMobile ? 0.65 : 0.8}
+                cardRef={addToRefs}
+                className="flex-[1.2] border border-slate-850 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600"
+              >
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm z-0" />
+                <div className="flex flex-col h-full justify-between relative z-10">
                   <div>
                     <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Featured Agent</span>
                     <h3 className="text-lg font-bold text-white mt-1 leading-snug">Vyapaar Mitra AI Chat</h3>
-                    <p className="text-xs text-slate-400 mt-1 font-medium leading-relaxed">Bilingual auto-pilot assistant for automated customer support.</p>
+                    <p className="text-xs text-slate-300 mt-1 font-medium leading-relaxed">Bilingual auto-pilot assistant for automated customer support.</p>
                   </div>
                   
                   <button 
@@ -240,16 +283,24 @@ export default function LandingPage() {
                     Try AI Chat <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
-              </div>
+              </MaskedCard>
 
               {/* Right Panel */}
-              <div className="flex-1 bg-gradient-to-tr from-white to-indigo-50/50 border border-slate-200/80 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-900">
-                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
-                <div className="text-left flex flex-col justify-between h-full">
+              <MaskedCard
+                bgImage="/saas_dashboard_mockup.png"
+                position={positions[2]}
+                imageWidth={imageWidth}
+                focalX={isMobile ? 0.65 : 0.8}
+                cardRef={addToRefs}
+                className="flex-1 border border-slate-800 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-900"
+              >
+                {/* Dark overlay */}
+                <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
+                <div className="text-left flex flex-col justify-between h-full relative z-10">
                   <div>
-                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">HR & Payroll</span>
-                    <h3 className="text-2xl font-black text-slate-900 mt-1">4.8★</h3>
-                    <p className="text-xs text-slate-500 font-semibold mt-1">User Satisfaction Score</p>
+                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">HR & Payroll</span>
+                    <h3 className="text-2xl font-black text-white mt-1">4.8★</h3>
+                    <p className="text-xs text-slate-350 font-semibold mt-1">User Satisfaction Score</p>
                   </div>
                   
                   <div className="flex gap-1 mt-4">
@@ -258,7 +309,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-              </div>
+              </MaskedCard>
             </div>
 
             {/* Tablet/Mobile stats row (below md) */}
