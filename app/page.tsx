@@ -180,7 +180,7 @@ export default function LandingPage() {
                   </div>
 
                   {/* Dashboard stats row */}
-                  <div className="grid grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
                       <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Pipeline</p>
                       <p className="text-sm md:text-base font-extrabold text-white mt-1">₹4,85,000</p>

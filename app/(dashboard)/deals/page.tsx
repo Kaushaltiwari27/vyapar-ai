@@ -69,7 +69,7 @@ export default function DealsPage() {
   };
 
   return (
-    <div className="p-8 h-[calc(100vh-4rem)] flex flex-col">
+    <div className="p-4 sm:p-8 h-[calc(100vh-4rem)] flex flex-col">
       <div className="flex justify-between items-center mb-6 flex-shrink-0">
         <h2 className="text-2xl font-bold text-foreground">Sales Pipeline</h2>
         <Button 
