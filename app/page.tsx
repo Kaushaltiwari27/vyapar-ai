@@ -1,7 +1,7 @@
 'use client';
 
 import Link from "next/link";
-import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database, Globe, Lock, PlayCircle, Star, MessageSquare, XCircle } from "lucide-react";
+import { ShieldCheck, CheckCircle2, Zap, ArrowRight, Activity, Users, Database, Globe, Lock, PlayCircle, Star, MessageSquare, XCircle, TrendingUp, Smartphone, FileText } from "lucide-react";
 import Image from "next/image";
 import { APP_FEATURES } from "@/lib/features";
 import { LandingNavbar } from "@/components/layout/LandingNavbar";
@@ -53,11 +53,47 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
   )
 }
 
+const carouselCards = [
+  {
+    icon: TrendingUp,
+    color: "#4f46e5",
+    title: "AI Sales Assistant",
+    desc: "Auto-pilot lead scoring, email drafts, and deal pipeline management."
+  },
+  {
+    icon: Smartphone,
+    color: "#16a34a",
+    title: "WhatsApp OS Automation",
+    desc: "Engage customers, send PDF invoices, and process orders on WhatsApp."
+  },
+  {
+    icon: FileText,
+    color: "#2563eb",
+    title: "Smart Invoicing & GST",
+    desc: "Generate compliant bills and calculate tax slabs in a single click."
+  },
+  {
+    icon: Users,
+    color: "#d97706",
+    title: "HR & Leaves Autopilot",
+    desc: "Manage payroll payouts, record attendance, and approve leave requests."
+  }
+]
+
 export default function LandingPage() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false);
   const [redirectPath, setRedirectPath] = useState('/dashboard');
+
+  const [activeCarousel, setActiveCarousel] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveCarousel((prev) => (prev + 1) % 4)
+    }, 3500)
+    return () => clearInterval(timer)
+  }, [])
 
   const router = useRouter();
   const supabase = createClient();
@@ -239,9 +275,15 @@ export default function LandingPage() {
                 <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
                 <div className="text-left flex flex-col justify-between h-full relative z-10">
                   <div>
-                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">Active Database</span>
-                    <h3 className="text-2xl font-black text-white mt-1">98K+</h3>
-                    <p className="text-xs text-slate-350 font-semibold mt-1">Managed Leads & Deals</p>
+                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">AI Assessment</span>
+                    <h3 className="text-sm font-bold text-white mt-1 leading-snug">Start your personalized path to automation.</h3>
+                    
+                    <button 
+                      onClick={(e) => handleActionClick(e, '/select-plan')}
+                      className="text-xs text-indigo-400 font-semibold underline hover:text-indigo-300 transition-colors mt-2 block"
+                    >
+                      Personal Business Assessment →
+                    </button>
                   </div>
                   
                   {/* Avatar stack */}
@@ -270,18 +312,58 @@ export default function LandingPage() {
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm z-0" />
                 <div className="flex flex-col h-full justify-between relative z-10">
-                  <div>
-                    <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Featured Agent</span>
-                    <h3 className="text-lg font-bold text-white mt-1 leading-snug">Vyapaar Mitra AI Chat</h3>
-                    <p className="text-xs text-slate-300 mt-1 font-medium leading-relaxed">Bilingual auto-pilot assistant for automated customer support.</p>
+                  <div className="flex justify-between items-center">
+                    <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Core AI Agentforce</span>
+                    <span className="text-[9px] text-slate-400 font-bold">Active</span>
                   </div>
-                  
-                  <button 
-                    onClick={(e) => handleActionClick(e, '/chat')}
-                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all w-fit"
-                  >
-                    Try AI Chat <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+
+                  {/* Carousel Content */}
+                  <div className="relative h-20 w-full overflow-hidden mt-2">
+                    {carouselCards.map((card, idx) => {
+                      const Icon = card.icon
+                      const isActive = activeCarousel === idx
+                      return (
+                        <div
+                          key={idx}
+                          className={`absolute inset-0 flex items-start gap-3.5 transition-all duration-500 transform ${
+                            isActive 
+                              ? 'opacity-100 translate-y-0' 
+                              : 'opacity-0 translate-y-4 pointer-events-none'
+                          }`}
+                        >
+                          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 text-white" style={{ backgroundColor: card.color }}>
+                            <Icon className="w-5 h-5" />
+                          </div>
+                          <div>
+                            <h4 className="text-sm font-bold text-white leading-none">{card.title}</h4>
+                            <p className="text-xs text-slate-300 mt-1 leading-snug">{card.desc}</p>
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+
+                  {/* Indicators and Button */}
+                  <div className="flex items-center justify-between mt-auto">
+                    {/* Dots indicator */}
+                    <div className="flex gap-1.5 w-24">
+                      {carouselCards.map((_, idx) => (
+                        <div 
+                          key={idx} 
+                          className={`h-1 rounded-full flex-1 transition-all ${
+                            activeCarousel === idx ? 'bg-white' : 'bg-white/20'
+                          }`}
+                        />
+                      ))}
+                    </div>
+
+                    <button 
+                      onClick={(e) => handleActionClick(e, '/chat')}
+                      className="inline-flex items-center justify-center gap-1.5 px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all"
+                    >
+                      Launch Agent <ArrowRight className="w-3 h-3" />
+                    </button>
+                  </div>
                 </div>
               </MaskedCard>
 
@@ -297,10 +379,21 @@ export default function LandingPage() {
                 {/* Dark overlay */}
                 <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
                 <div className="text-left flex flex-col justify-between h-full relative z-10">
-                  <div>
-                    <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">HR & Payroll</span>
-                    <h3 className="text-2xl font-black text-white mt-1">4.8★</h3>
-                    <p className="text-xs text-slate-350 font-semibold mt-1">User Satisfaction Score</p>
+                  <div className="flex justify-between items-start gap-4">
+                    <div className="flex-1">
+                      <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SaaS Validation</span>
+                      <h3 className="text-2xl font-black text-white mt-1">14K+</h3>
+                      <p className="text-[10px] text-slate-350 font-medium leading-tight mt-1">Active Indian companies trust VyaparAI to auto-pilot operations.</p>
+                    </div>
+
+                    {/* Small product card mockup on the right side of Panel 3 */}
+                    <div className="w-20 h-16 rounded-xl border border-slate-800/80 bg-slate-950/80 p-1.5 flex flex-col justify-between shrink-0">
+                      <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center text-[6px] text-emerald-400">✓</div>
+                      <div className="space-y-1">
+                        <div className="h-1 bg-slate-800 rounded-full w-full" />
+                        <div className="h-1 bg-slate-800 rounded-full w-2/3" />
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex gap-1 mt-4">
