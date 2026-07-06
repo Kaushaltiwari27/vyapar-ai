@@ -81,28 +81,91 @@ export default function LandingPage() {
         <LandingNavbar />
 
       {/* Hero Section */}
-      <main className="flex-1 pt-20">
-        <section className="relative pt-32 pb-40 overflow-hidden flex flex-col items-center justify-center min-h-[90vh]">
+      <main className="flex-1">
+        <section className="relative pt-28 pb-20 overflow-hidden flex flex-col items-center justify-center min-h-[95vh] bg-[#EFFDF0]/40">
           {/* Animated gradient orbs in background */}
-          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-[var(--primary-brand)] rounded-full blur-[120px] opacity-20 animate-float" />
-          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[var(--accent-brand)] rounded-full blur-[100px] opacity-20 animate-float" style={{ animationDelay: '1s' }} />
-          
+          <div className="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-[120px] opacity-30 animate-float" />
+          <div className="absolute top-1/2 right-1/4 translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-blue-500/10 rounded-full blur-[100px] opacity-30 animate-float" style={{ animationDelay: '1s' }} />
+
+          {/* Left CRM Side Card */}
+          <div 
+            className="hidden lg:block absolute top-[180px] left-12 w-[clamp(180px,13vw,240px)] bg-white rounded-3xl border border-slate-200/80 p-4 shadow-xl z-20 animate-slide-in-left delay-600"
+          >
+            <div className="aspect-[240/220] rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 flex items-center justify-center p-3 relative group">
+              <div className="w-full h-full flex flex-col justify-between">
+                <div className="flex justify-between items-center">
+                  <span className="text-[10px] bg-emerald-50 text-emerald-700 font-bold px-2 py-0.5 rounded-full">Active Deal</span>
+                  <span className="text-[9px] text-slate-400 font-medium">9:30 AM</span>
+                </div>
+                <div className="h-14 w-full flex items-end gap-1.5 pt-2">
+                  <div className="bg-slate-200 rounded-sm w-full h-1/3" />
+                  <div className="bg-slate-200 rounded-sm w-full h-1/2" />
+                  <div className="bg-slate-200 rounded-sm w-full h-2/3" />
+                  <div className="bg-indigo-500 rounded-sm w-full h-full animate-pulse" />
+                </div>
+              </div>
+              <div className="absolute bottom-2.5 right-2.5 w-8 h-8 rounded-full bg-slate-900 text-white flex items-center justify-center cursor-pointer hover:bg-indigo-600 transition-colors">
+                <ArrowRight className="w-4 h-4 -rotate-45" />
+              </div>
+            </div>
+            <div className="mt-3 text-left">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Vyapaar CRM</p>
+              <p className="text-sm font-black text-slate-900 mt-0.5">Kaushal Tiwari Deal</p>
+              <p className="text-xs font-extrabold text-indigo-600 mt-1">₹49,999</p>
+            </div>
+          </div>
+
+          {/* Right WhatsApp/AI Assistant Card */}
+          <div 
+            className="hidden lg:block absolute top-[180px] right-12 w-[clamp(160px,11vw,200px)] bg-white rounded-3xl border border-slate-200/80 p-4 shadow-xl z-20 animate-slide-in-right delay-700"
+          >
+            <div className="aspect-[200/260] rounded-2xl overflow-hidden bg-slate-50 border border-slate-100 p-3 relative flex flex-col justify-between group">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-green-500 animate-ping" />
+                <span className="text-[9px] text-slate-500 font-bold uppercase">WhatsApp OS</span>
+              </div>
+              <div className="space-y-1.5 my-3">
+                <div className="bg-slate-200/60 rounded-lg p-1.5 text-[8px] text-slate-700 max-w-[85%] text-left">
+                  Ramesh, stock level low for Fortune Oil.
+                </div>
+                <div className="bg-indigo-600 text-white rounded-lg p-1.5 text-[8px] max-w-[85%] ml-auto text-right font-medium">
+                  Order 10 units.
+                </div>
+              </div>
+              <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center mx-auto cursor-pointer hover:scale-110 transition-transform shadow-md shadow-indigo-200">
+                <PlayCircle className="w-4 h-4 fill-white text-indigo-600" />
+              </div>
+            </div>
+            <div className="mt-3 text-left">
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">AI Assistant</p>
+              <p className="text-xs font-semibold text-slate-600 mt-0.5 leading-snug">Auto-pilot orders & alerts via WhatsApp</p>
+            </div>
+          </div>
+
           <div className="relative max-w-5xl mx-auto px-6 text-center z-10">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 font-bold text-xs mb-8 shadow-sm">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-50 border border-blue-100 text-blue-700 font-bold text-xs mb-8 shadow-sm animate-fade-in">
               <span className="flex h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span>
               VyaparAI 2.0 is now live
             </div>
 
-            <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-tight">
-              India ka pehla <br className="hidden md:block"/>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-purple-600">AI Business Brain</span>
+            {/* Staggered Heading */}
+            <h1 className="font-serif-display text-[#1a3d1a] text-[clamp(40px,6.8vw,88px)] leading-[0.95] tracking-tight mb-8">
+              {["India's", "First", "AI", "Business", "Brain"].map((word, idx) => (
+                <span 
+                  key={idx} 
+                  className="inline-block animate-word-pop" 
+                  style={{ animationDelay: `${200 + idx * 100}ms`, marginRight: '0.22em' }}
+                >
+                  {word}
+                </span>
+              ))}
             </h1>
             
-            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-slate-600 mb-10 max-w-3xl mx-auto animate-fade-up delay-600 leading-relaxed">
               Automate sales, service, HR, and marketing with humans and AI agents working together on one trusted, agentic CRM platform. See value from day one with quick and easy setup.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center">
+            <div className="flex flex-col sm:flex-row gap-5 justify-center items-center animate-fade-up delay-700 mb-12">
               {user ? (
                 <Link 
                   href="/dashboard"
@@ -134,108 +197,82 @@ export default function LandingPage() {
               </Link>
             </div>
 
-            {/* Premium SaaS Mockup Preview */}
-            <motion.div 
-              initial={{ y: 60, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-              className="mt-16 w-full max-w-4xl mx-auto rounded-3xl bg-slate-950 border border-slate-800/80 p-2.5 shadow-2xl relative z-10 overflow-hidden text-left"
-            >
-              {/* Window Header */}
-              <div className="flex items-center gap-1.5 px-4 py-2.5 border-b border-slate-850 bg-slate-900/40">
-                <span className="w-3 h-3 rounded-full bg-rose-500/80" />
-                <span className="w-3 h-3 rounded-full bg-amber-500/80" />
-                <span className="w-3 h-3 rounded-full bg-emerald-500/80" />
-                <span className="text-[10px] text-slate-500 font-bold ml-4 tracking-widest uppercase">dashboard.vyapar.ai</span>
-              </div>
-
-              {/* Layout body */}
-              <div className="grid md:grid-cols-4 gap-4 p-4">
-                {/* Sidebar Mockup */}
-                <div className="hidden md:flex flex-col gap-3 border-r border-slate-900 pr-4">
-                  <div className="h-6 bg-slate-900 rounded-md w-3/4 animate-pulse" />
-                  <div className="h-5 bg-slate-900/50 rounded-md w-full" />
-                  <div className="h-5 bg-slate-900/50 rounded-md w-5/6" />
-                  <div className="h-5 bg-slate-900/50 rounded-md w-4/5" />
-                  <div className="h-5 bg-slate-900/50 rounded-md w-full" />
+            {/* Bottom 3 Mockup Panels (reveal from bottom) */}
+            <div className="hidden lg:flex items-end justify-center w-full max-w-5xl mx-auto mt-6 gap-4">
+              {/* Left Panel */}
+              <div className="flex-1 bg-gradient-to-tr from-white to-indigo-50/50 border border-slate-200/80 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-800">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
+                <div className="text-left flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Active Database</span>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">98K+</h3>
+                    <p className="text-xs text-slate-500 font-semibold mt-1">Managed Leads & Deals</p>
+                  </div>
                   
-                  <div className="mt-auto h-12 bg-slate-900/30 border border-slate-850 rounded-xl p-2 flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-xs font-bold text-white shadow-sm shadow-blue-500/30">RK</div>
-                    <div className="flex-1 min-w-0">
-                      <div className="h-2.5 bg-slate-800 rounded-full w-2/3" />
-                      <div className="h-2 bg-slate-800 rounded-full w-1/2 mt-1.5" />
-                    </div>
-                  </div>
-                </div>
-
-                {/* Content Mockup */}
-                <div className="md:col-span-3 space-y-4">
-                  {/* Top Bar Mockup */}
-                  <div className="flex justify-between items-center pb-2 border-b border-slate-900">
-                    <div className="h-4 bg-slate-900 rounded-full w-1/3" />
-                    <div className="flex items-center gap-2">
-                      <span className="w-8 h-8 rounded-xl bg-slate-900 border border-slate-850 flex items-center justify-center text-xs">🔔</span>
-                      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 text-white font-bold text-xs flex items-center justify-center">RK</div>
-                    </div>
-                  </div>
-
-                  {/* Dashboard stats row */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
-                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Pipeline</p>
-                      <p className="text-sm md:text-base font-extrabold text-white mt-1">₹4,85,000</p>
-                      <span className="text-[8px] text-emerald-500 font-bold mt-0.5 inline-block">↑ 15% this month</span>
-                    </div>
-                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
-                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">Invoices Due</p>
-                      <p className="text-sm md:text-base font-extrabold text-rose-500 mt-1">₹1,24,500</p>
-                      <span className="text-[8px] text-rose-400 font-bold mt-0.5 inline-block">2 Overdue</span>
-                    </div>
-                    <div className="bg-slate-900/40 border border-slate-850 rounded-xl p-3">
-                      <p className="text-[9px] text-slate-500 font-extrabold uppercase tracking-wider">HR Active</p>
-                      <p className="text-sm md:text-base font-extrabold text-blue-400 mt-1">12 / 13</p>
-                      <span className="text-[8px] text-slate-400 font-semibold mt-0.5 inline-block">1 Leave request</span>
-                    </div>
-                  </div>
-
-                  {/* AI Chat Box */}
-                  <div className="border border-slate-850 bg-slate-900/20 rounded-xl p-4 space-y-3 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
-                    
-                    {/* User */}
-                    <div className="flex gap-2 items-start justify-end">
-                      <div className="bg-blue-600 text-white text-[11px] px-3 py-1.5 rounded-xl rounded-tr-none font-medium max-w-[80%]">
-                        Show me today's business health summary.
+                  {/* Avatar stack */}
+                  <div className="flex items-center -space-x-2 mt-4">
+                    {["A", "B", "C", "D"].map((n, i) => (
+                      <div key={i} className="w-7 h-7 rounded-full bg-slate-800 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-white">
+                        {n}
                       </div>
-                      <span className="w-5 h-5 rounded-full bg-blue-500 text-white text-[9px] font-bold flex items-center justify-center shrink-0">U</span>
-                    </div>
-
-                    {/* AI Agent */}
-                    <div className="flex gap-2 items-start">
-                      <span className="w-5 h-5 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 text-white text-[9px] font-bold flex items-center justify-center shrink-0">AI</span>
-                      <div className="bg-slate-900/80 text-slate-200 text-[11px] px-3 py-2 rounded-xl rounded-tl-none font-medium max-w-[85%] border border-slate-850 leading-relaxed">
-                        Good morning Ramesh! Today your Sales Pipeline is up by <span className="text-emerald-400 font-bold">15%</span>, 2 invoices are overdue, and low stock alert triggered for <span className="text-amber-400 font-semibold">Fortune Oil</span>. Should I generate a purchase order?
-                      </div>
-                    </div>
-
-                    {/* Quick action buttons */}
-                    <div className="flex gap-2 pl-7 pt-1">
-                      <button className="bg-slate-900 border border-slate-800 text-[9px] text-slate-400 font-bold px-2.5 py-1 rounded-md hover:bg-slate-850 hover:text-white transition-colors cursor-pointer">
-                        Generate PO
-                      </button>
-                      <button className="bg-slate-900 border border-slate-800 text-[9px] text-slate-400 font-bold px-2.5 py-1 rounded-md hover:bg-slate-850 hover:text-white transition-colors cursor-pointer">
-                        Email Overdue Customers
-                      </button>
+                    ))}
+                    <div className="w-7 h-7 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-white">
+                      +
                     </div>
                   </div>
-
                 </div>
               </div>
-            </motion.div>
-            
-            <div className="mt-12 text-sm font-semibold text-slate-500">
-              Trusted by 10,000+ modern Indian SMBs
+
+              {/* Center Panel (tallest) */}
+              <div className="flex-[1.2] bg-gradient-to-tr from-slate-950 to-indigo-950 border border-slate-800/80 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600">
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl" />
+                <div className="flex flex-col h-full justify-between">
+                  <div>
+                    <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Featured Agent</span>
+                    <h3 className="text-lg font-bold text-white mt-1 leading-snug">Vyapaar Mitra AI Chat</h3>
+                    <p className="text-xs text-slate-400 mt-1 font-medium leading-relaxed">Bilingual auto-pilot assistant for automated customer support.</p>
+                  </div>
+                  
+                  <button 
+                    onClick={(e) => handleActionClick(e, '/chat')}
+                    className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs rounded-xl transition-all w-fit"
+                  >
+                    Try AI Chat <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Right Panel */}
+              <div className="flex-1 bg-gradient-to-tr from-white to-indigo-50/50 border border-slate-200/80 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-900">
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
+                <div className="text-left flex flex-col justify-between h-full">
+                  <div>
+                    <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">HR & Payroll</span>
+                    <h3 className="text-2xl font-black text-slate-900 mt-1">4.8★</h3>
+                    <p className="text-xs text-slate-500 font-semibold mt-1">User Satisfaction Score</p>
+                  </div>
+                  
+                  <div className="flex gap-1 mt-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-amber-500 text-amber-500" />
+                    ))}
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {/* Tablet/Mobile stats row (below md) */}
+            <div className="lg:hidden mt-8 grid grid-cols-2 gap-4 max-w-md mx-auto animate-fade-up delay-900">
+              <div className="bg-white border border-slate-200 p-4 rounded-2xl text-left">
+                <h4 className="text-xl font-black text-slate-900 font-serif-display">98K+</h4>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">Managed Leads</p>
+              </div>
+              <div className="bg-white border border-slate-200 p-4 rounded-2xl text-left">
+                <h4 className="text-xl font-black text-slate-900 font-serif-display">4.8★ Rating</h4>
+                <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wider mt-0.5">User Score</p>
+              </div>
+            </div>
+
           </div>
         </section>
 
