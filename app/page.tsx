@@ -258,21 +258,14 @@ export default function LandingPage() {
               >
                 <PlayCircle className="w-5 h-5 text-blue-600" /> Watch Demo
               </Link>
-            </div>
-
-            {/* Bottom 3 Mockup Panels (reveal from bottom using MaskedCard) */}
+            </div>            {/* Bottom 3 Mockup Panels (reveal from bottom using single black gradient) */}
             <div className="hidden lg:flex items-end justify-center w-full max-w-5xl mx-auto mt-6 gap-4">
               {/* Left Panel */}
-              <MaskedCard
-                bgImage="/saas_dashboard_mockup.png"
-                position={positions[0]}
-                imageWidth={imageWidth}
-                focalX={isMobile ? 0.65 : 0.8}
-                cardRef={addToRefs}
-                className="flex-1 border border-slate-800 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-800"
+              <div
+                className="flex-1 bg-gradient-to-b from-slate-950 to-zinc-950 border border-slate-800/80 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-800"
               >
-                {/* Dark overlay to ensure contrast */}
-                <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
+                {/* Subtle dark glow orb */}
+                <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-500/5 rounded-full blur-xl" />
                 <div className="text-left flex flex-col justify-between h-full relative z-10">
                   <div>
                     <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">AI Assessment</span>
@@ -298,19 +291,13 @@ export default function LandingPage() {
                     </div>
                   </div>
                 </div>
-              </MaskedCard>
+              </div>
 
               {/* Center Panel (tallest) */}
-              <MaskedCard
-                bgImage="/saas_dashboard_mockup.png"
-                position={positions[1]}
-                imageWidth={imageWidth}
-                focalX={isMobile ? 0.65 : 0.8}
-                cardRef={addToRefs}
-                className="flex-[1.2] border border-slate-850 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600"
+              <div
+                className="flex-[1.2] bg-gradient-to-b from-slate-950 to-zinc-950 border border-slate-850 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600"
               >
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm z-0" />
+                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
                 <div className="flex flex-col h-full justify-between relative z-10">
                   <div className="flex justify-between items-center">
                     <span className="text-[10px] font-extrabold text-blue-400 uppercase tracking-widest">Core AI Agentforce</span>
@@ -365,19 +352,13 @@ export default function LandingPage() {
                     </button>
                   </div>
                 </div>
-              </MaskedCard>
+              </div>
 
               {/* Right Panel */}
-              <MaskedCard
-                bgImage="/saas_dashboard_mockup.png"
-                position={positions[2]}
-                imageWidth={imageWidth}
-                focalX={isMobile ? 0.65 : 0.8}
-                cardRef={addToRefs}
-                className="flex-1 border border-slate-800 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-900"
+              <div
+                className="flex-1 bg-gradient-to-b from-slate-950 to-zinc-950 border border-slate-800 rounded-t-3xl p-6 h-48 relative overflow-hidden shadow-sm animate-photo-reveal delay-900"
               >
-                {/* Dark overlay */}
-                <div className="absolute inset-0 bg-slate-950/70 backdrop-blur-sm z-0" />
+                <div className="absolute top-0 right-0 w-24 h-24 bg-blue-500/5 rounded-full blur-xl" />
                 <div className="text-left flex flex-col justify-between h-full relative z-10">
                   <div className="flex justify-between items-start gap-4">
                     <div className="flex-1">
@@ -387,11 +368,11 @@ export default function LandingPage() {
                     </div>
 
                     {/* Small product card mockup on the right side of Panel 3 */}
-                    <div className="w-20 h-16 rounded-xl border border-slate-800/80 bg-slate-950/80 p-1.5 flex flex-col justify-between shrink-0">
+                    <div className="w-20 h-16 rounded-xl border border-slate-800/80 bg-slate-900/40 p-1.5 flex flex-col justify-between shrink-0">
                       <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center text-[6px] text-emerald-400">✓</div>
                       <div className="space-y-1">
-                        <div className="h-1 bg-slate-800 rounded-full w-full" />
-                        <div className="h-1 bg-slate-800 rounded-full w-2/3" />
+                        <div className="h-1 bg-slate-850 rounded-full w-full" />
+                        <div className="h-1 bg-slate-850 rounded-full w-2/3" />
                       </div>
                     </div>
                   </div>
@@ -402,7 +383,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                 </div>
-              </MaskedCard>
+              </div>
             </div>
 
             {/* Tablet/Mobile stats row (below md) */}
