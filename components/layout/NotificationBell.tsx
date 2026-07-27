@@ -53,7 +53,7 @@ export default function NotificationBell({ businessId }: { businessId: string })
           id: `leave-${l.id}`,
           type: 'leave',
           title: 'Leave Request Pending',
-          body: `${l.employees?.full_name || 'Employee'} ne ${l.days} din ki ${l.leave_type_name || 'leave'} maangi hai`,
+          body: `${l.employees?.full_name || 'Employee'} requested ${l.days} days of ${l.leave_type_name || 'leave'}`,
           read: false,
           created_at: l.created_at,
           action_href: '/leaves'
@@ -75,7 +75,7 @@ export default function NotificationBell({ businessId }: { businessId: string })
           id: `inv-${inv.id}`,
           type: 'invoice',
           title: 'Invoice Overdue',
-          body: `${inv.customer_name} — ₹${inv.total_amount?.toLocaleString('en-IN')} (${days} din overdue)`,
+          body: `${inv.customer_name} — ₹${inv.total_amount?.toLocaleString('en-IN')} (${days} days overdue)`,
           read: false,
           created_at: inv.created_at,
           action_href: '/invoices'
@@ -95,7 +95,7 @@ export default function NotificationBell({ businessId }: { businessId: string })
             id: `stock-${p.id}`,
             type: 'stock',
             title: 'Low Stock Alert',
-            body: `${p.name} — sirf ${p.current_stock} units bache hain`,
+            body: `${p.name} — only ${p.current_stock} units remaining`,
             read: false,
             created_at: p.updated_at || new Date().toISOString(),
             action_href: '/inventory'
@@ -164,8 +164,8 @@ export default function NotificationBell({ businessId }: { businessId: string })
             {notifications.length === 0 ? (
               <div className="px-4 py-8 text-center flex flex-col items-center justify-center">
                 <span className="text-2xl mb-2">🎉</span>
-                <p className="text-sm font-bold text-slate-700">Sab theek hai!</p>
-                <p className="text-xs text-slate-400 mt-1">Koi pending action nahi.</p>
+                <p className="text-sm font-bold text-slate-700">All caught up!</p>
+                <p className="text-xs text-slate-400 mt-1">No pending actions.</p>
               </div>
             ) : (
               notifications.map(n => {

@@ -89,7 +89,7 @@ export default function SettingsPage() {
         }
       } catch (err) {
         console.error("Error loading settings:", err);
-        toast.error("Settings load nahi ho sake.");
+        toast.error("Failed to load settings.");
       } finally {
         setLoading(false);
       }
@@ -126,10 +126,10 @@ export default function SettingsPage() {
         if (bizError) throw bizError;
       }
 
-      toast.success("Settings successfully save ho gayi hain!");
+      toast.success("Settings saved successfully!");
     } catch (err: any) {
       console.error("Error saving settings:", err);
-      toast.error(err.message || "Save karne mein error aayi.");
+      toast.error(err.message || "An error occurred while saving.");
     } finally {
       setSaving(false);
     }
@@ -157,7 +157,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <CardTitle className="text-lg font-bold">Personal Profile</CardTitle>
-                <CardDescription>Aapka naam aur credentials settings.</CardDescription>
+                <CardDescription>Manage your name and credential settings.</CardDescription>
               </div>
             </div>
           </CardHeader>
@@ -262,7 +262,7 @@ export default function SettingsPage() {
               </div>
               <div>
                 <CardTitle className="text-lg font-bold">Subscription Plan</CardTitle>
-                <CardDescription>Aapka current billing details.</CardDescription>
+                <CardDescription>Your current subscription and billing details.</CardDescription>
               </div>
             </div>
           </CardHeader>

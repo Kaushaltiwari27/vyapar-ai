@@ -133,7 +133,7 @@ export default function CustomersPage() {
         <EmptyState 
           icon={Users}
           title="No Customers Yet"
-          description="Aapke business ke liye koi customer add nahi kiya gaya hai. Abhi add karein aur records track karna shuru karein."
+          description="You haven't added any customers to your business yet. Add a customer now to start tracking invoices and deals."
           actionLabel="Add Customer"
           onAction={() => { setSelectedCustomer(null); setIsFormOpen(true); }}
         />

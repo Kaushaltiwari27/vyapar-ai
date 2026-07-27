@@ -153,7 +153,7 @@ export default function PurchaseOrdersPage() {
                 onClick={() => setFilterStatus(status)}
                 className={`capitalize ${filterStatus === status ? 'bg-slate-800 text-white' : 'bg-white'}`}
               >
-                {status === 'all' ? 'Sab' : status}
+                {status === 'all' ? 'All' : status}
               </Button>
             ))}
           </div>

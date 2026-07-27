@@ -20,7 +20,7 @@ function LoginForm() {
     const supabase = createClient()
     const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
     if (authError) {
-      setError('Email ya password galat hai. Dobara try karo.')
+      setError('Incorrect email or password. Please try again.')
       setLoading(false)
       return
     }
@@ -36,27 +36,27 @@ function LoginForm() {
       <div className="w-full max-w-md bg-white rounded-[24px] p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border border-gray-100">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 tracking-tight">VyaparAI</h1>
-          <p className="text-sm text-gray-500 mt-2">Wapas aaye! Login karo</p>
+          <p className="text-sm text-gray-500 mt-2">Welcome back! Please login to your account.</p>
         </div>
         {error && <div className="mb-4 p-3 bg-red-50 text-red-600 text-sm rounded-lg border border-red-100">{error}</div>}
         <form onSubmit={handleLogin} className="space-y-5">
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">Email address</label>
-            <input required type="email" style={inputStyle} value={email} onChange={e => setEmail(e.target.value)} placeholder="aapka@email.com" />
+            <input required type="email" style={inputStyle} value={email} onChange={e => setEmail(e.target.value)} placeholder="name@example.com" />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-700 mb-1.5">Password</label>
-            <input required type="password" style={inputStyle} value={password} onChange={e => setPassword(e.target.value)} placeholder="Aapka password" />
+            <input required type="password" style={inputStyle} value={password} onChange={e => setPassword(e.target.value)} placeholder="Enter your password" />
           </div>
           <div className="flex justify-end">
-            <Link href="/forgot-password" className="text-xs font-medium text-[#4F46E5] hover:underline">Password bhool gaye?</Link>
+            <Link href="/forgot-password" className="text-xs font-medium text-[#4F46E5] hover:underline">Forgot Password?</Link>
           </div>
           <button type="submit" disabled={loading} style={{ width: '100%', padding: '12px', borderRadius: 10, background: '#4F46E5', color: 'white', fontWeight: 500, fontSize: 14, marginTop: 10, opacity: loading ? 0.7 : 1 }}>
-            {loading ? 'Login ho raha hai...' : 'Login karo →'}
+            {loading ? 'Logging in...' : 'Login →'}
           </button>
         </form>
         
-        <p className="mt-8 text-center text-sm text-gray-500">Naya account? <Link href="/signup" className="text-[#4F46E5] font-medium hover:underline">Free mein signup karo</Link></p>
+        <p className="mt-8 text-center text-sm text-gray-500">New here? <Link href="/signup" className="text-[#4F46E5] font-medium hover:underline">Create a free account</Link></p>
       </div>
     </div>
   )

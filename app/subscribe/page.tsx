@@ -89,9 +89,9 @@ export default function SubscribePage() {
           <div className="w-16 h-16 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center mx-auto mb-6">
             <ShieldAlert className="w-8 h-8" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Aapka free trial khatam ho gaya</h1>
+          <h1 className="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Your free trial has expired</h1>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Continue karne ke liye ek plan choose karein — aapka poora data safe hai aur wahi se shuru hoga jahan aapne chhoda tha.
+            Choose a plan to continue — all your data remains secure and you will start right where you left off.
           </p>
         </div>
 
@@ -121,7 +121,7 @@ export default function SubscribePage() {
                   opacity: loading === plan.id ? 0.7 : 1
                 }}
               >
-                {loading === plan.id ? 'Processing...' : `${plan.display}/mo se shuru karo`}
+                {loading === plan.id ? 'Processing...' : `Subscribe for ${plan.display}/mo`}
               </button>
             </div>
           ))}
@@ -129,7 +129,7 @@ export default function SubscribePage() {
 
         <div className="text-center text-sm font-medium text-slate-500 flex items-center justify-center gap-2">
           <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-          Aapka data safe hai — customers, deals, invoices sab waisa hi rahega
+          Your data is secure — customers, deals, invoices, and settings will remain fully intact.
         </div>
       </div>
     </div>

@@ -155,7 +155,7 @@ export default function AttendancePage() {
         <EmptyState 
           icon={Calendar}
           title="No Active Employees"
-          description="Attendance mark karne ke liye active employees ka hona zaroori hai. Pehle employee directory mein members add karein."
+          description="To mark attendance, you must have active employees. Please add members to the employee directory first."
           actionLabel="Add Employees"
           onAction={() => router.push('/employees')}
         />

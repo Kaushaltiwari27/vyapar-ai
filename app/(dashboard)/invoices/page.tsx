@@ -101,7 +101,7 @@ export default function InvoicesPage() {
       {/* Filter Tabs */}
       <div className="flex space-x-2 border-b border-slate-200 pb-px">
         {[
-          { id: 'all', label: 'Sab' },
+          { id: 'all', label: 'All' },
           { id: 'draft', label: 'Draft' },
           { id: 'sent', label: 'Sent' },
           { id: 'paid', label: 'Paid' },
@@ -128,7 +128,7 @@ export default function InvoicesPage() {
         <EmptyState 
           icon={FileText}
           title="No Invoices Generated"
-          description="Aapne abhi tak koi invoice create nahi kiya hai. Apne customers ke liye tax invoice generate karein."
+          description="You haven't created any invoices yet. Generate professional tax invoices for your customers now."
           actionLabel="Create Invoice"
           onAction={() => { router.push('/invoices/new') }}
         />

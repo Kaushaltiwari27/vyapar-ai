@@ -87,7 +87,7 @@ export default function DealsPage() {
           <EmptyState 
             icon={Briefcase}
             title="No Deals in Pipeline"
-            description="Aapki sales pipeline abhi khali hai. Naya deal add karein aur use leads se closed won tak track karein."
+            description="Your sales pipeline is empty. Add a new deal to track leads through to closed-won status."
             actionLabel="Add Deal"
             onAction={() => { setSelectedDeal(null); setIsFormOpen(true); }}
           />

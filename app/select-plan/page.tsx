@@ -56,9 +56,9 @@ function SelectPlanContent() {
       <main className="flex-1 pt-12 pb-24">
         <div className="max-w-7xl mx-auto px-6 text-center">
           
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Apna plan chuniye</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4">Choose Your Plan</h1>
           <p className="text-lg text-slate-600 mb-12 max-w-2xl mx-auto">
-            14 din bilkul free — koi payment nahi. Baad mein upgrade ya cancel karo.
+            14 days free trial — no payment required. Upgrade or cancel anytime.
           </p>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left items-stretch mb-12">
@@ -108,7 +108,7 @@ function SelectPlanContent() {
               className="w-full py-6 rounded-xl text-base font-bold text-white transition-all duration-300 hover:scale-[1.02] shadow-lg shadow-blue-500/20"
               style={{ background: 'var(--grad-button)' }}
             >
-              {loading ? 'Shuru ho raha hai...' : '14 din free mein shuru karo →'}
+              {loading ? 'Starting Trial...' : 'Start 14-Day Free Trial →'}
             </Button>
             <p className="mt-4 text-sm text-slate-500 font-medium">No credit card required • Cancel anytime</p>
           </div>

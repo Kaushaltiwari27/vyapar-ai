@@ -226,7 +226,7 @@ export default function EmployeesPage() {
           <EmptyState 
             icon={Users}
             title="No Employees Added"
-            description="Aapki team mein abhi tak koi employee add nahi hua hai. Naya employee add karke attendance aur leaves manage karein."
+            description="You haven't added any employees to your team yet. Add your first employee to start managing attendance and leaves."
             actionLabel="Add Employee"
             onAction={handleAddNew}
           />

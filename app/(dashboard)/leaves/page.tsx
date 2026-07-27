@@ -129,7 +129,7 @@ export default function LeavesPage() {
         <EmptyState 
           icon={Calendar}
           title="No Leave Requests Yet"
-          description="Aapki team se abhi tak koi leave request submit nahi hui hai. Employee leave requests yahan manage karein."
+          description="No leave requests have been submitted by your team yet. Manage employee leave requests and balances here."
           actionLabel="Add Manual Leave"
           onAction={() => setNewLeaveModalOpen(true)}
         />

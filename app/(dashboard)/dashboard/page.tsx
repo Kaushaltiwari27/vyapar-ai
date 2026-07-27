@@ -288,16 +288,16 @@ export default function DashboardPage() {
               <AlertTriangle className={`w-6 h-6 ${daysLeft <= 3 ? 'text-rose-600' : 'text-amber-600'}`} />
               <div>
                 <h3 className="font-bold">
-                  {daysLeft <= 3 ? 'Urgent: ' : ''}Aapka free trial {daysLeft} din mein khatam hoga
+                  {daysLeft <= 3 ? 'Urgent: ' : ''}Your free trial expires in {daysLeft} {daysLeft === 1 ? 'day' : 'days'}
                 </h3>
                 <p className={`text-sm mt-0.5 ${daysLeft <= 3 ? 'text-rose-600' : 'text-amber-700'}`}>
-                  Ab tak ka poora data safe rahega jab bhi aap upgrade karenge.
+                  All your data is secure and will be waiting for you when you upgrade.
                 </p>
               </div>
             </div>
             <Link href="/subscribe">
               <Button className={daysLeft <= 3 ? 'bg-rose-600 hover:bg-rose-700 text-white font-bold' : 'bg-amber-500 hover:bg-amber-600 text-white font-bold'}>
-                Plan kharido
+                Upgrade Plan
               </Button>
             </Link>
           </motion.div>

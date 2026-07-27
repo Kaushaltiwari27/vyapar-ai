@@ -222,7 +222,7 @@ export default function InventoryPage() {
                   onClick={() => setFilterType('all')}
                   className={filterType === 'all' ? 'bg-slate-800 text-white' : ''}
                 >
-                  Sab
+                  All
                 </Button>
                 <Button 
                   variant={filterType === 'low' ? 'default' : 'outline'} 
@@ -250,7 +250,7 @@ export default function InventoryPage() {
                 <EmptyState 
                   icon={Package}
                   title="No Products in Inventory"
-                  description="Aapke inventory mein abhi koi product nahi hai. Pehla product add karein aur stock track karna shuru karein."
+                  description="Your inventory is empty. Add your first product to start tracking your stock levels and sales."
                   actionLabel="New Product"
                   onAction={() => setIsProductSheetOpen(true)}
                 />
