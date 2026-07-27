@@ -282,11 +282,11 @@ export default function LandingPage() {
                   {/* Avatar stack */}
                   <div className="flex items-center -space-x-2 mt-4">
                     {["A", "B", "C", "D"].map((n, i) => (
-                      <div key={i} className="w-7 h-7 rounded-full bg-slate-850 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
+                      <div key={i} className="w-7 h-7 rounded-full bg-slate-800 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
                         {n}
                       </div>
                     ))}
-                    <div className="w-7 h-7 rounded-full bg-indigo-650 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
+                    <div className="w-7 h-7 rounded-full bg-indigo-600 text-white text-[10px] font-extrabold flex items-center justify-center border-2 border-slate-700">
                       +
                     </div>
                   </div>
@@ -295,7 +295,7 @@ export default function LandingPage() {
 
               {/* Center Panel (tallest) */}
               <div
-                className="flex-[1.2] bg-gradient-to-b from-slate-950 to-zinc-950 border border-slate-850 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600"
+                className="flex-[1.2] bg-gradient-to-b from-slate-950 to-zinc-950 border border-slate-800 rounded-t-3xl p-6 h-56 relative overflow-hidden shadow-xl text-left animate-photo-reveal delay-600"
               >
                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl" />
                 <div className="flex flex-col h-full justify-between relative z-10">
@@ -364,15 +364,20 @@ export default function LandingPage() {
                     <div className="flex-1">
                       <span className="text-[10px] font-bold text-blue-400 uppercase tracking-widest">SaaS Validation</span>
                       <h3 className="text-2xl font-black text-white mt-1">14K+</h3>
-                      <p className="text-[10px] text-slate-350 font-medium leading-tight mt-1">Active Indian companies trust VyaparAI to auto-pilot operations.</p>
+                      <p className="text-[11px] text-slate-300 font-medium leading-normal mt-1.5">Active Indian companies trust VyaparAI to auto-pilot operations.</p>
                     </div>
 
                     {/* Small product card mockup on the right side of Panel 3 */}
-                    <div className="w-20 h-16 rounded-xl border border-slate-800/80 bg-slate-900/40 p-1.5 flex flex-col justify-between shrink-0">
-                      <div className="w-3 h-3 rounded-full bg-emerald-500/20 border border-emerald-500 flex items-center justify-center text-[6px] text-emerald-400">✓</div>
-                      <div className="space-y-1">
-                        <div className="h-1 bg-slate-850 rounded-full w-full" />
-                        <div className="h-1 bg-slate-850 rounded-full w-2/3" />
+                    <div className="w-20 h-16 rounded-xl border border-emerald-500/30 bg-emerald-500/5 p-2 flex flex-col justify-between shrink-0 shadow-[0_0_15px_rgba(16,185,129,0.1)]">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[7px] text-emerald-400 font-extrabold uppercase tracking-wider">Active</span>
+                        <div className="w-3.5 h-3.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-[7px] text-emerald-400 font-black">✓</div>
+                      </div>
+                      <div className="flex items-end gap-1 h-6 pt-1">
+                        <div className="bg-emerald-500/30 rounded-[1px] w-full h-[40%]" />
+                        <div className="bg-emerald-500/40 rounded-[1px] w-full h-[65%]" />
+                        <div className="bg-emerald-500/60 rounded-[1px] w-full h-[80%]" />
+                        <div className="bg-emerald-500 rounded-[1px] w-full h-full animate-pulse" />
                       </div>
                     </div>
                   </div>
