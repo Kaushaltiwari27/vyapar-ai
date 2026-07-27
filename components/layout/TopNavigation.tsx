@@ -1,14 +1,21 @@
 'use client'
-
+ 
 import { useEffect, useState } from 'react'
-import { Bell, Menu } from 'lucide-react'
+import { Menu } from 'lucide-react'
 import { createClient } from "@/lib/client"
 import Image from "next/image"
+import NotificationBell from './NotificationBell'
+import ProfileDropdown from './ProfileDropdown'
 
 export function TopNavigation() {
   const [userInitials, setUserInitials] = useState("V")
   const supabase = createClient()
   const [pageTitle, setPageTitle] = useState('Dashboard')
+  
+  const [userName, setUserName] = useState("")
+  const [businessName, setBusinessName] = useState("")
+  const [plan, setPlan] = useState("trial")
+  const [businessId, setBusinessId] = useState("")
 
   // Get dynamic page title based on URL (simple mapping)
   const getPageTitle = () => {
@@ -39,18 +46,30 @@ export function TopNavigation() {
     async function loadUser() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
+      
       const { data } = await supabase
         .from('profiles')
-        .select('full_name')
+        .select('full_name, plan, business_id, businesses(name)')
         .eq('id', user.id)
         .single()
       
-      if (data?.full_name) {
-        const names = data.full_name.split(' ')
-        const initials = names.length > 1 
-          ? `${names[0][0]}${names[names.length-1][0]}` 
-          : data.full_name.substring(0, 2)
-        setUserInitials(initials.toUpperCase())
+      if (data) {
+        setUserName(data.full_name || "User")
+        setPlan(data.plan || "trial")
+        setBusinessId(data.business_id || "")
+        
+        const bus = data.businesses as any
+        if (bus?.name) {
+          setBusinessName(bus.name)
+        }
+
+        if (data.full_name) {
+          const names = data.full_name.split(' ')
+          const initials = names.length > 1 
+            ? `${names[0][0]}${names[names.length-1][0]}` 
+            : data.full_name.substring(0, 2)
+          setUserInitials(initials.toUpperCase())
+        }
       }
     }
     loadUser()
@@ -81,17 +100,10 @@ export function TopNavigation() {
       
       <div className="flex items-center gap-4">
         {/* Notification bell */}
-        <button className="relative p-2.5 rounded-full hover:bg-[rgba(0,0,0,0.04)] text-slate-600 transition-colors">
-          <Bell className="w-5 h-5" />
-          <span className="absolute top-2.5 right-2.5 w-2 h-2 bg-rose-500 rounded-full border-2 border-white"></span>
-        </button>
-        {/* Avatar */}
-        <div 
-          className="w-10 h-10 rounded-full text-white flex items-center justify-center font-bold shadow-[0_4px_10px_rgba(37,99,235,0.3)] cursor-pointer hover:scale-105 transition-transform"
-          style={{ background: 'var(--grad-button)' }}
-        >
-          {userInitials}
-        </div>
+        <NotificationBell businessId={businessId} />
+
+        {/* Profile Dropdown */}
+        <ProfileDropdown userName={userName} businessName={businessName} plan={plan} />
       </div>
     </header>
   )
