@@ -184,16 +184,16 @@ export default function NewQuotationPage() {
             <div className="grid grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label>Customer *</Label>
-                <Select value={customerId} onValueChange={(val) => setCustomerId(val || "")}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select customer" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {customers.map(c => (
-                      <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <select 
+                  value={customerId} 
+                  onChange={(e) => setCustomerId(e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  <option value="">Select customer</option>
+                  {customers.map(c => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
               </div>
               <div className="space-y-2">
                 <Label>Quotation Number *</Label>
@@ -213,11 +213,16 @@ export default function NewQuotationPage() {
             </div>
           </div>
 
-          {/* Line Items */}
           <div className="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-            <h3 className="text-lg font-bold text-slate-900 mb-4">Line Items</h3>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-slate-900">Line Items</h3>
+              <Link href="/inventory" target="_blank" className="text-xs font-semibold text-indigo-600 hover:underline">
+                + Add New Product
+              </Link>
+            </div>
             <div className="space-y-4">
-              <div className="grid grid-cols-12 gap-3 text-sm font-semibold text-slate-600 mb-2">
+              {/* Desktop Header (hidden on mobile) */}
+              <div className="hidden md:grid grid-cols-12 gap-3 text-sm font-semibold text-slate-600 mb-2">
                 <div className="col-span-4">Description</div>
                 <div className="col-span-2">HSN/SAC</div>
                 <div className="col-span-1">Qty</div>
@@ -227,36 +232,81 @@ export default function NewQuotationPage() {
               </div>
 
               {items.map((item, index) => (
-                <div key={index} className="grid grid-cols-12 gap-3 items-start">
-                  <div className="col-span-4 space-y-2">
-                    <Select value={item.product_id || ""} onValueChange={(val) => handleItemChange(index, 'product_id', val as string)}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select Product (Optional)" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {products.map(p => (
-                          <SelectItem key={p.id} value={p.id}>
-                            {p.name} <span className="text-slate-400 text-xs ml-1">({p.current_stock} {p.unit} avail)</span>
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input placeholder="Item description" value={item.description} onChange={e => handleItemChange(index, 'description', e.target.value)} />
+                <div 
+                  key={index} 
+                  className="flex flex-col md:grid md:grid-cols-12 gap-3 items-start p-4 md:p-0 bg-slate-50 md:bg-transparent rounded-xl border border-slate-200 md:border-0 relative mb-4 md:mb-0"
+                >
+                  {/* Product/Description dropdown & input */}
+                  <div className="w-full md:col-span-4 space-y-2">
+                    <Label className="block md:hidden text-xs text-slate-500 font-bold uppercase">Product</Label>
+                    <select 
+                      value={item.product_id || ""} 
+                      onChange={(e) => handleItemChange(index, 'product_id', e.target.value)}
+                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <option value="">Select Product (Optional)</option>
+                      {products.map(p => (
+                        <option key={p.id} value={p.id}>
+                          {p.name} ({p.current_stock} {p.unit} avail)
+                        </option>
+                      ))}
+                    </select>
+                    <Input 
+                      placeholder="Item description" 
+                      value={item.description} 
+                      onChange={e => handleItemChange(index, 'description', e.target.value)} 
+                    />
                   </div>
-                  <div className="col-span-2">
-                    <Input placeholder="HSN" value={item.hsn || ""} onChange={e => handleItemChange(index, 'hsn', e.target.value)} />
+
+                  {/* HSN/SAC */}
+                  <div className="w-full md:col-span-2">
+                    <Label className="block md:hidden text-xs text-slate-500 font-bold uppercase">HSN/SAC</Label>
+                    <Input 
+                      placeholder="HSN" 
+                      value={item.hsn || ""} 
+                      onChange={e => handleItemChange(index, 'hsn', e.target.value)} 
+                    />
                   </div>
-                  <div className="col-span-1">
-                    <Input type="number" min="1" value={item.quantity} onChange={e => handleItemChange(index, 'quantity', e.target.value)} />
+
+                  {/* Quantity */}
+                  <div className="w-full md:col-span-1">
+                    <Label className="block md:hidden text-xs text-slate-500 font-bold uppercase">Qty</Label>
+                    <Input 
+                      type="number" 
+                      min="1" 
+                      value={item.quantity} 
+                      onChange={e => handleItemChange(index, 'quantity', e.target.value)} 
+                    />
                   </div>
-                  <div className="col-span-2">
-                    <Input type="number" min="0" step="any" value={item.rate} onChange={e => handleItemChange(index, 'rate', e.target.value)} />
+
+                  {/* Rate */}
+                  <div className="w-full md:col-span-2">
+                    <Label className="block md:hidden text-xs text-slate-500 font-bold uppercase">Rate (₹)</Label>
+                    <Input 
+                      type="number" 
+                      min="0" 
+                      step="any"
+                      value={item.rate} 
+                      onChange={e => handleItemChange(index, 'rate', e.target.value)} 
+                    />
                   </div>
-                  <div className="col-span-2 text-right font-medium text-slate-900 py-2">
-                    {formatCurrency(item.amount)}
+
+                  {/* Amount */}
+                  <div className="w-full md:col-span-2 flex justify-between md:justify-end items-center mt-2 md:mt-0">
+                    <span className="block md:hidden text-xs text-slate-500 font-bold uppercase">Amount</span>
+                    <span className="font-semibold text-slate-900">{formatCurrency(item.amount)}</span>
                   </div>
-                  <div className="col-span-1 flex justify-end">
-                    <Button variant="ghost" size="icon" className="text-slate-400 hover:text-red-600" onClick={() => removeItem(index)} disabled={items.length === 1}>
+
+                  {/* Delete Button */}
+                  <div className="absolute top-2 right-2 md:relative md:top-0 md:right-0 md:col-span-1 md:pt-1">
+                    <Button 
+                      type="button" 
+                      variant="ghost" 
+                      size="icon" 
+                      className="text-rose-500 hover:text-rose-600 hover:bg-rose-50"
+                      onClick={() => removeItem(index)}
+                      disabled={items.length === 1}
+                    >
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>

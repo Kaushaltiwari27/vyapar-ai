@@ -34,6 +34,10 @@ export function VendorForm({ initialData, onSave, onCancel }: VendorFormProps) {
       toast.error("Vendor name is required");
       return;
     }
+    if (!formData.phone) {
+      toast.error("Phone number is required");
+      return;
+    }
     setLoading(true);
     try {
       await onSave(formData);
@@ -69,11 +73,12 @@ export function VendorForm({ initialData, onSave, onCancel }: VendorFormProps) {
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone</Label>
+            <Label htmlFor="phone">Phone *</Label>
             <Input 
               id="phone" 
               value={formData.phone} 
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })} 
+              required
               placeholder="e.g. 9876543210"
             />
           </div>
