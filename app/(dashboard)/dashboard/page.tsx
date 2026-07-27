@@ -374,7 +374,7 @@ export default function DashboardPage() {
           </div>
           <div className="lg:col-span-1 flex flex-col gap-6">
             {/* Overdue Invoices Table moved to side of chart */}
-            <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white flex-1 flex flex-col">
+            <Card className="border border-slate-200 shadow-[0_2px_2px_rgba(0,0,0,0.05)] rounded-sm bg-white lg:flex-1 h-auto flex flex-col">
               <CardHeader className="flex flex-row items-center justify-between bg-slate-50 p-4 border-b border-slate-200">
                 <CardTitle className="text-[15px] font-bold text-slate-900 flex items-center gap-2">
                   <AlertTriangle className="w-4 h-4 text-[#c23934]" /> Overdue Invoices
@@ -525,7 +525,7 @@ export default function DashboardPage() {
         {/* Alerts Section (Moved to side of chart) */}
         <div className="lg:col-span-1 flex flex-col gap-6">
           {/* Payroll Alert */}
-          <Card className={`border shadow-sm rounded-sm flex-1 flex flex-col ${payrollStatus?.status === 'processed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/50'}`}>
+          <Card className={`border shadow-sm rounded-sm lg:flex-1 h-auto flex flex-col ${payrollStatus?.status === 'processed' ? 'border-emerald-200 bg-emerald-50/30' : 'border-amber-200 bg-amber-50/50'}`}>
             <CardContent className="p-6 flex-1 flex flex-col justify-between items-start">
               <div className="mb-4">
                 <h3 className={`font-bold text-lg mb-1 flex items-center gap-2 ${payrollStatus?.status === 'processed' ? 'text-emerald-800' : 'text-amber-800'}`}>
@@ -539,11 +539,11 @@ export default function DashboardPage() {
                 </p>
               </div>
               {!payrollStatus || payrollStatus.status !== 'processed' ? (
-                <Link href="/payroll/run">
+                <Link href="/payroll/run" className="w-full">
                   <Button className="bg-amber-500 hover:bg-amber-600 text-white shadow-sm font-bold w-full">Run Now</Button>
                 </Link>
               ) : (
-                <Link href="/payroll">
+                <Link href="/payroll" className="w-full">
                   <Button variant="outline" className="border-emerald-300 text-emerald-700 hover:bg-emerald-100 font-bold w-full">View Payroll</Button>
                 </Link>
               )}
@@ -552,7 +552,7 @@ export default function DashboardPage() {
 
           {/* Compliance Alert */}
           {upcomingDeadlines.length > 0 ? (
-            <Card className="border border-rose-200 bg-rose-50/50 shadow-sm rounded-sm flex-1 flex flex-col">
+            <Card className="border border-rose-200 bg-rose-50/50 shadow-sm rounded-sm lg:flex-1 h-auto flex flex-col">
               <CardContent className="p-6 flex-1 flex flex-col justify-between items-start">
                 <div className="mb-4">
                   <h3 className="font-bold text-lg text-rose-800 mb-1 flex items-center gap-2">
@@ -562,13 +562,13 @@ export default function DashboardPage() {
                     {upcomingDeadlines[0].title} is due in {Math.ceil((new Date(upcomingDeadlines[0].due_date).getTime() - Date.now()) / 86400000)} days.
                   </p>
                 </div>
-                <Link href="/compliance">
+                <Link href="/compliance" className="w-full">
                   <Button className="bg-rose-600 hover:bg-rose-700 text-white shadow-sm font-bold w-full">Review Now</Button>
                 </Link>
               </CardContent>
             </Card>
           ) : (
-            <Card className="border border-slate-200 bg-slate-50/50 shadow-sm rounded-sm flex-1 flex items-center justify-center p-6">
+            <Card className="border border-slate-200 bg-slate-50/50 shadow-sm rounded-sm lg:flex-1 h-auto flex items-center justify-center p-6">
               <p className="text-slate-500 font-medium flex items-center gap-2 text-sm">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500"/> No urgent compliance deadlines.
               </p>
