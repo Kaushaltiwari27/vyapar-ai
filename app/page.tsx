@@ -44,9 +44,9 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
 
   return (
     <div 
-      className={`fixed inset-0 z-[100] bg-white flex items-end justify-start p-6 md:p-10 transition-opacity duration-700 ${exiting ? 'opacity-0' : 'opacity-100'}`}
+      className={`fixed inset-0 z-[100] bg-slate-950 flex items-end justify-start p-6 md:p-10 transition-all duration-700 ease-[cubic-bezier(0.85,0,0.15,1)] ${exiting ? '-translate-y-full' : 'translate-y-0'}`}
     >
-      <div className="text-7xl md:text-9xl font-bold tabular-nums text-black leading-none select-none">
+      <div className="text-7xl md:text-9xl font-bold tabular-nums text-white leading-none select-none">
         {counter}
       </div>
     </div>
@@ -87,12 +87,40 @@ export default function LandingPage() {
   const [redirectPath, setRedirectPath] = useState('/dashboard');
 
   const [activeCarousel, setActiveCarousel] = useState(0)
+  const [mousePos, setMousePos] = useState({ x: -100, y: -100 })
+  const [hovering, setHovering] = useState(false)
 
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveCarousel((prev) => (prev + 1) % 4)
     }, 3500)
     return () => clearInterval(timer)
+  }, [])
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePos({ x: e.clientX, y: e.clientY })
+    }
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement
+      if (
+        target.tagName === 'BUTTON' || 
+        target.tagName === 'A' || 
+        target.closest('button') || 
+        target.closest('a') || 
+        target.classList.contains('cursor-pointer')
+      ) {
+        setHovering(true)
+      } else {
+        setHovering(false)
+      }
+    }
+    window.addEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mouseover', handleMouseOver)
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      window.removeEventListener('mouseover', handleMouseOver)
+    }
   }, [])
 
   const router = useRouter();
@@ -134,6 +162,18 @@ export default function LandingPage() {
       <AnimatePresence>
         {loading && <Preloader onComplete={() => setLoading(false)} />}
       </AnimatePresence>
+
+      {/* Custom Cursor Effect */}
+      <motion.div 
+        className="hidden md:block fixed w-8 h-8 rounded-full border border-indigo-500/50 pointer-events-none z-50 mix-blend-difference"
+        animate={{
+          x: mousePos.x - 16,
+          y: mousePos.y - 16,
+          scale: hovering ? 1.8 : 1,
+          backgroundColor: hovering ? 'rgba(79, 70, 229, 0.15)' : 'rgba(0,0,0,0)'
+        }}
+        transition={{ type: 'spring', stiffness: 500, damping: 28, mass: 0.5 }}
+      />
 
       <motion.div 
         initial={{ opacity: 0 }}
@@ -248,14 +288,17 @@ export default function LandingPage() {
             </div>
 
             {/* Staggered Heading */}
-            <h1 className="font-serif-display text-[#1a3d1a] text-[clamp(40px,6.8vw,88px)] leading-[0.95] tracking-tight mb-8">
+            <h1 className="font-serif-display text-[#1a3d1a] text-[clamp(40px,6.8vw,88px)] leading-[0.95] tracking-tight mb-8 flex flex-wrap justify-center py-2 select-none">
               {["India's", "First", "AI", "Business", "Brain"].map((word, idx) => (
-                <span 
-                  key={idx} 
-                  className="inline-block animate-word-pop" 
-                  style={{ animationDelay: `${200 + idx * 100}ms`, marginRight: '0.22em' }}
-                >
-                  {word}
+                <span key={idx} className="inline-block overflow-hidden mr-[0.25em]">
+                  <motion.span 
+                    initial={{ y: "100%" }}
+                    animate={{ y: 0 }}
+                    transition={{ duration: 0.8, delay: 0.15 + idx * 0.08, ease: [0.16, 1, 0.3, 1] }}
+                    className="inline-block"
+                  >
+                    {word}
+                  </motion.span>
                 </span>
               ))}
             </h1>
@@ -496,7 +539,14 @@ export default function LandingPage() {
         </section>
 
         {/* Customer Success / Trust */}
-        <section id="customers" className="py-24 bg-slate-900 text-white relative overflow-hidden">
+        <motion.section 
+          id="customers" 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="py-24 bg-slate-900 text-white relative overflow-hidden"
+        >
           <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-blue-900/50 to-transparent pointer-events-none" />
           <div className="max-w-7xl mx-auto px-6 relative z-10">
             <div className="text-center mb-16">
@@ -510,7 +560,11 @@ export default function LandingPage() {
                 { name: "Priya Sharma", company: "Sharma Logistics", quote: "The WhatsApp AI bot handles 60% of our customer queries automatically. Game changer.", rating: 5 },
                 { name: "Rahul Verma", company: "Verma Manufacturing", quote: "Inventory and Payroll in one place. It truly is the AI brain of our business.", rating: 5 }
               ].map((testimonial, i) => (
-                <div key={i} className="bg-slate-800 p-8 rounded-3xl border border-slate-700">
+                <motion.div 
+                  key={i} 
+                  whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.3)' }}
+                  className="bg-slate-800 p-8 rounded-3xl border border-slate-700 hover:border-slate-600 transition-colors duration-300 cursor-pointer"
+                >
                   <div className="flex gap-1 mb-6">
                     {[...Array(testimonial.rating)].map((_, j) => <Star key={j} className="w-5 h-5 fill-yellow-400 text-yellow-400" />)}
                   </div>
@@ -524,14 +578,21 @@ export default function LandingPage() {
                       <p className="text-sm text-slate-400">{testimonial.company}</p>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
-        </section>
+        </motion.section>
 
         {/* Pricing */}
-        <section className="py-24 bg-white border-t border-slate-100 relative">
+        {/* Pricing */}
+        <motion.section 
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="py-24 bg-white border-t border-slate-100 relative"
+        >
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-blue-50 rounded-full blur-[100px] opacity-50 pointer-events-none" />
           
           <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
@@ -539,7 +600,10 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto text-left items-stretch">
               
               {/* Basic Tier */}
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+              <motion.div 
+                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
                   Basic
                 </div>
@@ -577,10 +641,13 @@ export default function LandingPage() {
                     </button>
                   )}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Intermediate Tier */}
-              <div className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4">
+              <motion.div 
+                whileHover={{ y: -16, scale: 1.03, boxShadow: '0 25px 30px -5px rgba(59, 130, 246, 0.2)' }}
+                className="p-8 rounded-3xl bg-white border-2 border-blue-500 shadow-xl relative flex flex-col transform md:-translate-y-4 cursor-pointer"
+              >
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold text-xs px-4 py-1.5 rounded-full whitespace-nowrap shadow-md">
                   MOST POPULAR (14-DAY TRIAL)
                 </div>
@@ -619,10 +686,13 @@ export default function LandingPage() {
                     </button>
                   )}
                 </div>
-              </div>
+              </motion.div>
 
               {/* Advance Tier */}
-              <div className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow">
+              <motion.div 
+                whileHover={{ y: -8, scale: 1.02, boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                className="p-8 rounded-3xl bg-white border border-slate-200 shadow-sm flex flex-col hover:shadow-md transition-shadow cursor-pointer"
+              >
                 <div className="inline-block px-3 py-1 bg-slate-100 text-slate-800 font-bold text-xs rounded-full mb-6 w-fit">
                   Advance
                 </div>
@@ -658,11 +728,11 @@ export default function LandingPage() {
                     </button>
                   )}
                 </div>
-              </div>
+              </motion.div>
 
             </div>
           </div>
-        </section>
+        </motion.section>
       </main>
 
       {/* Footer */}

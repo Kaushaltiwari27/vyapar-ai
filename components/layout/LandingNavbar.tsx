@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion'
 import { ChevronDown, ArrowRight, Home, Users, TrendingUp, FileText, Smartphone, ShieldCheck, Truck, Package, Menu, X } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import PlanSelectModal from '@/components/auth/PlanSelectModal'
@@ -22,6 +22,13 @@ export function LandingNavbar() {
   const [user, setUser] = useState<any>(null)
   const [isPlanModalOpen, setIsPlanModalOpen] = useState(false)
   const [redirectPath, setRedirectPath] = useState('/dashboard')
+
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001
+  })
 
   const supabase = createClient()
 
@@ -49,6 +56,11 @@ export function LandingNavbar() {
 
   return (
     <>
+      {/* Scroll Progress Bar */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-600 z-[60] origin-left"
+        style={{ scaleX }}
+      />
       <nav className={`fixed w-full z-50 top-0 transition-all duration-300 ${scrolled ? 'bg-white/90 backdrop-blur-xl border-b border-slate-200/50 shadow-sm py-3' : 'bg-white/50 backdrop-blur-md border-b border-transparent py-5'}`}>
         <div className="w-full flex justify-between items-center px-6 max-w-7xl mx-auto">
           <div className="flex items-center gap-10">
